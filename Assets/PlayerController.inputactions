@@ -41,6 +41,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Emit",
+                    "type": "Button",
+                    "id": "3f0fdde5-1eba-479f-acd2-2159ad0ae3c2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -123,17 +132,6 @@
                 },
                 {
                     "name": "",
-                    "id": "21a465de-fb98-4eb8-aa3d-77bd81ede668",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "42939ff6-274d-4426-a02f-51319b335bf4",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -151,6 +149,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21a465de-fb98-4eb8-aa3d-77bd81ede668",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Emit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
