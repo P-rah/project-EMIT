@@ -1179,6 +1179,7 @@ MonoBehaviour:
   attackSweepPoint: {fileID: 2078460878}
   attackSweepRange: 1
   attackGrabPoint: {fileID: 1742584625}
+  attackGrabRange: 0.2
   attackGrabDistance: 8
   emitCooldown: 1
   _emitShaderController: {fileID: 1320504999}

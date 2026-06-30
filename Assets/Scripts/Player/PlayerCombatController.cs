@@ -24,6 +24,7 @@ public class PlayerCombatController : MonoBehaviour
     public float attackSweepRange = 0.5f;
 
     public Transform attackGrabPoint;
+    public float attackGrabRange = 0.1f;
     public float attackGrabDistance = 0.5f;
 
     [Header("Emit Settings")]
@@ -85,7 +86,7 @@ public class PlayerCombatController : MonoBehaviour
         attackable = false;
         isAttacking = true;
         Vector2 direction = transform.right;
-        RaycastHit2D hitInfo = Physics2D.Raycast(attackGrabPoint.position, direction, attackGrabDistance, enemyLayers);
+        RaycastHit2D hitInfo = Physics2D.CircleCast(attackGrabPoint.position, attackGrabRange, direction, attackGrabDistance, enemyLayers);
         if (hitInfo.collider != null)
         {
             Debug.Log(hitInfo.collider.name + "hit!");
@@ -136,8 +137,9 @@ public class PlayerCombatController : MonoBehaviour
         if (attackGrabPoint != null)
         {
             Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(attackGrabPoint.position, attackGrabRange);
             Gizmos.DrawLine(attackGrabPoint.position, attackGrabPoint.position + transform.right * attackGrabDistance);
-
+            Gizmos.DrawWireSphere(attackGrabPoint.position + transform.right * attackGrabDistance, attackGrabRange);
         }
     }
 
