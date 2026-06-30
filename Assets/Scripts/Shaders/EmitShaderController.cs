@@ -6,7 +6,7 @@ public class EmitShaderController : MonoBehaviour
     [SerializeField]
     private float _distortionTime = 0.75f;
     private Material _material;
-    private static int _distanceFormCenter = Shader.PropertyToID("_DistanceFromCenter");
+    private static int _shaderRad = Shader.PropertyToID("_ShaderRad");
     private Coroutine _emitDistorionCoroutine;
 
 
@@ -26,7 +26,7 @@ public class EmitShaderController : MonoBehaviour
 
     private IEnumerator EmitDistortionAction(float startPos, float endPos)
     {
-        _material.SetFloat(_distanceFormCenter, startPos);
+        _material.SetFloat(_shaderRad, startPos);
         float lerpedAmount = 0f;
 
         float elapsedTime = 0f;
@@ -36,7 +36,7 @@ public class EmitShaderController : MonoBehaviour
             elapsedTime += Time.deltaTime;
 
             lerpedAmount = Mathf.Lerp(startPos, endPos, (elapsedTime / _distortionTime));
-            _material.SetFloat(_distanceFormCenter, lerpedAmount);
+            _material.SetFloat(_shaderRad, lerpedAmount);
 
             yield return null;
         }

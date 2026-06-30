@@ -775,7 +775,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d15c376374f601047bdeee7651e2ccc7, type: 2}
+  - {fileID: 2100000, guid: 709ac6fd32bb6394491fb19af8f67799, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -836,7 +836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f371d26ee2fe1754381c06b8d4048059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EmitShaderController
-  _distortionTime: 0.75
+  _distortionTime: 2
 --- !u!1 &1616797779
 GameObject:
   m_ObjectHideFlags: 0

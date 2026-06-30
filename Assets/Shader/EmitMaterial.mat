@@ -23,23 +23,7 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _CameraSortingLayerTexture:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MaskTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NormalMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -57,30 +41,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DistanceFromCenter: -0.1
-    - _EnableExternalAlpha: 0
-    - _FilterColor: 0
-    - _FilterColorExposure: 1
-    - _FilterColorFuzz: 0
-    - _FilterColorRange: 1
-    - _FilterExposure: 0.78
-    - _FilterOriginalColorRate: 0.05
-    - _FilterResExposure: 0.7
-    - _FilterTolerance: 1
-    - _QueueControl: -1
-    - _QueueOffset: 0
-    - _Size: 0.1
+    - _DistanceFromCenter: 0.5
+    - _FilterColorExposure: 0
+    - _FilterOriginalColorRate: 0
+    - _FilterResExposure: 0
+    - _FilterTolerance: 0
+    - _Size: 0.05
     - _Strength: -0.1
-    - _ZWrite: 0
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _FilterColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-    - _FilterColorFrom: {r: 1, g: 1, b: 0.5019608, a: 1}
-    - _FilterColorTo: {r: 1, g: 1, b: 0, a: 1}
-    - _FilterExposure: {r: 0.9607843, g: 1, b: 0.64705884, a: 1}
-    - _FilterTargetColor: {r: 1, g: 1, b: 0, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FilterTargetColor: {r: 0, g: 0, b: 0, a: 1}
     - _RingSpawnPosition: {r: 0.5, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
