@@ -16,9 +16,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Attack",
+                    "name": "AttackSweep",
                     "type": "Button",
                     "id": "b7c941b3-65de-4e29-8e6f-d9e913f6068f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AttackGrab",
+                    "type": "Button",
+                    "id": "f18d079d-8c2b-4a95-a442-bfd10f87a00a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -115,18 +124,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b4f2772e-b003-4698-81ff-34c518df4858",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Attack",
+                    "action": "AttackSweep",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -160,6 +158,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Emit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ffa50d8e-fb42-4c4b-9a27-d70cc7d2bafd",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AttackGrab",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

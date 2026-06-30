@@ -57,11 +57,19 @@ public class PlayerController : MonoBehaviour
         moveInput = context.ReadValue<Vector2>();
         if (moveInput.x > 0)
         {
-            facingDirection = 1f;
+            if(facingDirection < 0f)
+            {
+                transform.Rotate(0f, 180f, 0f);
+                facingDirection = 1f;
+            }
         }
         else if (moveInput.x < 0)
         {
-            facingDirection = -1f;
+            if (facingDirection > 0f)
+            {
+                transform.Rotate(0f, 180f, 0f);
+                facingDirection = -1f;
+            }
         }
     }
 

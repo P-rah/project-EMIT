@@ -57,7 +57,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DistanceFromCenter: 0.781
+    - _DistanceFromCenter: -0.1
     - _EnableExternalAlpha: 0
     - _FilterColor: 0
     - _FilterColorExposure: 1
