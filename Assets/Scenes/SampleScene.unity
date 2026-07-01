@@ -898,11 +898,11 @@ Transform:
   m_GameObject: {fileID: 1320504996}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 40, y: 40, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalScale: {x: 20, y: 12, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1616797781}
+  m_Father: {fileID: 1726210616}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1320504999
 MonoBehaviour:
@@ -916,7 +916,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f371d26ee2fe1754381c06b8d4048059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EmitShaderController
-  _distortionTime: 2
+  _distortionTime: 0.75
+  startPoint: {fileID: 1616797781}
 --- !u!1 &1551528610
 GameObject:
   m_ObjectHideFlags: 3
@@ -1101,7 +1102,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2079430871}
-  - {fileID: 1320504998}
   - {fileID: 2078460878}
   - {fileID: 1742584625}
   m_Father: {fileID: 0}
@@ -1421,6 +1421,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1551528611}
+  - {fileID: 1320504998}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1742584624

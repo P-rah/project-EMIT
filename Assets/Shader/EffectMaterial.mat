@@ -76,7 +76,7 @@ Material:
     - _FilterTolerance: 1
     - _GrowthRateCurve: 0.089
     - _NoiseAmp: 0.757
-    - _NoiseDensity: 5
+    - _NoiseDensity: 3
     - _NoiseRandomness: 5
     - _NoiseScale: 10.6
     - _NoiseSpeed: 0.062
@@ -86,6 +86,7 @@ Material:
     - _ShaderRadius: 0.04
     - _Size: 0.05
     - _Strength: -0.1
+    - _XsizeRatio: 1.6
     - _ZWrite: 0
     - _distortionAmp: 0.208
     - _distortionFreq: 3.18
@@ -99,5 +100,6 @@ Material:
     - _OutlineColor: {r: 0.78431374, g: 0.78431374, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _RingSpawnPosition: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _StartPoint: {r: 0.5, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
