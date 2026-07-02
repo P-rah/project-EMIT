@@ -29,9 +29,9 @@ public class PlayerCombatController : MonoBehaviour
 
     [Header("Emit Settings")]
     public float emitCooldown = 1f;
-
-
     public EmitShaderController _emitShaderController;
+
+    public GameplayCameraController _gameplayCameraController;
 
     public void OnAttackSweep(InputAction.CallbackContext context)
     {
@@ -66,8 +66,7 @@ public class PlayerCombatController : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackSweepPoint.position, attackSweepRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
-            Debug.Log(enemy.name + " hit!");
-
+            _gameplayCameraController.CameraShake(2f, 1f);
             // enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
 

@@ -3,6 +3,17 @@ using UnityEngine;
 
 public class EmitShaderController : MonoBehaviour
 {
+    private void OnEnable()
+    {
+        EventManager.StartListening("EmitStart", StartEffect);
+        EventManager.StartListening("EmitEnd", EndEffect);
+    }
+    private void OnDisable()
+    {
+        EventManager.StopListening("EmitStart", StartEffect);
+        EventManager.StopListening("EmitEnd", EndEffect);
+    }
+
     [SerializeField]
     private float _distortionTime = 0.75f;
     private Material _material;
