@@ -32,6 +32,7 @@ public class PlayerState : MonoBehaviour
     public bool isAttackingSweep { get; set; }
     public bool isAttackingGrap { get; set; }
 
+    public EmitState CurrentEmitState { get; private set; }
     public bool isEmiting { get; set; }
 
     [Header("Ground Check Settings")]
@@ -51,6 +52,7 @@ public class PlayerState : MonoBehaviour
         CheckGrounded();
         DetermineMoveState();
         DetermineAttackState();
+        DetermineEmitState();
     }
 
     private void CheckGrounded()
@@ -107,6 +109,19 @@ public class PlayerState : MonoBehaviour
         }
     }
 
+    private void DetermineEmitState()
+    {
+        EmitState newEmitState = CurrentEmitState;
+
+        if (isEmiting) newEmitState = EmitState.emiting;
+        else newEmitState = EmitState.notEmiting;
+
+        if (newEmitState != CurrentEmitState)
+        {
+            ChangeState(newEmitState);
+        }
+    }
+
     private void ChangeState(MoveState newMoveState)
     {
         CurrentMoveState = newMoveState;
@@ -115,6 +130,11 @@ public class PlayerState : MonoBehaviour
     private void ChangeState(AttackState newAttackState)
     {
         CurrentAttackState = newAttackState;
+    }
+
+    private void ChangeState(EmitState newEmitState)
+    {
+        CurrentEmitState = newEmitState;
     }
 
     private void OnDrawGizmosSelected()

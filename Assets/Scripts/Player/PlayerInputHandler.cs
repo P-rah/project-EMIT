@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 /*
- * 플레이어 입력 제어용 클래스
+ * 플레이어 입력을 받아 이벤트를 발생시키는 Handler 클래스
  */
 public class PlayerInputHandler : MonoBehaviour
 {
@@ -14,12 +14,6 @@ public class PlayerInputHandler : MonoBehaviour
     public bool AttackGrapTriggered { get; private set; }
     public bool EmitTriggered { get; private set; }
 
-    public event Action OnJumpPressed;
-    public event Action OnDashPressed;
-    public event Action OnAttackSweepPressed;
-    public event Action OnAttackGrapPressed;
-    public event Action OnEmitPressed;
-
     public void OnMove(InputValue value)
     {
         MoveInput = value.Get<Vector2>();
@@ -29,7 +23,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            OnJumpPressed?.Invoke();
+            EventManager.TriggerEvent("OnJumpPressed");
         }
     }
 
@@ -37,7 +31,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            OnDashPressed?.Invoke();
+            EventManager.TriggerEvent("OnDashPressed");
         }
     }
 
@@ -45,7 +39,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            OnEmitPressed?.Invoke();
+            EventManager.TriggerEvent("OnEmitPressed");
         }
     }
 
@@ -53,7 +47,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            OnAttackSweepPressed?.Invoke();
+            EventManager.TriggerEvent("OnAttackSweepPressed");
         }
     }
 
@@ -61,7 +55,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            OnAttackGrapPressed?.Invoke();
+            EventManager.TriggerEvent("OnAttackGrapPressed");
         }
     }
 

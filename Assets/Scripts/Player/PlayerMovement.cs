@@ -33,14 +33,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        input.OnJumpPressed += ExecuteJump;
-        input.OnDashPressed += ExecuteDash;
+        EventManager.StartListening("OnJumpPressed", ExecuteJump);
+        EventManager.StartListening("OnDashPressed", ExecuteDash);
     }
 
     private void OnDisable()
     {
-        if (input != null) input.OnJumpPressed -= ExecuteJump;
-        if (input != null) input.OnDashPressed -= ExecuteDash;
+        EventManager.StopListening("OnJumpPressed", ExecuteJump);
+        EventManager.StopListening("OnDashPressed", ExecuteDash);
     }
 
     private void Update()

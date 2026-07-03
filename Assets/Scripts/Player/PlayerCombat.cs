@@ -35,16 +35,16 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnEnable()
     {
-        input.OnAttackSweepPressed += ExecuteAttackSweep;
-        input.OnAttackGrapPressed += ExecuteAttackGrap;
-        input.OnEmitPressed += ExecuteEmit;
+        EventManager.StartListening("OnAttackSweepPressed", ExecuteAttackSweep);
+        EventManager.StartListening("OnAttackGrapPressed", ExecuteAttackGrap);
+        EventManager.StartListening("OnEmitPressed", ExecuteEmit);
     }
 
     private void OnDisable()
     {
-        if (input != null) input.OnAttackSweepPressed -= ExecuteAttackSweep;
-        if (input != null) input.OnAttackGrapPressed -= ExecuteAttackGrap;
-        if (input != null) input.OnEmitPressed -= ExecuteEmit;
+        EventManager.StopListening("OnAttackSweepPressed", ExecuteAttackSweep);
+        EventManager.StopListening("OnAttackGrapPressed", ExecuteAttackGrap);
+        EventManager.StopListening("OnEmitPressed", ExecuteEmit);
     }
 
     public void ExecuteAttackSweep()
@@ -74,6 +74,7 @@ public class PlayerCombat : MonoBehaviour
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log(enemy.name + "hit!");
+            CameraShake.Instance.ShakeCamera(5f, 0.5f);
             // enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
 
@@ -95,7 +96,7 @@ public class PlayerCombat : MonoBehaviour
         if (hitInfo.collider != null)
         {
             Debug.Log(hitInfo.collider.name + "hit!");
-
+            CameraShake.Instance.ShakeCamera(5f, 0.5f);
             // Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
             // if (enemy != null)
             // {
@@ -112,7 +113,7 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator EmitRoutine()
     {
         canEmit= false;
-        state.isEmiting = true;
+        state.isEmiting = !state.isEmiting;
 
         yield return new WaitForSeconds(emitCooldown);
         canEmit = true;

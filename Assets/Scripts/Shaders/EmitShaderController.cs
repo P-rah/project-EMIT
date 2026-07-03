@@ -5,13 +5,11 @@ public class EmitShaderController : MonoBehaviour
 {
     private void OnEnable()
     {
-        EventManager.StartListening("EmitStart", StartEffect);
-        EventManager.StartListening("EmitEnd", EndEffect);
+        EventManager.StartListening("OnEmitPressed", SwitchEffect);
     }
     private void OnDisable()
     {
-        EventManager.StopListening("EmitStart", StartEffect);
-        EventManager.StopListening("EmitEnd", EndEffect);
+        EventManager.StopListening("OnEmitPressed", SwitchEffect);
     }
 
     [SerializeField]
@@ -19,21 +17,34 @@ public class EmitShaderController : MonoBehaviour
     private Material _material;
     private static int _shaderRad = Shader.PropertyToID("_ShaderRad");
     private static int _startPoint = Shader.PropertyToID("_StartPoint");
-    private Coroutine _emitDistorionCoroutine;
     public Transform startPoint;
+    private bool Emiting = false;
 
     private void Awake()
     {
         _material = GetComponent<SpriteRenderer>().material;
     }
 
-    public void StartEffect()
+    private void SwitchEffect()
     {
-        _emitDistorionCoroutine = StartCoroutine(EmitDistortionAction(-0.1f, 2f));
+        if(!Emiting)
+        {
+            StartEffect();
+        }
+        else
+        {
+            EndEffect();
+        }
+        Emiting = !Emiting;
     }
-    public void EndEffect()
+
+    private void StartEffect()
     {
-        _emitDistorionCoroutine = StartCoroutine(EmitDistortionAction(2f, -0.1f));
+        StartCoroutine(EmitDistortionAction(-0.1f, 2f));
+    }
+    private void EndEffect()
+    {
+        StartCoroutine(EmitDistortionAction(2f, -0.1f));
     }
 
     private IEnumerator EmitDistortionAction(float startPos, float endPos)
