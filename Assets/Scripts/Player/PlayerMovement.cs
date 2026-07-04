@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void ExecuteDash()
     {
-        if(canDash) StartCoroutine(DashRoutine());
+        if(canDash&& input.MoveInput.x !=0) StartCoroutine(DashRoutine());
     }
 
     private void Flip()

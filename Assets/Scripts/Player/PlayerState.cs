@@ -2,20 +2,17 @@ using UnityEngine;
 /*
  * 플레이어 상태 관리용 클래스
  */
-public enum MoveState
+public enum State
 {
     Idle,
     Running,
     Jumping,
     Falling,
     Dashing,
-}
-public enum AttackState
-{
-    notAttacking,
     AttackingSweep,
     AttackingGrap
 }
+
 public enum EmitState
 {
     emiting,
@@ -24,13 +21,13 @@ public enum EmitState
 
 public class PlayerState : MonoBehaviour
 {
-    public MoveState CurrentMoveState { get; private set; }
+    public State CurrentState { get; private set; }
     public bool IsGrounded { get; private set; }
     public bool IsDashing { get; set; }
-
-    public AttackState CurrentAttackState { get; private set; }
     public bool isAttackingSweep { get; set; }
     public bool isAttackingGrap { get; set; }
+
+    public bool attacked = false;
 
     public EmitState CurrentEmitState { get; private set; }
     public bool isEmiting { get; set; }
@@ -50,8 +47,7 @@ public class PlayerState : MonoBehaviour
     private void Update()
     {
         CheckGrounded();
-        DetermineMoveState();
-        DetermineAttackState();
+        DetermineState();
         DetermineEmitState();
     }
 
@@ -60,52 +56,33 @@ public class PlayerState : MonoBehaviour
         IsGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
     }
 
-    private void DetermineMoveState()
+    private void DetermineState()
     {
-        MoveState newMoveState = CurrentMoveState;
+        State newState = CurrentState;
 
-        if (IsDashing)
-        {
-            newMoveState = MoveState.Dashing;
-        }
+
+        if(isAttackingSweep) newState = State.AttackingSweep;
+        else if (isAttackingSweep) newState = State.AttackingGrap;
+        else if (IsDashing) newState = State.Dashing;
         else if (IsGrounded)
         {
             if (Mathf.Abs(rb.linearVelocity.x) > 0.1f)
-                newMoveState = MoveState.Running;
+                newState = State.Running;
             else
-                newMoveState = MoveState.Idle;
+                newState = State.Idle;
         }
         else
         {
             if (rb.linearVelocity.y > 0.1f)
-                newMoveState = MoveState.Jumping;
+                newState = State.Jumping;
             else
-                newMoveState = MoveState.Falling;
+                newState = State.Falling;
         }
 
-        if (newMoveState != CurrentMoveState)
+        if (newState != CurrentState)
         {
-            ChangeState(newMoveState);
-        }
-    }
-
-    private void DetermineAttackState()
-    {
-        AttackState newAttackState = CurrentAttackState;
-
-        if (isAttackingSweep)
-        {
-            newAttackState = AttackState.AttackingSweep;
-        }
-        else if(isAttackingGrap)
-        {
-            newAttackState = AttackState.AttackingGrap;
-        }
-        else newAttackState = AttackState.notAttacking;
-
-        if (newAttackState != CurrentAttackState)
-        {
-            ChangeState(newAttackState);
+            ChangeState(newState);
+            Debug.Log(newState);
         }
     }
 
@@ -122,14 +99,9 @@ public class PlayerState : MonoBehaviour
         }
     }
 
-    private void ChangeState(MoveState newMoveState)
+    private void ChangeState(State newState)
     {
-        CurrentMoveState = newMoveState;
-    }
-
-    private void ChangeState(AttackState newAttackState)
-    {
-        CurrentAttackState = newAttackState;
+        CurrentState = newState;
     }
 
     private void ChangeState(EmitState newEmitState)

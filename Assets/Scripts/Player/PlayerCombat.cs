@@ -3,7 +3,7 @@ using UnityEngine;
 /*
  * 플레이어 공격, 역행 관리용 클래스
  */
-[RequireComponent(typeof(Rigidbody2D), typeof(PlayerInputHandler))]
+[RequireComponent(typeof(Rigidbody2D), typeof(PlayerInputHandler), typeof(PlayerState))]
 public class PlayerCombat : MonoBehaviour
 {
     private PlayerInputHandler input;
@@ -11,8 +11,8 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Attack Settings")]
     public LayerMask enemyLayers;
-    public float attackCooldown = 0.5f;
-    public float attackContinuousCooldown = 0.2f;
+    public float attackJudgeTime = 0.2f;
+    public float attackMotionLimit = 0.3f;
 
     public Transform attackSweepPoint;
     public float attackSweepRange = 0.5f;
@@ -56,7 +56,7 @@ public class PlayerCombat : MonoBehaviour
     public void ExecuteAttackGrap()
     {
         if (canAttack)
-            StartCoroutine(AttackGrabRoutine());
+            StartCoroutine(AttackGrapRoutine());
     }
 
     public void ExecuteEmit()
@@ -68,8 +68,10 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator AttackSweepRoutine()
     {
         canAttack = false;
+        state.isAttackingGrap = false;
         state.isAttackingSweep = true;
 
+        //공격 이펙트 활성화
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackSweepPoint.position, attackSweepRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
@@ -78,17 +80,21 @@ public class PlayerCombat : MonoBehaviour
             // enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
 
-
-        yield return new WaitForSeconds(attackCooldown);
+        yield return new WaitForSeconds(attackJudgeTime);
+        //공격 이펙트 비활성화
+        state.attacked = true;
         canAttack = true;
 
-        yield return new WaitForSeconds(attackContinuousCooldown);
+        yield return new WaitForSeconds(attackMotionLimit);
+        //공격 모션 종료
         state.isAttackingSweep = false;
+        state.attacked = false;
     }
 
-    private IEnumerator AttackGrabRoutine()
+    private IEnumerator AttackGrapRoutine()
     {
         canAttack = false;
+        state.isAttackingSweep = false;
         state.isAttackingGrap = true;
 
         Vector2 direction = transform.right;
@@ -103,11 +109,16 @@ public class PlayerCombat : MonoBehaviour
             //     enemy.TakeDamage(attackDamage);
             // }
         }
-        yield return new WaitForSeconds(attackCooldown);
+
+        yield return new WaitForSeconds(attackJudgeTime);
+        //공격 이펙트 비활성화
+        state.attacked = true;
         canAttack = true;
 
-        yield return new WaitForSeconds(attackContinuousCooldown);
+        yield return new WaitForSeconds(attackMotionLimit);
+        //공격 모션 종료
         state.isAttackingGrap = false;
+        state.attacked = false;
     }
 
     private IEnumerator EmitRoutine()
