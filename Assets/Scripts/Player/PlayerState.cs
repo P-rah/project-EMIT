@@ -62,7 +62,7 @@ public class PlayerState : MonoBehaviour
 
 
         if(isAttackingSweep) newState = State.AttackingSweep;
-        else if (isAttackingSweep) newState = State.AttackingGrap;
+        else if (isAttackingGrap) newState = State.AttackingGrap;
         else if (IsDashing) newState = State.Dashing;
         else if (IsGrounded)
         {
