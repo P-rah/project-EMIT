@@ -27,8 +27,6 @@ public class PlayerState : MonoBehaviour
     public bool isAttackingSweep { get; set; }
     public bool isAttackingGrap { get; set; }
 
-    public bool attacked = false;
-
     public EmitState CurrentEmitState { get; private set; }
     public bool isEmiting { get; set; }
 

@@ -1289,7 +1289,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 114f449fb7b44f941b591b9d1fc4ac3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerState
-  attacked: 0
   groundCheck: {fileID: 2079430871}
   checkRadius: 0.2
   groundLayer:
@@ -1308,6 +1307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 15
+  moveSpeedWhileAttack: 0
   jumpForce: 15
   dashPower: 40
   dashTime: 0.1
@@ -1369,8 +1369,8 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 128
-  attackJudgeTime: 0.5
-  attackMotionLimit: 0.3
+  attackingTime: 0.2
+  attackCoolTime: 0.5
   attackSweepPoint: {fileID: 2078460878}
   attackSweepRange: 0.5
   attackGrabPoint: {fileID: 1742584625}

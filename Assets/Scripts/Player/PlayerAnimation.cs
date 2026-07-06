@@ -8,8 +8,6 @@ public class PlayerAnimation : MonoBehaviour
     private Animator animator;
     private PlayerState state;
     private State previousState;
-    private bool attacked = false;
-    private bool attackReverse = false;
 
     private void Awake()
     {
@@ -19,25 +17,12 @@ public class PlayerAnimation : MonoBehaviour
 
     private void OnEnable()
     {
-        previousState = state.CurrentState;
         AnimationControll();
+        previousState = state.CurrentState;
     }
 
     private void Update()
     {
-        if (attacked != state.attacked)
-        {
-            if (state.attacked)
-            {
-                animator.SetBool("attackReverse", !attackReverse);
-            }
-            else
-            {
-                animator.SetTrigger("noMoreAttack");
-                attackReverse = false;
-            }
-            attacked = state.attacked;
-        }
 
         if (previousState != state.CurrentState)
         {

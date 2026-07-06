@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement Settings")]
     public float moveSpeed = 15f;
+    public float moveSpeedWhileAttack = 5f;
     public float jumpForce = 15f;
 
     [Header("Dash Settings")]
@@ -52,7 +53,9 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (state.IsDashing) return;
-        rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeed, rb.linearVelocity.y);
+        else if (state.isAttackingGrap || state.isAttackingSweep)
+            rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeedWhileAttack, rb.linearVelocity.y);
+        else rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeed, rb.linearVelocity.y);
     }
     private void ExecuteJump()
     {

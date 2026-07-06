@@ -11,8 +11,8 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Attack Settings")]
     public LayerMask enemyLayers;
-    public float attackJudgeTime = 0.2f;
-    public float attackMotionLimit = 0.3f;
+    public float attackingTime = 0.2f;
+    public float attackCoolTime = 0.3f;
 
     public Transform attackSweepPoint;
     public float attackSweepRange = 0.5f;
@@ -71,8 +71,8 @@ public class PlayerCombat : MonoBehaviour
         state.isAttackingGrap = false;
         state.isAttackingSweep = true;
 
-        //공격 이펙트 활성화
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackSweepPoint.position, attackSweepRange, enemyLayers);
+            //공격 이펙트 활성화
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackSweepPoint.position, attackSweepRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log(enemy.name + "hit!");
@@ -80,15 +80,11 @@ public class PlayerCombat : MonoBehaviour
             // enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
 
-        yield return new WaitForSeconds(attackJudgeTime);
-        //공격 이펙트 비활성화
-        state.attacked = true;
-        canAttack = true;
-
-        yield return new WaitForSeconds(attackMotionLimit);
-        //공격 모션 종료
+        yield return new WaitForSeconds(attackingTime);
         state.isAttackingSweep = false;
-        state.attacked = false;
+
+        yield return new WaitForSeconds(attackCoolTime);
+        canAttack = true;
     }
 
     private IEnumerator AttackGrapRoutine()
@@ -110,15 +106,11 @@ public class PlayerCombat : MonoBehaviour
             // }
         }
 
-        yield return new WaitForSeconds(attackJudgeTime);
-        //공격 이펙트 비활성화
-        state.attacked = true;
-        canAttack = true;
-
-        yield return new WaitForSeconds(attackMotionLimit);
-        //공격 모션 종료
+        yield return new WaitForSeconds(attackingTime);
         state.isAttackingGrap = false;
-        state.attacked = false;
+
+        yield return new WaitForSeconds(attackCoolTime);
+        canAttack = true;
     }
 
     private IEnumerator EmitRoutine()
