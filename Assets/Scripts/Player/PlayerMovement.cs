@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerInputHandler input;
     private PlayerState state;
+    private DashEffectController dashEffectController;
 
     [Header("Movement Settings")]
     public float moveSpeed = 15f;
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         input = GetComponent<PlayerInputHandler>();
         state = GetComponent<PlayerState>();
+        dashEffectController = GetComponent<DashEffectController>();
 
         originalGravity = rb.gravityScale;
     }
@@ -84,11 +86,13 @@ public class PlayerMovement : MonoBehaviour
         rb.gravityScale = 0f;
 
         rb.linearVelocity = new Vector2(facingDirection * dashPower, 0f);
+        dashEffectController.StartDashTrail();
 
         yield return new WaitForSeconds(dashTime);
 
         state.IsDashing = false;
         rb.gravityScale = originalGravity;
+        dashEffectController.StopDashTrail();
 
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;

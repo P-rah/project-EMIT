@@ -15,7 +15,8 @@ public class Enemy : MonoBehaviour
     };
 
     private EnemyState currentState;
-    public PlayerController target;
+    //public PlayerController target;
+    public GameObject target; //임시로 지정
 
     public EnemyIdleState IdleState { get; private set; }
     public EnemyAttackState AttackState { get; private set; }
@@ -68,7 +69,7 @@ public class Enemy : MonoBehaviour
     public virtual void Init()
     {
         // FIX: EnemyManager 만들면 거기에서 player 정보 Enemy 객체에 뿌려주기
-        target = FindAnyObjectByType<PlayerController>();
+        //target = FindAnyObjectByType<PlayerController>();
 
         IdleState = new EnemyIdleState(this);
         AttackState = new EnemyAttackState(this);

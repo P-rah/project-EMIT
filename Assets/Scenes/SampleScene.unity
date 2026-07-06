@@ -544,6 +544,8 @@ GameObject:
   - component: {fileID: 963427680}
   - component: {fileID: 963427679}
   - component: {fileID: 963427681}
+  - component: {fileID: 963427683}
+  - component: {fileID: 963427682}
   m_Layer: 7
   m_Name: TestEnemy
   m_TagString: Untagged
@@ -656,7 +658,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -672,6 +674,61 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 2}
   m_EdgeRadius: 0
+--- !u!50 &963427682
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963427678}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 5
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!114 &963427683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963427678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 788f01738f3dec146884e2b04aa8cca7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  target: {fileID: 1616797779}
+  data: {fileID: 11400000, guid: 5bc9bf452556c354a9c53f347f4205d7, type: 2}
+  rb: {fileID: 963427682}
+  maxHealth: 0
+  baseAttack: 0
+  baseSpeed: 0
+  jumpHeight: 0
+  visionRange: 0
+  attackRange: 0
+  startAttackRange: 0
+  startUpTime: 0
+  recoveryTime: 0
+  canChangeState: 0
+  currentHealth: 0
+  isRooted: 0
+  front: {x: 0, y: 0}
 --- !u!1 &974782909
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,6 +1175,7 @@ GameObject:
   - component: {fileID: 1616797789}
   - component: {fileID: 1616797790}
   - component: {fileID: 1616797791}
+  - component: {fileID: 1616797792}
   m_Layer: 3
   m_Name: TestPlayer
   m_TagString: Player
@@ -1172,7 +1230,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2779023822413464520, guid: 0c7a6f2e014ce8848ab74c7a63233861, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1411,6 +1469,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3de600dc21b7142999bcda2309c1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimation
+--- !u!114 &1616797792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616797779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6e6744829a1c9f4cb489c234a7eaa38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DashEffectController
+  ghostPrefab: {fileID: 1664963545714560829, guid: 6f96f9f512bb05d4f9b537d342432dc3, type: 3}
+  poolSize: 10
+  ghostColor: {r: 1, g: 1, b: 1, a: 0.78431374}
+  fadeSpeed: 3
+  distanceBetweenGhosts: 0.5
 --- !u!1 &1726210614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1598,7 +1673,7 @@ SceneRoots:
   - {fileID: 974782911}
   - {fileID: 519420032}
   - {fileID: 1616797781}
-  - {fileID: 379686686}
   - {fileID: 963427680}
+  - {fileID: 379686686}
   - {fileID: 1726210616}
   - {fileID: 138688623}
