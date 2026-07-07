@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.XR;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, Attackable
 {
     public struct Attack
     {
@@ -15,8 +15,8 @@ public class Enemy : MonoBehaviour
     };
 
     private EnemyState currentState;
-    //public PlayerController target;
-    public GameObject target; //임시로 지정
+
+    private Transform target; //플레이어의 transform
 
     public EnemyIdleState IdleState { get; private set; }
     public EnemyAttackState AttackState { get; private set; }
@@ -68,8 +68,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void Init()
     {
-        // FIX: EnemyManager 만들면 거기에서 player 정보 Enemy 객체에 뿌려주기
-        //target = FindAnyObjectByType<PlayerController>();
+        target = Player.InstanceTransform; //플레이어의 싱글톤 Transform 받아옴
 
         IdleState = new EnemyIdleState(this);
         AttackState = new EnemyAttackState(this);
@@ -134,7 +133,7 @@ public class Enemy : MonoBehaviour
         currentState?.Move();
     }
 
-    public void ReceiveAttack()
+    public void ReceiveAttack(AttackInfo attackInfo)
     {
         // FIX: 임시로 struct 만들어둠
         Attack atk = new Attack();

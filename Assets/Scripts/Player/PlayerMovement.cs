@@ -3,7 +3,6 @@ using System.Collections;
 /*
  * 플레이어 이동 제어용 클래스
  */
-[RequireComponent(typeof(Rigidbody2D), typeof(PlayerInputHandler))]
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
@@ -26,24 +25,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        input = GetComponent<PlayerInputHandler>();
-        state = GetComponent<PlayerState>();
-        dashEffectController = GetComponent<DashEffectController>();
+        rb = Player.Instance.Rb;
+        input = Player.InputHandler;
+        state = Player.State;
+        dashEffectController = Player.DashEffect;
 
         originalGravity = rb.gravityScale;
-    }
-
-    private void OnEnable()
-    {
-        EventManager.StartListening("OnJumpPressed", ExecuteJump);
-        EventManager.StartListening("OnDashPressed", ExecuteDash);
-    }
-
-    private void OnDisable()
-    {
-        EventManager.StopListening("OnJumpPressed", ExecuteJump);
-        EventManager.StopListening("OnDashPressed", ExecuteDash);
     }
 
     private void Update()
@@ -54,12 +41,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (state.IsDashing) return;
-        else if (state.isAttackingGrap || state.isAttackingSweep)
+        if (state.CurrentState == State.Dashing) return;
+        else if (state.CurrentState == State.AttackingSweep || state.CurrentState == State.AttackingGrap)
             rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeedWhileAttack, rb.linearVelocity.y);
         else rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeed, rb.linearVelocity.y);
     }
-    private void ExecuteJump()
+    public void ExecuteJump()
     {
         if (state.IsGrounded)
         {
@@ -67,12 +54,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void ExecuteDash()
+    public void ExecuteDash()
     {
         if(canDash&& input.MoveInput.x !=0) StartCoroutine(DashRoutine());
     }
 
-    private void Flip()
+    public void Flip()
     {
         facingDirection = -facingDirection;
         transform.Rotate(0f, 180f, 0f);

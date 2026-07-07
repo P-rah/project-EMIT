@@ -1,0 +1,41 @@
+using UnityEngine;
+
+[RequireComponent(typeof(PlayerState))]
+[RequireComponent(typeof(PlayerMovement))]
+[RequireComponent(typeof(PlayerInputHandler))]
+[RequireComponent(typeof(PlayerCombat))]
+[RequireComponent(typeof(PlayerAnimation))]
+public class Player : MonoBehaviour
+{
+    public static Player Instance { get; private set; }
+    public static Transform InstanceTransform { get; private set; }
+
+    public Rigidbody2D Rb { get; private set; }
+    public Animator animator { get; private set; }
+
+    public static PlayerState State { get; private set; }
+    public static PlayerInputHandler InputHandler { get; private set; }
+    public static PlayerMovement Movement { get; private set; }
+    public static PlayerCombat Combat { get; private set; }
+    public static PlayerAnimation Animation { get; private set; }
+    public static DashEffectController DashEffect { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+
+        InstanceTransform = this.transform;
+
+        Rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+
+        State = GetComponent<PlayerState>();
+        InputHandler = GetComponent<PlayerInputHandler>();
+        Movement = GetComponent<PlayerMovement>();
+        Combat = GetComponent<PlayerCombat>();
+        Animation = GetComponent<PlayerAnimation>();
+        DashEffect = GetComponent<DashEffectController>();
+
+    }
+}

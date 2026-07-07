@@ -2,7 +2,6 @@ using UnityEngine;
 /*
  * 플레이어 애니메이션 관리용 클래스
  */
-[RequireComponent(typeof(PlayerState))]
 public class PlayerAnimation : MonoBehaviour
 {
     private Animator animator;
@@ -11,8 +10,8 @@ public class PlayerAnimation : MonoBehaviour
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
-        state = GetComponent<PlayerState>();
+        animator = Player.Instance.animator;
+        state = Player.State;
     }
 
     private void OnEnable()

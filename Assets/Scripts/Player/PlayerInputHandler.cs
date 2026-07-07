@@ -6,13 +6,18 @@ using UnityEngine.InputSystem;
  */
 public class PlayerInputHandler : MonoBehaviour
 {
-    public Vector2 MoveInput { get; private set; }
-    public bool JumpTriggered { get; private set; }
-    public bool DashTriggered { get; private set; }
+    private PlayerMovement PlayerMovement;
+    private PlayerCombat PlayerCombat;
 
-    public bool AttackSweepTriggered { get; private set; }
-    public bool AttackGrapTriggered { get; private set; }
+    public Vector2 MoveInput { get; private set; }
+
     public bool EmitTriggered { get; private set; }
+
+    public void Awake()
+    {
+        PlayerMovement = GetComponent<PlayerMovement>();
+        PlayerCombat = GetComponent<PlayerCombat>();
+    }
 
     public void OnMove(InputValue value)
     {
@@ -23,7 +28,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            EventManager.TriggerEvent("OnJumpPressed");
+            PlayerMovement.ExecuteJump();
         }
     }
 
@@ -31,7 +36,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            EventManager.TriggerEvent("OnDashPressed");
+            PlayerMovement.ExecuteDash();
         }
     }
 
@@ -47,7 +52,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            EventManager.TriggerEvent("OnAttackSweepPressed");
+            PlayerCombat.ExecuteAttackSweep();
         }
     }
 
@@ -55,13 +60,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            EventManager.TriggerEvent("OnAttackGrapPressed");
+            PlayerCombat.ExecuteAttackGrap();
         }
     }
-
-    public void ConsumeJump() => JumpTriggered = false;
-
-    public void ConsumeDash() => DashTriggered = false;
-
-
 }

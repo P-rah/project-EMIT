@@ -698,7 +698,7 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 4
 --- !u!114 &963427683
@@ -713,7 +713,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788f01738f3dec146884e2b04aa8cca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  target: {fileID: 1616797779}
   data: {fileID: 11400000, guid: 5bc9bf452556c354a9c53f347f4205d7, type: 2}
   rb: {fileID: 963427682}
   maxHealth: 0
@@ -1152,7 +1151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Cinemachine::Cinemachine.CinemachineBasicMultiChannelPerlin
   m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
-  m_PivotOffset: {x: 1, y: 1, z: 0}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
   m_AmplitudeGain: 0
   m_FrequencyGain: 1
   mNoiseOffsets: {x: -658.9741, y: -554.46387, z: -851.1808}
@@ -1176,6 +1175,7 @@ GameObject:
   - component: {fileID: 1616797790}
   - component: {fileID: 1616797791}
   - component: {fileID: 1616797792}
+  - component: {fileID: 1616797793}
   m_Layer: 3
   m_Name: TestPlayer
   m_TagString: Player
@@ -1365,7 +1365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 15
-  moveSpeedWhileAttack: 0
+  moveSpeedWhileAttack: 3
   jumpForce: 15
   dashPower: 40
   dashTime: 0.1
@@ -1424,16 +1424,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0491ad99ea0b4ce4b9e6fc8d3ca6ce8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 128
-  attackingTime: 0.2
-  attackCoolTime: 0.5
-  attackSweepPoint: {fileID: 2078460878}
-  attackSweepRange: 0.5
-  attackGrabPoint: {fileID: 1742584625}
-  attackGrabRange: 0.1
-  attackGrabDistance: 8
+  sweepCollider: {fileID: 2078460877}
+  grapCollider: {fileID: 1742584624}
+  attackingSweepTime: 0.2
+  attackingGrapTime: 0.5
+  attackCoolTime: 0.2
   emitCooldown: 1
 --- !u!95 &1616797790
 Animator:
@@ -1484,8 +1479,20 @@ MonoBehaviour:
   ghostPrefab: {fileID: 1664963545714560829, guid: 6f96f9f512bb05d4f9b537d342432dc3, type: 3}
   poolSize: 10
   ghostColor: {r: 1, g: 1, b: 1, a: 0.78431374}
-  fadeSpeed: 3
+  fadeSpeed: 4
   distanceBetweenGhosts: 0.5
+--- !u!114 &1616797793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616797779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b08e81de29fb9d4e8c9e7d9090fa323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
 --- !u!1 &1726210614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1581,13 +1588,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1742584625}
-  m_Layer: 3
+  - component: {fileID: 1742584627}
+  - component: {fileID: 1742584626}
+  m_Layer: 8
   m_Name: AttackGrap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1742584625
 Transform:
   m_ObjectHideFlags: 0
@@ -1603,6 +1612,67 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1616797781}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1742584626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1742584624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6de6830b2ddaba8418d5ecd733189a81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
+  knockbackPower: 10
+  localKnockbackDir: {x: 1, y: 0}
+  attackIsGrap: 1
+--- !u!61 &1742584627
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1742584624}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 1, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 2, y: 0.1}
+  m_EdgeRadius: 0
 --- !u!1 &2078460877
 GameObject:
   m_ObjectHideFlags: 0
@@ -1612,13 +1682,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2078460878}
-  m_Layer: 3
+  - component: {fileID: 2078460880}
+  - component: {fileID: 2078460879}
+  m_Layer: 8
   m_Name: AttackSweep
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2078460878
 Transform:
   m_ObjectHideFlags: 0
@@ -1634,6 +1706,67 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1616797781}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2078460879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2078460877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6de6830b2ddaba8418d5ecd733189a81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
+  knockbackPower: 10
+  localKnockbackDir: {x: 1, y: 0}
+  attackIsGrap: 0
+--- !u!61 &2078460880
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2078460877}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.5, y: 0.3}
+  m_EdgeRadius: 0
 --- !u!1 &2079430870
 GameObject:
   m_ObjectHideFlags: 0

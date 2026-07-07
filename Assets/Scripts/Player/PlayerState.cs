@@ -39,7 +39,7 @@ public class PlayerState : MonoBehaviour
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = Player.Instance.Rb;
     }
 
     private void Update()
@@ -58,8 +58,8 @@ public class PlayerState : MonoBehaviour
     {
         State newState = CurrentState;
 
+        if (isAttackingSweep) newState = State.AttackingSweep;
 
-        if(isAttackingSweep) newState = State.AttackingSweep;
         else if (isAttackingGrap) newState = State.AttackingGrap;
         else if (IsDashing) newState = State.Dashing;
         else if (IsGrounded)

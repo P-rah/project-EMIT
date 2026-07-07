@@ -3,23 +3,18 @@ using UnityEngine;
 /*
  * 플레이어 공격, 역행 관리용 클래스
  */
-[RequireComponent(typeof(Rigidbody2D), typeof(PlayerInputHandler), typeof(PlayerState))]
 public class PlayerCombat : MonoBehaviour
 {
-    private PlayerInputHandler input;
     private PlayerState state;
 
+    [Header("Hitbox Colliders")]
+    public GameObject sweepCollider;
+    public GameObject grapCollider;
+
     [Header("Attack Settings")]
-    public LayerMask enemyLayers;
-    public float attackingTime = 0.2f;
+    public float attackingSweepTime = 0.2f;
+    public float attackingGrapTime = 0.5f;
     public float attackCoolTime = 0.3f;
-
-    public Transform attackSweepPoint;
-    public float attackSweepRange = 0.5f;
-
-    public Transform attackGrabPoint;
-    public float attackGrabRange = 0.1f;
-    public float attackGrabDistance = 8f;
 
     [Header("Emit Settings")]
     public float emitCooldown = 1f;
@@ -29,21 +24,16 @@ public class PlayerCombat : MonoBehaviour
 
     private void Awake()
     {
-        input = GetComponent<PlayerInputHandler>();
-        state = GetComponent<PlayerState>();
+        state = Player.State;
     }
 
     private void OnEnable()
     {
-        EventManager.StartListening("OnAttackSweepPressed", ExecuteAttackSweep);
-        EventManager.StartListening("OnAttackGrapPressed", ExecuteAttackGrap);
         EventManager.StartListening("OnEmitPressed", ExecuteEmit);
     }
 
     private void OnDisable()
     {
-        EventManager.StopListening("OnAttackSweepPressed", ExecuteAttackSweep);
-        EventManager.StopListening("OnAttackGrapPressed", ExecuteAttackGrap);
         EventManager.StopListening("OnEmitPressed", ExecuteEmit);
     }
 
@@ -68,19 +58,13 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator AttackSweepRoutine()
     {
         canAttack = false;
-        state.isAttackingGrap = false;
         state.isAttackingSweep = true;
 
-            //공격 이펙트 활성화
-            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackSweepPoint.position, attackSweepRange, enemyLayers);
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            Debug.Log(enemy.name + "hit!");
-            CameraShake.Instance.ShakeCamera(5f, 0.5f);
-            // enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
-        }
+        //공격 처리
+        sweepCollider.SetActive(true);
 
-        yield return new WaitForSeconds(attackingTime);
+        yield return new WaitForSeconds(attackingSweepTime);
+        sweepCollider.SetActive(false);
         state.isAttackingSweep = false;
 
         yield return new WaitForSeconds(attackCoolTime);
@@ -90,23 +74,13 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator AttackGrapRoutine()
     {
         canAttack = false;
-        state.isAttackingSweep = false;
         state.isAttackingGrap = true;
 
-        Vector2 direction = transform.right;
-        RaycastHit2D hitInfo = Physics2D.CircleCast(attackGrabPoint.position, attackGrabRange, direction, attackGrabDistance, enemyLayers);
-        if (hitInfo.collider != null)
-        {
-            Debug.Log(hitInfo.collider.name + "hit!");
-            CameraShake.Instance.ShakeCamera(5f, 0.5f);
-            // Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
-            // if (enemy != null)
-            // {
-            //     enemy.TakeDamage(attackDamage);
-            // }
-        }
+        //공격 처리
+        grapCollider.SetActive(true);
 
-        yield return new WaitForSeconds(attackingTime);
+        yield return new WaitForSeconds(attackingGrapTime);
+        grapCollider.SetActive(false);
         state.isAttackingGrap = false;
 
         yield return new WaitForSeconds(attackCoolTime);
@@ -121,22 +95,4 @@ public class PlayerCombat : MonoBehaviour
         yield return new WaitForSeconds(emitCooldown);
         canEmit = true;
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (attackSweepPoint != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(attackSweepPoint.position, attackSweepRange);
-
-        }
-        if (attackGrabPoint != null)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(attackGrabPoint.position, attackGrabRange);
-            Gizmos.DrawLine(attackGrabPoint.position, attackGrabPoint.position + transform.right * attackGrabDistance);
-            Gizmos.DrawWireSphere(attackGrabPoint.position + transform.right * attackGrabDistance, attackGrabRange);
-        }
-    }
-
 }
