@@ -7,22 +7,16 @@ using UnityEngine.XR;
 
 public class Enemy : MonoBehaviour, Attackable
 {
-    public struct Attack
-    {
-        public int damage;
-        public bool hasKnockback;
-        public bool KnockbackIsLeft;
-    };
-
     private EnemyState currentState;
 
-    private Transform target; //플레이어의 transform
+    public Transform target; //플레이어의 transform
 
     public EnemyIdleState IdleState { get; private set; }
     public EnemyAttackState AttackState { get; private set; }
     public EnemyChaseState ChaseState { get; private set; }
     public EnemyDeadState DeadState { get; private set; }
-    public EnemyKnockbackState KnockbackState { get; private set;}
+    public EnemyKnockbackState KnockbackState { get; private set;}  //넉백(밀치기) 상태
+    public EnemyGrappedState GrappedState { get; private set; }     //넉백이랑 당겨오는 상태랑 분리
 
     [Header("적 데이터")]
     [SerializeField] private EnemyData data;
@@ -39,10 +33,16 @@ public class Enemy : MonoBehaviour, Attackable
     public float startUpTime;
     public float recoveryTime;
 
+    public float knockbackRate;
+    public float knockbackTime;
+    public float grapForce;
+
     [Header("적 상태")]
     public bool canChangeState; // 다음 프레임에서 State가 자동으로 변경 가능한지만 관여
     public int currentHealth;
     public bool isRooted;
+    public Vector2 currentKnockBackForce;
+    public bool isCurrentHitGrap;
 
     public Vector2 front; // 적이 바라보는 방향 (넉백 관련 처리 시 필요)
 
@@ -74,7 +74,8 @@ public class Enemy : MonoBehaviour, Attackable
         AttackState = new EnemyAttackState(this);
         ChaseState = new EnemyChaseState(this);
         DeadState =  new EnemyDeadState(this);
-        KnockbackState = new EnemyKnockbackState(this); 
+        KnockbackState = new EnemyKnockbackState(this);
+        GrappedState = new EnemyGrappedState(this);
 
         rb = GetComponent<Rigidbody2D>();
         if (rb != null)
@@ -91,6 +92,9 @@ public class Enemy : MonoBehaviour, Attackable
         startAttackRange = data.startAttackRange;
         startUpTime = data.startUpTime;
         recoveryTime = data.recoveryTime;
+        knockbackRate = data.knockbackRate;
+        knockbackTime = data.knockbackTime;
+        grapForce = data.grapForce;
 
         canChangeState = true;
         isRooted = false;
@@ -135,26 +139,26 @@ public class Enemy : MonoBehaviour, Attackable
 
     public void ReceiveAttack(AttackInfo attackInfo)
     {
+        Vector2 HitPoint = attackInfo.HitPoint;
+        currentKnockBackForce = attackInfo.KnockbackForce;
+        isCurrentHitGrap = attackInfo.AttackIsGrap;
+
+        if(AttackState.CanBeCancelled())
+        {
+            AttackState.ExitState();
+        }
         // FIX: 임시로 struct 만들어둠
-        Attack atk = new Attack();
         // 데미지를 받고
-        ReceiveDamage(atk);
+        //ReceiveDamage(atk);
 
         if (currentHealth <= 0)
         {
             ChangeState(DeadState);
         }
-
-        // 넉백이 있으면 넉백도 받고
-        if (atk.hasKnockback)
-        {
-            ReceiveKnockback();
-        }
-
-
+        ReceiveKnockback();
     }
 
-    public void ReceiveDamage(Attack atk)
+    public void ReceiveDamage()
     {
         /*
 
@@ -172,11 +176,11 @@ public class Enemy : MonoBehaviour, Attackable
         단점: State의 
         */
 
-        int damage = atk.damage;
-        if (currentState == KnockbackState)
-        {
-            damage *= 2; // FIX: HARDCODED
-        }
+        //int damage = atk.damage;
+        //if (currentState == KnockbackState)
+        //{
+        //    damage *= 2; // FIX: HARDCODED
+        //}
         // 평타 = 1
         // 넉백 + 반대방향 평타 = 2
         // 역행 + 반대방향 평타 = 4
@@ -186,7 +190,8 @@ public class Enemy : MonoBehaviour, Attackable
 
     public void ReceiveKnockback()
     {
-        
+        if (!isCurrentHitGrap) ChangeState(KnockbackState);
+        else ChangeState(GrappedState);
     }
 
     public bool isPlayerInVision()

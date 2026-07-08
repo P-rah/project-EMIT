@@ -36,6 +36,5 @@ public class Player : MonoBehaviour
         Combat = GetComponent<PlayerCombat>();
         Animation = GetComponent<PlayerAnimation>();
         DashEffect = GetComponent<DashEffectController>();
-
     }
 }

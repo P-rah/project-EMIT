@@ -40,7 +40,7 @@ public class PlayerAttackHitbox : MonoBehaviour
 
             if (!hasTriggeredHitEffect)
             {
-                CameraShake.Instance.ShakeCamera(5f, 0.2f);
+                CameraShake.Instance.ShakeCamera(10f, 0.2f);
                 hasTriggeredHitEffect = true;
             }
         }

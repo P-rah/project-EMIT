@@ -21,4 +21,9 @@ public class EnemyData : ScriptableObject
     // 선딜 시간 + 후딜 시간 = 공격속도
     public float startUpTime; // 선딜레이 시간
     public float recoveryTime; // 후딜레이 시간
+
+    [Header("피격 관련")]
+    public float knockbackRate;
+    public float knockbackTime;
+    public float grapForce;
 }

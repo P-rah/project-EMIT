@@ -6,6 +6,8 @@ public class EnemyAttackState : EnemyState
     public EnemyAttackState(Enemy enemy) : base(enemy) { }
     private Coroutine attackCoroutine;
 
+    private bool isCancellable = false;
+
     public override void EnterState()
     {
         Debug.Log(enemy.name + " entered Attack State");
@@ -31,6 +33,8 @@ public class EnemyAttackState : EnemyState
         {
             enemy.StopCoroutine(attackCoroutine);
             attackCoroutine = null;
+            enemy.UnrootMovement();
+            enemy.canChangeState = true;
         }
     }
 
@@ -44,11 +48,13 @@ public class EnemyAttackState : EnemyState
     {
         // 선딜레이 시간
         Debug.Log("Charging Attack...");
+        isCancellable = true;
         yield return new WaitForSeconds(enemy.startUpTime);
         // 선딜레이 시간 동안에 넉백을 받았다면 TryAttack이 실패하고 KnockBackState가 되어야 함
         
         // 본공격
         Debug.Log("Enemy Attacked!");
+        isCancellable = false;
         // 공격 판정이 될 콜라이더 활성화
         // 
         // 콜라이더 비활성화
@@ -63,5 +69,10 @@ public class EnemyAttackState : EnemyState
     public bool IsAttacking()
     {
         return attackCoroutine != null;
+    }
+
+    public bool CanBeCancelled()
+    {
+        return isCancellable;
     }
 }

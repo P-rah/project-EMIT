@@ -21,5 +21,8 @@ MonoBehaviour:
   visionRange: 10
   attackRange: 5
   startAttackRange: 2
-  startUpTime: 1
-  recoveryTime: 2
+  startUpTime: 2
+  recoveryTime: 1
+  knockbackRate: 4
+  knockbackTime: 0.2
+  grapForce: 50
