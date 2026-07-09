@@ -1,6 +1,6 @@
 using UnityEngine;
 /*
- * ÇÃ·¹ÀÌ¾î »óÅÂ °ü¸®¿ë Å¬·¡½º
+ * í”Œë ˆì´ì–´ ìƒíƒœ ê´€ë¦¬ìš© í´ë˜ìŠ¤
  */
 public enum State
 {
@@ -10,7 +10,7 @@ public enum State
     Falling,
     Dashing,
     AttackingSweep,
-    AttackingGrap
+    AttackingGrab
 }
 
 public enum EmitState
@@ -25,7 +25,7 @@ public class PlayerState : MonoBehaviour
     public bool IsGrounded { get; private set; }
     public bool IsDashing { get; set; }
     public bool isAttackingSweep { get; set; }
-    public bool isAttackingGrap { get; set; }
+    public bool isAttackingGrab { get; set; }
 
     public EmitState CurrentEmitState { get; private set; }
     public bool isEmiting { get; set; }
@@ -60,7 +60,7 @@ public class PlayerState : MonoBehaviour
 
         if (isAttackingSweep) newState = State.AttackingSweep;
 
-        else if (isAttackingGrap) newState = State.AttackingGrap;
+        else if (isAttackingGrab) newState = State.AttackingGrab;
         else if (IsDashing) newState = State.Dashing;
         else if (IsGrounded)
         {

@@ -1,6 +1,6 @@
 using UnityEngine;
 /*
- * ÇÃ·¹ÀÌ¾î ¾Ö´Ï¸ŞÀÌ¼Ç °ü¸®¿ë Å¬·¡½º
+ * í”Œë ˆì´ì–´ ì• ë‹ˆë©”ì´ì…˜ ê´€ë¦¬ìš© í´ë˜ìŠ¤
  */
 public class PlayerAnimation : MonoBehaviour
 {
@@ -16,7 +16,7 @@ public class PlayerAnimation : MonoBehaviour
 
     private void OnEnable()
     {
-        AnimationControll();
+        AnimationControl();
         previousState = state.CurrentState;
     }
 
@@ -25,12 +25,12 @@ public class PlayerAnimation : MonoBehaviour
 
         if (previousState != state.CurrentState)
         {
-            AnimationControll();
+            AnimationControl();
             previousState = state.CurrentState;
         }
     }
 
-    private void AnimationControll()
+    private void AnimationControl()
     {
         switch(state.CurrentState)
         {
@@ -58,7 +58,7 @@ public class PlayerAnimation : MonoBehaviour
                 animator.SetBool("attackGrap", false);
                 animator.SetTrigger("isAttack");
                 break;
-            case State.AttackingGrap:
+            case State.AttackingGrab:
                 animator.SetBool("attackGrap", true);
                 animator.SetTrigger("isAttack");
                 break;

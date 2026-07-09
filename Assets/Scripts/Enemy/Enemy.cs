@@ -1,11 +1,7 @@
-using System.Data.Common;
-using JetBrains.Annotations;
-using NUnit.Framework.Internal;
-using TMPro;
 using UnityEngine;
-using UnityEngine.XR;
 
-public class Enemy : MonoBehaviour, Attackable
+[RequireComponent(typeof(Rigidbody2D))]
+public class Enemy : MonoBehaviour, IDamageable
 {
     private EnemyState currentState;
 
@@ -16,7 +12,7 @@ public class Enemy : MonoBehaviour, Attackable
     public EnemyChaseState ChaseState { get; private set; }
     public EnemyDeadState DeadState { get; private set; }
     public EnemyKnockbackState KnockbackState { get; private set;}  //넉백(밀치기) 상태
-    public EnemyGrappedState GrappedState { get; private set; }     //넉백이랑 당겨오는 상태랑 분리
+    public EnemyGrabbedState GrabbedState { get; private set; }     //넉백이랑 당겨오는 상태랑 분리
 
     [Header("적 데이터")]
     [SerializeField] private EnemyData data;
@@ -35,14 +31,14 @@ public class Enemy : MonoBehaviour, Attackable
 
     public float knockbackRate;
     public float knockbackTime;
-    public float grapForce;
+    public float grabForce;
 
     [Header("적 상태")]
     public bool canChangeState; // 다음 프레임에서 State가 자동으로 변경 가능한지만 관여
     public int currentHealth;
     public bool isRooted;
     public Vector2 currentKnockBackForce;
-    public bool isCurrentHitGrap;
+    public bool isCurrentHitGrab;
 
     public Vector2 front; // 적이 바라보는 방향 (넉백 관련 처리 시 필요)
 
@@ -75,7 +71,7 @@ public class Enemy : MonoBehaviour, Attackable
         ChaseState = new EnemyChaseState(this);
         DeadState =  new EnemyDeadState(this);
         KnockbackState = new EnemyKnockbackState(this);
-        GrappedState = new EnemyGrappedState(this);
+        GrabbedState = new EnemyGrabbedState(this);
 
         rb = GetComponent<Rigidbody2D>();
         if (rb != null)
@@ -94,7 +90,7 @@ public class Enemy : MonoBehaviour, Attackable
         recoveryTime = data.recoveryTime;
         knockbackRate = data.knockbackRate;
         knockbackTime = data.knockbackTime;
-        grapForce = data.grapForce;
+        grabForce = data.grabForce;
 
         canChangeState = true;
         isRooted = false;
@@ -139,9 +135,9 @@ public class Enemy : MonoBehaviour, Attackable
 
     public void ReceiveAttack(AttackInfo attackInfo)
     {
-        Vector2 HitPoint = attackInfo.HitPoint;
-        currentKnockBackForce = attackInfo.KnockbackForce;
-        isCurrentHitGrap = attackInfo.AttackIsGrap;
+        Vector2 HitPoint = attackInfo.hitPoint;
+        currentKnockBackForce = attackInfo.knockbackForce;
+        isCurrentHitGrab = attackInfo.attackIsGrab;
 
         if(AttackState.CanBeCancelled())
         {
@@ -190,8 +186,8 @@ public class Enemy : MonoBehaviour, Attackable
 
     public void ReceiveKnockback()
     {
-        if (!isCurrentHitGrap) ChangeState(KnockbackState);
-        else ChangeState(GrappedState);
+        if (!isCurrentHitGrab) ChangeState(KnockbackState);
+        else ChangeState(GrabbedState);
     }
 
     public bool isPlayerInVision()

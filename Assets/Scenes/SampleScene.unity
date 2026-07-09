@@ -727,13 +727,12 @@ MonoBehaviour:
   recoveryTime: 0
   knockbackRate: 0
   knockbackTime: 0
-  grapRate: 0
-  grapTime: 0
+  grabForce: 0
   canChangeState: 0
   currentHealth: 0
   isRooted: 0
   currentKnockBackForce: {x: 0, y: 0}
-  isCurrentHitGrap: 0
+  isCurrentHitGrab: 0
   front: {x: 0, y: 0}
 --- !u!1 &974782909
 GameObject:
@@ -1432,9 +1431,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
   sweepCollider: {fileID: 2078460877}
-  grapCollider: {fileID: 1742584624}
+  grabCollider: {fileID: 1742584624}
   attackingSweepTime: 0.2
-  attackingGrapTime: 0.5
+  attackingGrabTime: 0.5
   attackCoolTime: 0.2
   emitCooldown: 1
 --- !u!95 &1616797790
@@ -1598,7 +1597,7 @@ GameObject:
   - component: {fileID: 1742584627}
   - component: {fileID: 1742584626}
   m_Layer: 8
-  m_Name: AttackGrap
+  m_Name: AttackGrab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1633,7 +1632,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
   knockbackPower: 10
   localKnockbackDir: {x: 1, y: 0}
-  attackIsGrap: 1
+  attackIsGrab: 1
 --- !u!61 &1742584627
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1727,7 +1726,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
   knockbackPower: 10
   localKnockbackDir: {x: 1, y: 0}
-  attackIsGrap: 0
+  attackIsGrab: 0
 --- !u!61 &2078460880
 BoxCollider2D:
   m_ObjectHideFlags: 0

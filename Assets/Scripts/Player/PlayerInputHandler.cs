@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 /*
- * ÇÃ·¹ÀÌ¾î ÀÔ·ÂÀ» ¹Ş¾Æ ÀÌº¥Æ®¸¦ ¹ß»ı½ÃÅ°´Â Handler Å¬·¡½º
+ * í”Œë ˆì´ì–´ ì…ë ¥ì„ ë°›ì•„ ì´ë²¤íŠ¸ë¥¼ ë°œìƒì‹œí‚¤ëŠ” Handler í´ë˜ìŠ¤
  */
 public class PlayerInputHandler : MonoBehaviour
 {
@@ -56,11 +56,11 @@ public class PlayerInputHandler : MonoBehaviour
         }
     }
 
-    public void OnAttackGrap(InputValue value)
+    public void OnAttackGrab(InputValue value)
     {
         if (value.isPressed)
         {
-            PlayerCombat.ExecuteAttackGrap();
+            PlayerCombat.ExecuteAttackGrab();
         }
     }
 }

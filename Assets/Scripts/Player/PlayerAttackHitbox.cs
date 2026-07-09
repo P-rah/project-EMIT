@@ -6,7 +6,7 @@ public class PlayerAttackHitbox : MonoBehaviour
     public float knockbackPower = 10f;
     public Vector2 localKnockbackDir = new Vector2(1, 0);
 
-    public bool attackIsGrap;
+    public bool attackIsGrab;
 
     private bool hasTriggeredHitEffect = false;
 
@@ -17,7 +17,7 @@ public class PlayerAttackHitbox : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Attackable target = other.GetComponent<Attackable>();
+        IDamageable target = other.GetComponent<IDamageable>();
 
         if (target != null)
         {
@@ -31,9 +31,9 @@ public class PlayerAttackHitbox : MonoBehaviour
 
             AttackInfo info = new AttackInfo
             {
-                HitPoint = other.ClosestPoint(transform.position),
-                KnockbackForce = finalForce,
-                AttackIsGrap = attackIsGrap
+                hitPoint = other.ClosestPoint(transform.position),
+                knockbackForce = finalForce,
+                attackIsGrab = attackIsGrab
             };
 
             target.ReceiveAttack(info);

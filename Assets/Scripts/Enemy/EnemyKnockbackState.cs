@@ -10,7 +10,7 @@ public class EnemyKnockbackState : EnemyState
     {
         Debug.Log(enemy.name + " entered Knockback State");
         enemy.UnrootMovement();
-        knockback();
+        Knockback();
     }
 
     public override void UpdateState()
@@ -27,7 +27,7 @@ public class EnemyKnockbackState : EnemyState
 
     }
 
-    public void knockback()
+    public void Knockback()
     {
         enemy.canChangeState = false;
         enemy.rb.AddForce(enemy.currentKnockBackForce * enemy.knockbackRate, ForceMode2D.Impulse);

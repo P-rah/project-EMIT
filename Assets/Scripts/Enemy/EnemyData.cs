@@ -25,5 +25,5 @@ public class EnemyData : ScriptableObject
     [Header("피격 관련")]
     public float knockbackRate;
     public float knockbackTime;
-    public float grapForce;
+    public float grabForce;
 }

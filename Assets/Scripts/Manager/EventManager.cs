@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /*
- * °ÔÀÓ ÀÌº¥Æ® Á¦¾î¿ë ¸Å´ÏÀú Å¬·¡½º
+ * ê²Œì„ ì´ë²¤íŠ¸ ì œì–´ìš© ë§¤ë‹ˆì € í´ë˜ìŠ¤
  */
 public class EventManager : MonoBehaviour
 {
     public static EventManager Instance { get; private set; }
 
-    // ÀÌº¥Æ® º¸°ü µñ¼Å³Ê¸®
+    // ì´ë²¤íŠ¸ ë³´ê´€ ë”•ì…”ë„ˆë¦¬
     private Dictionary<string, Delegate> eventDictionary = new Dictionary<string, Delegate>();
 
     private void Awake()
@@ -22,7 +22,7 @@ public class EventManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // ¸®½º³Ê µî·Ï
+    // ë¦¬ìŠ¤ë„ˆ ë“±ë¡
     public static void StartListening(string eventName, Action listener)
     {
         if (Instance.eventDictionary.TryGetValue(eventName, out Delegate thisEvent))
@@ -31,7 +31,7 @@ public class EventManager : MonoBehaviour
             Instance.eventDictionary.Add(eventName, listener);
     }
 
-    // ¸®½º³Ê ÇØÁ¦
+    // ë¦¬ìŠ¤ë„ˆ í•´ì œ
     public static void StopListening(string eventName, Action listener)
     {
         if (Instance == null) return;
@@ -39,14 +39,14 @@ public class EventManager : MonoBehaviour
             Instance.eventDictionary[eventName] = Delegate.Remove(thisEvent, listener);
     }
 
-    // ÀÌº¥Æ® ¹ß»ı
+    // ì´ë²¤íŠ¸ ë°œìƒ
     public static void TriggerEvent(string eventName)
     {
         if (Instance.eventDictionary.TryGetValue(eventName, out Delegate thisEvent))
             (thisEvent as Action)?.Invoke();
     }
 
-    // ¸Å°³º¯¼ö<T> ¿¡ ´ëÇÑ ¿À¹ö·Îµå
+    // ë§¤ê°œë³€ìˆ˜<T> ì— ëŒ€í•œ ì˜¤ë²„ë¡œë“œ
     public static void StartListening<T>(string eventName, Action<T> listener)
     {
         if (Instance.eventDictionary.TryGetValue(eventName, out Delegate thisEvent))
@@ -72,7 +72,7 @@ public class EventManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"ÀÌº¥Æ® '{eventName}'ÀÇ ¸Å°³º¯¼ö Å¸ÀÔÀÌ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù!");
+                Debug.LogWarning($"ì´ë²¤íŠ¸ '{eventName}'ì˜ ë§¤ê°œë³€ìˆ˜ íƒ€ì…ì´ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤!");
             }
         }
     }
