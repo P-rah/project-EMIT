@@ -727,8 +727,7 @@ MonoBehaviour:
   recoveryTime: 0
   knockbackRate: 0
   knockbackTime: 0
-  grapRate: 0
-  grapTime: 0
+  grapForce: 0
   canChangeState: 0
   currentHealth: 0
   isRooted: 0

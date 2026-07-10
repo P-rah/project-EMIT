@@ -50,8 +50,6 @@ public class EnemyGrappedState : EnemyState
             );
             yield return null;
         }
-
-        Debug.Log("당기기 끝");
         enemy.transform.position = targetPosition;
         enemy.canChangeState = true;
     }
