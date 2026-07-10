@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     public static PlayerCombat Combat { get; private set; }
     public static PlayerAnimation Animation { get; private set; }
     public static DashEffectController DashEffect { get; private set; }
+    public static GrapEffect GrapEffect { get; private set; }
 
     private void Awake()
     {
@@ -36,5 +37,6 @@ public class Player : MonoBehaviour
         Combat = GetComponent<PlayerCombat>();
         Animation = GetComponent<PlayerAnimation>();
         DashEffect = GetComponent<DashEffectController>();
+        GrapEffect = GetComponent<GrapEffect>();
     }
 }

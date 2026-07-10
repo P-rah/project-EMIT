@@ -10,8 +10,8 @@ public class EnemyGrabbedState : EnemyState
     public override void EnterState()
     {
         Debug.Log(enemy.name + " entered Grab State");
+        enemy.canChangeState = false;
         enemy.UnrootMovement();
-        Grab();
     }
 
     public override void UpdateState()
@@ -30,12 +30,11 @@ public class EnemyGrabbedState : EnemyState
 
     public void Grab()
     {
-        float offsetX = (enemy.target.position.x > enemy.transform.position.x) ? -1f : 1f;
+        float offsetX = (enemy.target.position.x > enemy.transform.position.x) ? -0.5f : 0.5f;
         Vector2 targetPosition = new Vector2(enemy.target.position.x + offsetX, enemy.transform.position.y);
 
-        enemy.canChangeState = false;
         grabRoutine = enemy.StartCoroutine(GrabRoutine(targetPosition));
-   }
+    }
 
     IEnumerator GrabRoutine(Vector2 targetPosition)
     {

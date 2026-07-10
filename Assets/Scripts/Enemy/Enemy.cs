@@ -135,7 +135,6 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void ReceiveAttack(AttackInfo attackInfo)
     {
-        Vector2 HitPoint = attackInfo.hitPoint;
         currentKnockBackForce = attackInfo.knockbackForce;
         isCurrentHitGrab = attackInfo.attackIsGrab;
 
@@ -188,6 +187,12 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if (!isCurrentHitGrab) ChangeState(KnockbackState);
         else ChangeState(GrabbedState);
+    }
+
+    public void ReceiveGrab()
+    {
+        if(currentState == GrabbedState)
+            GrabbedState.Grab();
     }
 
     public bool isPlayerInVision()
