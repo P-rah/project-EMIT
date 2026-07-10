@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 /*
- * ÇÃ·¹ÀÌ¾î °ø°İ, ¿ªÇà °ü¸®¿ë Å¬·¡½º
+ * í”Œë ˆì´ì–´ ê³µê²©, ì—­í–‰ ê´€ë¦¬ìš© í´ë˜ìŠ¤
  */
 public class PlayerCombat : MonoBehaviour
 {
@@ -9,11 +9,11 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Hitbox Colliders")]
     public GameObject sweepCollider;
-    public GameObject grapCollider;
+    public GameObject grabCollider;
 
     [Header("Attack Settings")]
     public float attackingSweepTime = 0.2f;
-    public float attackingGrapTime = 0.5f;
+    public float attackingGrabTime = 0.5f;
     public float attackCoolTime = 0.3f;
 
     [Header("Emit Settings")]
@@ -43,10 +43,10 @@ public class PlayerCombat : MonoBehaviour
             StartCoroutine(AttackSweepRoutine());
     }
 
-    public void ExecuteAttackGrap()
+    public void ExecuteAttackGrab()
     {
         if (canAttack)
-            StartCoroutine(AttackGrapRoutine());
+            StartCoroutine(AttackGrabRoutine());
     }
 
     public void ExecuteEmit()
@@ -60,7 +60,7 @@ public class PlayerCombat : MonoBehaviour
         canAttack = false;
         state.isAttackingSweep = true;
 
-        //°ø°İ Ã³¸®
+        //ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
         sweepCollider.SetActive(true);
 
         yield return new WaitForSeconds(attackingSweepTime);
@@ -71,17 +71,17 @@ public class PlayerCombat : MonoBehaviour
         canAttack = true;
     }
 
-    private IEnumerator AttackGrapRoutine()
+    private IEnumerator AttackGrabRoutine()
     {
         canAttack = false;
-        state.isAttackingGrap = true;
+        state.isAttackingGrab = true;
 
-        //°ø°İ Ã³¸®
-        grapCollider.SetActive(true);
+        //ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+        grabCollider.SetActive(true);
 
-        yield return new WaitForSeconds(attackingGrapTime);
-        grapCollider.SetActive(false);
-        state.isAttackingGrap = false;
+        yield return new WaitForSeconds(attackingGrabTime);
+        grabCollider.SetActive(false);
+        state.isAttackingGrab = false;
 
         yield return new WaitForSeconds(attackCoolTime);
         canAttack = true;

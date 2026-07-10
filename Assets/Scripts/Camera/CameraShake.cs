@@ -2,9 +2,9 @@ using Cinemachine;
 using UnityEngine;
 
 /*
- * °ÔÀÓ ÇÃ·¹ÀÌ °¡»ó Ä«¸Ş¶ó¸¦ Èçµå´Â ½Ì±ÛÅæ Å¬·¡½º
- * CameraShake.Instance.ShakeCamera(°­µµf, ½Ã°£f);
- * À¸·Î È£Ãâ
+ * ê²Œì„ í”Œë ˆì´ ê°€ìƒ ì¹´ë©”ë¼ë¥¼ í”ë“œëŠ” ì‹±ê¸€í†¤ í´ë˜ìŠ¤
+ * CameraShake.Instance.ShakeCamera(ê°•ë„f, ì‹œê°„f);
+ * ìœ¼ë¡œ í˜¸ì¶œ
  */
 [RequireComponent(typeof(CinemachineVirtualCamera))]
 public class CameraShake : MonoBehaviour

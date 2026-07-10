@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class DashEffectController : MonoBehaviour
 {
-    [Header("ÀÜ»ó ¼³Á¤")]
+    [Header("ì”ìƒ ì„¤ì •")]
     public GameObject ghostPrefab;
     public int poolSize = 10;
     public Color ghostColor = new Color(1f, 1f, 1f, 0.5f);
     public float fadeSpeed = 3f;
 
-    [Header("»ı¼º °£°İ")]
+    [Header("ìƒì„± ê°„ê²©")]
     public float distanceBetweenGhosts = 1f;
 
     private Queue<GameObject> ghostPool;
@@ -46,7 +46,7 @@ public class DashEffectController : MonoBehaviour
     {
         isDashing = true;
 
-        // ´ë½¬ ½ÃÀÛ ½Ã ÇöÀç À§Ä¡¸¦ ÀúÀåÇÏ°í Ã¹ ÀÜ»óÀ» ¹Ù·Î ÇÏ³ª Âï½À´Ï´Ù.
+        // ëŒ€ì‰¬ ì‹œì‘ ì‹œ í˜„ì¬ ìœ„ì¹˜ë¥¼ ì €ì¥í•˜ê³  ì²« ì”ìƒì„ ë°”ë¡œ í•˜ë‚˜ ì°ìŠµë‹ˆë‹¤.
         lastSpawnPosition = transform.position;
         SpawnSingleGhost();
     }
@@ -70,7 +70,7 @@ public class DashEffectController : MonoBehaviour
         }
     }
 
-    // ÀÜ»ó ÇÏ³ª¸¦ ¼¼ÆÃÇÏ°í Ãâ·ÂÇÏ´Â ÇÔ¼ö
+    // ì”ìƒ í•˜ë‚˜ë¥¼ ì„¸íŒ…í•˜ê³  ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
     private void SpawnSingleGhost()
     {
         GameObject ghost = GetGhost();

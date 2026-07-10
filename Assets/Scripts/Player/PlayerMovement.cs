@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 /*
- * ÇÃ·¹ÀÌ¾î ÀÌµ¿ Á¦¾î¿ë Å¬·¡½º
+ * í”Œë ˆì´ì–´ ì´ë™ ì œì–´ìš© í´ë˜ìŠ¤
  */
 public class PlayerMovement : MonoBehaviour
 {
@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (state.CurrentState == State.Dashing) return;
-        else if (state.CurrentState == State.AttackingSweep || state.CurrentState == State.AttackingGrap)
+        else if (state.CurrentState == State.AttackingSweep || state.CurrentState == State.AttackingGrab)
             rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeedWhileAttack, rb.linearVelocity.y);
         else rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeed, rb.linearVelocity.y);
     }
