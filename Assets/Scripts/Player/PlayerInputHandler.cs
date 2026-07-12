@@ -8,7 +8,7 @@ public class PlayerInputHandler : MonoBehaviour
 {
     private PlayerMovement PlayerMovement;
     private PlayerCombat PlayerCombat;
-
+    
     public Vector2 MoveInput { get; private set; }
 
     public bool EmitTriggered { get; private set; }
