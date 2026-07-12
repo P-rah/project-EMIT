@@ -1,9 +1,10 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(EnemyEmitController))]
 public class Enemy : MonoBehaviour, IDamageable
 {
-    private EnemyState currentState;
+    public EnemyState currentState { get; private set; }
 
     public Transform target; //플레이어의 transform
 
@@ -55,6 +56,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public virtual void Update()
     {
+        if (EmitManager.Instance.isEmitting) return;
+
         if (currentState != DeadState) // race condition 방지
         {        
             currentState.UpdateState();
@@ -79,18 +82,25 @@ public class Enemy : MonoBehaviour, IDamageable
             rb.freezeRotation = true;
         }
 
-        maxHealth = currentHealth = data.baseHealth;
-        baseAttack = data.baseAttack;
-        baseSpeed = data.baseSpeed;
-        jumpHeight = data.jumpHeight;
-        visionRange = data.visionRange;
-        attackRange = data.attackRange;
-        startAttackRange = data.startAttackRange;
-        startUpTime = data.startUpTime;
-        recoveryTime = data.recoveryTime;
-        knockbackRate = data.knockbackRate;
-        knockbackTime = data.knockbackTime;
-        grabForce = data.grabForce;
+        if (!data)
+        {
+            Debug.LogError("Enemy is missing Enemy Data ScriptableObject!!");
+        }
+        else
+        {   
+            maxHealth = currentHealth = data.baseHealth;
+            baseAttack = data.baseAttack;
+            baseSpeed = data.baseSpeed;
+            jumpHeight = data.jumpHeight;
+            visionRange = data.visionRange;
+            attackRange = data.attackRange;
+            startAttackRange = data.startAttackRange;
+            startUpTime = data.startUpTime;
+            recoveryTime = data.recoveryTime;
+            knockbackRate = data.knockbackRate;
+            knockbackTime = data.knockbackTime;
+            grabForce = data.grabForce;
+        }
 
         canChangeState = true;
         isRooted = false;

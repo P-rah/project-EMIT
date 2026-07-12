@@ -40,8 +40,13 @@ public class PlayerAttackHitbox : MonoBehaviour
 
             if (!hasTriggeredHitEffect)
             {
-                CameraShake.Instance.ShakeCamera(10f, 0.2f);
+                if (EmitManager.Instance.isEmitting)
+                {
+                    EventManager.TriggerEvent("OnEmitAborted");
+                }
                 hasTriggeredHitEffect = true;
+                // 적 피격됐을 때
+                CameraShake.Instance.ShakeCamera(10f, 0.2f);
             }
         }
     }

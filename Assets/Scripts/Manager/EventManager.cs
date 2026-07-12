@@ -4,6 +4,8 @@ using UnityEngine;
 /*
  * 게임 이벤트 제어용 매니저 클래스
  */
+
+[DefaultExecutionOrder(-1000)]
 public class EventManager : MonoBehaviour
 {
     public static EventManager Instance { get; private set; }
