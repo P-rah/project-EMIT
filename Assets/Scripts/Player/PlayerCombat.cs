@@ -10,7 +10,7 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Hitbox Colliders")]
     public PlayerAttackHitbox sweepAttackHitbox;
-    public PlayerAttackHitbox grabAttackHitbox;
+    public PlayerGrapHitbox grabAttackHitbox;
 
     [Header("Attack Settings")]
     public float attackingSweepTime = 0.2f;
@@ -22,7 +22,8 @@ public class PlayerCombat : MonoBehaviour
     [Header("Emit Settings")]
     public float emitCooldown = 1f;
 
-    private bool canAttack = true;
+    private bool canAttackSweep = true;
+    private bool canAttackGrap = true;
     private bool canEmit = true;
 
     private Enemy currentTarget;
@@ -46,14 +47,28 @@ public class PlayerCombat : MonoBehaviour
 
     public void ExecuteAttackSweep()
     {
-        if (canAttack)
+        if (canAttackSweep)
+        {
+            if(state.CurrentState == State.AttackingGrab)
+            {
+                AnimEvent_stopGrabVisual();
+                AnimEvent_AttackGrapEnd();
+            }
             StartCoroutine(AttackSweepRoutine());
+        }
     }
 
     public void ExecuteAttackGrab()
     {
-        if (canAttack)
-            StartCoroutine(AttackGrabRoutine());
+        if (canAttackGrap)
+        {
+            canAttackSweep = false;
+            canAttackGrap = false;
+            state.isAttackingGrab = true;
+            hasTriggeredHitEffect = false;
+
+            grabAttackHitbox.OnTargetGrapHit += handleGrapHit;
+        }
     }
 
     public void ExecuteEmit()
@@ -64,27 +79,28 @@ public class PlayerCombat : MonoBehaviour
 
     private IEnumerator AttackSweepRoutine()
     {
-        canAttack = false;
+        canAttackSweep = false;
+        canAttackGrap = false;
         state.isAttackingSweep = true;
         hasTriggeredHitEffect = false;
 
-        sweepAttackHitbox.OnTargetHit += handleSweepHit;
+        sweepAttackHitbox.OnTargetSweepHit += handleSweepHit;
         sweepAttackHitbox.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(attackingSweepTime);
 
         sweepAttackHitbox.gameObject.SetActive(false);
-        sweepAttackHitbox.OnTargetHit -= handleSweepHit;
+        sweepAttackHitbox.OnTargetSweepHit -= handleSweepHit;
 
         state.isAttackingSweep = false;
 
         yield return new WaitForSeconds(attackCoolTime);
-        canAttack = true;
+        canAttackSweep = true;
+        canAttackGrap = true;
     }
 
     private void handleSweepHit(Transform target, Vector2 hitPoint)
     {
-
         if (!hasTriggeredHitEffect)
         {
             CameraShake.Instance.ShakeCamera(10f, 0.2f);
@@ -93,28 +109,7 @@ public class PlayerCombat : MonoBehaviour
     }
 
 
-    private IEnumerator AttackGrabRoutine()
-    {
-        canAttack = false;
-        state.isAttackingGrab = true;
-        hasTriggeredHitEffect = false;
-
-        grabAttackHitbox.OnTargetHit += handleGrabHit;
-        grabAttackHitbox.gameObject.SetActive(true);
-
-        yield return new WaitForSeconds(attackingGrabTime);
-
-        grabAttackHitbox.gameObject.SetActive(false);
-        grabAttackHitbox.OnTargetHit -= handleGrabHit;
-        currentTargetTransform = null;
-
-        state.isAttackingGrab = false;
-
-        yield return new WaitForSeconds(attackCoolTime);
-        canAttack = true;
-    }
-
-    private void handleGrabHit(Transform target, Vector2 hitPoint)
+    private void handleGrapHit(Transform target, Vector2 hitPoint)
     {
         currentTarget = target.GetComponent<Enemy>();
         currentTargetTransform = target;
@@ -123,6 +118,22 @@ public class PlayerCombat : MonoBehaviour
             CameraShake.Instance.ShakeCamera(10f, 0.2f);
             hasTriggeredHitEffect = true;
         }
+    }
+
+    public void AnimEvent_AttackGrapEnd()
+    {
+        grabAttackHitbox.OnTargetGrapHit -= handleGrapHit;
+        currentTargetTransform = null;
+
+        state.isAttackingGrab = false;
+
+        canAttackSweep = true;
+        canAttackGrap = true;
+    }
+
+    public void AnimEvent_GrabHitboxActive()
+    {
+        grabAttackHitbox.CatchClosestEnemy();
     }
 
     public void AnimEvent_startGrabVisual()
@@ -140,6 +151,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (currentTarget != null)
             currentTarget.ReceiveGrab();
+        canAttackSweep = true;
     }
 
     private IEnumerator EmitRoutine()
