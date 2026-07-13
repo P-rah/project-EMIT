@@ -24,6 +24,7 @@ public class GrapEffect : MonoBehaviour
 
         Vector2 startPos = startPoint.position;
         Vector2 endPos = targetPoint.position;
+        endPos.x += (endPos.x - startPos.x) > 0 ? -0.5f : 0.5f;
 
         Vector2 direction = endPos - startPos;
         float distance = direction.magnitude;

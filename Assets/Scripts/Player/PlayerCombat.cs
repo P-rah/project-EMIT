@@ -20,11 +20,8 @@ public class PlayerCombat : MonoBehaviour
     private bool hasTriggeredHitEffect = false;
 
     [Header("Emit Settings")]
-    public float emitCooldown = 1f;
-
     private bool canAttackSweep = true;
     private bool canAttackGrap = true;
-    private bool canEmit = true;
 
     private Enemy currentTarget;
     private Transform currentTargetTransform;
@@ -33,16 +30,6 @@ public class PlayerCombat : MonoBehaviour
     {
         state = Player.State;
         grapEffect = Player.GrapEffect;
-    }
-
-    private void OnEnable()
-    {
-        EventManager.StartListening("OnEmitPressed", ExecuteEmit);
-    }
-
-    private void OnDisable()
-    {
-        EventManager.StopListening("OnEmitPressed", ExecuteEmit);
     }
 
     public void ExecuteAttackSweep()
@@ -69,12 +56,6 @@ public class PlayerCombat : MonoBehaviour
 
             grabAttackHitbox.OnTargetGrapHit += handleGrapHit;
         }
-    }
-
-    public void ExecuteEmit()
-    {
-        if (canEmit)
-            StartCoroutine(EmitRoutine());
     }
 
     private IEnumerator AttackSweepRoutine()
@@ -106,6 +87,10 @@ public class PlayerCombat : MonoBehaviour
             CameraShake.Instance.ShakeCamera(10f, 0.2f);
             hasTriggeredHitEffect = true;
         }
+        if(EmitManager.Instance.isEmitting)
+        {
+            EventManager.TriggerEvent("OnEmitAborted");
+        }
     }
 
 
@@ -117,6 +102,10 @@ public class PlayerCombat : MonoBehaviour
         {
             CameraShake.Instance.ShakeCamera(10f, 0.2f);
             hasTriggeredHitEffect = true;
+        }
+        if (EmitManager.Instance.isEmitting)
+        {
+            EventManager.TriggerEvent("OnEmitAborted");
         }
     }
 
@@ -152,14 +141,5 @@ public class PlayerCombat : MonoBehaviour
         if (currentTarget != null)
             currentTarget.ReceiveGrab();
         canAttackSweep = true;
-    }
-
-    private IEnumerator EmitRoutine()
-    {
-        canEmit= false;
-        state.isEmiting = !state.isEmiting;
-
-        yield return new WaitForSeconds(emitCooldown);
-        canEmit = true;
     }
 }

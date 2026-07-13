@@ -1,5 +1,6 @@
-using System.Collections.Generic;
 using Cinemachine;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ public class EmitManager : MonoBehaviour
 
     [Header("현재 EMIT 상태")]
     [SerializeField] public bool isEmitting;
+    public bool isEmitable = true;
 
 
     private void Awake()
@@ -80,6 +82,7 @@ public class EmitManager : MonoBehaviour
 
     private void OnEmitPressed()
     {
+        isEmitable = false;
         Debug.Log("Emit Started");
         emittedFrames = 0;
         foreach (IEmit obj in emitObjects)
@@ -87,6 +90,7 @@ public class EmitManager : MonoBehaviour
             obj.BeginEmit();
         }
         isEmitting = true;
+        TimeManager.Instance.StartSlowMotion();
     }
 
     private void OnEmitFinished()
@@ -98,6 +102,9 @@ public class EmitManager : MonoBehaviour
         }
         emittedFrames = 0;
         isEmitting = false;
+        TimeManager.Instance.StopSlowMotion();
+        EventManager.TriggerEvent("OnEmitFinished");
+        StartCoroutine(emitCoolDownRoutine());
     }
 
     private void OnEmitAborted()
@@ -110,5 +117,13 @@ public class EmitManager : MonoBehaviour
         }
         emittedFrames = 0;
         isEmitting = false;
+        TimeManager.Instance.InstantNormalTime();
+        StartCoroutine(emitCoolDownRoutine());
+    }
+
+    private IEnumerator emitCoolDownRoutine()
+    {
+        yield return new WaitForSeconds(emitCooldownTime);
+        isEmitable = true;
     }
 }

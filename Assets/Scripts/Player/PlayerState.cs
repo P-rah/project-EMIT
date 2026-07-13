@@ -13,12 +13,6 @@ public enum State
     AttackingGrab
 }
 
-public enum EmitState
-{
-    emiting,
-    notEmiting
-}
-
 public class PlayerState : MonoBehaviour
 {
     public State CurrentState { get; private set; }
@@ -26,9 +20,6 @@ public class PlayerState : MonoBehaviour
     public bool IsDashing { get; set; }
     public bool isAttackingSweep { get; set; }
     public bool isAttackingGrab { get; set; }
-
-    public EmitState CurrentEmitState { get; private set; }
-    public bool isEmiting { get; set; }
 
     [Header("Ground Check Settings")]
     public Transform groundCheck;
@@ -46,7 +37,6 @@ public class PlayerState : MonoBehaviour
     {
         CheckGrounded();
         DetermineState();
-        DetermineEmitState();
     }
 
     private void CheckGrounded()
@@ -83,27 +73,9 @@ public class PlayerState : MonoBehaviour
         }
     }
 
-    private void DetermineEmitState()
-    {
-        EmitState newEmitState = CurrentEmitState;
-
-        if (isEmiting) newEmitState = EmitState.emiting;
-        else newEmitState = EmitState.notEmiting;
-
-        if (newEmitState != CurrentEmitState)
-        {
-            ChangeState(newEmitState);
-        }
-    }
-
     private void ChangeState(State newState)
     {
         CurrentState = newState;
-    }
-
-    private void ChangeState(EmitState newEmitState)
-    {
-        CurrentEmitState = newEmitState;
     }
 
     private void OnDrawGizmosSelected()

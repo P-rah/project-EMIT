@@ -44,7 +44,8 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            EventManager.TriggerEvent("OnEmitPressed");
+            if(EmitManager.Instance.isEmitable)
+                EventManager.TriggerEvent("OnEmitPressed");
         }
     }
 

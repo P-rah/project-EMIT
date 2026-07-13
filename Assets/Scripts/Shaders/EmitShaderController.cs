@@ -5,11 +5,15 @@ public class EmitShaderController : MonoBehaviour
 {
     private void OnEnable()
     {
-        EventManager.StartListening("OnEmitPressed", SwitchEffect);
+        EventManager.StartListening("OnEmitPressed", StartEffect);
+        EventManager.StartListening("OnEmitAborted", AbortEffect);
+        EventManager.StartListening("OnEmitFinished", EndEffect);
     }
     private void OnDisable()
     {
-        EventManager.StopListening("OnEmitPressed", SwitchEffect);
+        EventManager.StopListening("OnEmitPressed", StartEffect);
+        EventManager.StartListening("OnEmitAborted", AbortEffect);
+        EventManager.StartListening("OnEmitFinished", EndEffect);
     }
 
     [SerializeField]
@@ -18,36 +22,37 @@ public class EmitShaderController : MonoBehaviour
     private static int _shaderRad = Shader.PropertyToID("_ShaderRad");
     private static int _startPoint = Shader.PropertyToID("_StartPoint");
     public Transform startPoint;
-    private bool Emiting = false;
+    private Coroutine emitDistortionAction;
 
     private void Awake()
     {
         _material = GetComponent<SpriteRenderer>().material;
     }
 
-    private void SwitchEffect()
-    {
-        if(!Emiting)
-        {
-            StartEffect();
-        }
-        else
-        {
-            EndEffect();
-        }
-        Emiting = !Emiting;
-    }
-
     private void StartEffect()
     {
-        StartCoroutine(EmitDistortionAction(-0.1f, 2f));
+        emitDistortionAction = StartCoroutine(EmitDistortionAction(-0.1f, 2f));
     }
     private void EndEffect()
     {
-        StartCoroutine(EmitDistortionAction(2f, -0.1f));
+        emitDistortionAction = StartCoroutine(EmitDistortionAction(2f, -0.1f));
+    }
+    private void AbortEffect()
+    {
+        cancelEffect();
+        _material.SetFloat(_shaderRad, 0f);
     }
 
-    private IEnumerator EmitDistortionAction(float startPos, float endPos)
+    private void cancelEffect()
+    {
+        if(emitDistortionAction != null)
+        {
+            StopCoroutine(emitDistortionAction);
+            emitDistortionAction = null;
+        }
+    }
+
+    IEnumerator EmitDistortionAction(float startPos, float endPos)
     {
         _material.SetFloat(_shaderRad, startPos);
         float lerpedAmount = 0f;

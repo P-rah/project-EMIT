@@ -21,7 +21,7 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 8960278200517875464, guid: b658f7edd9e016c4d9ec5d9496a11df1, type: 3}
+      value: {fileID: 2598868237486306103, guid: 5bb9be3a9f8f0514c92d88324fa68da1, type: 3}
     - time: 0.083333336
       value: {fileID: -2465810860969379800, guid: b658f7edd9e016c4d9ec5d9496a11df1, type: 3}
     - time: 0.25
@@ -51,7 +51,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
       metaData: 0
     pptrCurveMapping:
-    - {fileID: 8960278200517875464, guid: b658f7edd9e016c4d9ec5d9496a11df1, type: 3}
+    - {fileID: 2598868237486306103, guid: 5bb9be3a9f8f0514c92d88324fa68da1, type: 3}
     - {fileID: -2465810860969379800, guid: b658f7edd9e016c4d9ec5d9496a11df1, type: 3}
     - {fileID: -4914715563372401958, guid: 5bb9be3a9f8f0514c92d88324fa68da1, type: 3}
     - {fileID: -4914715563372401958, guid: 5bb9be3a9f8f0514c92d88324fa68da1, type: 3}
@@ -115,3 +115,10 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 1
+  - time: 0.5
+    functionName: AnimEvent_AttackGrapEnd
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

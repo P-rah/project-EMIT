@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: 0c7a6f2e014ce8848ab74c7a63233861
+guid: ae95149a5101bd149b0bf1d9a1ac7a59
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2779023822413464520
-    second: stand_0
+      213: 2147685559727469259
+    second: Stand_0
   - first:
-      213: -8206780490526076562
-    second: stand_1
+      213: 1531825654891787424
+    second: Stand_1
   - first:
-      213: 2477338608294755939
-    second: stand_2
+      213: -6642458161248216228
+    second: Stand_2
   - first:
-      213: -1523739029567859866
-    second: stand_3
+      213: 3305897227715394346
+    second: Stand_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,12 +109,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: stand_0
+      name: Stand_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 2
-        width: 22
+        x: 27
+        y: 9
+        width: 20
         height: 58
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -124,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8c38d4d4173119620800000000000000
-      internalID: 2779023822413464520
+      spriteID: bc2bacc33ac1ecd10800000000000000
+      internalID: 2147685559727469259
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stand_1
+      name: Stand_1
       rect:
         serializedVersion: 2
-        x: 31
-        y: 2
-        width: 22
-        height: 58
+        x: 69
+        y: 10
+        width: 21
+        height: 57
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -146,20 +146,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e61569010a8ab1e80800000000000000
-      internalID: -8206780490526076562
+      spriteID: 0a4b7a13153224510800000000000000
+      internalID: 1531825654891787424
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stand_2
+      name: Stand_2
       rect:
         serializedVersion: 2
-        x: 57
-        y: 2
-        width: 22
-        height: 58
+        x: 120
+        y: 9
+        width: 21
+        height: 57
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -168,20 +168,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 36ef4c7b656416220800000000000000
-      internalID: 2477338608294755939
+      spriteID: c5bd76fde7f31d3a0800000000000000
+      internalID: -6642458161248216228
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stand_3
+      name: Stand_3
       rect:
         serializedVersion: 2
-        x: 84
-        y: 2
-        width: 22
-        height: 58
+        x: 176
+        y: 10
+        width: 21
+        height: 57
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -190,8 +190,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 663953cfc679adae0800000000000000
-      internalID: -1523739029567859866
+      spriteID: a2bbce16308e0ed20800000000000000
+      internalID: 3305897227715394346
       vertices: []
       indices: 
       edges: []
@@ -200,7 +200,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: eeaf1c06b664d5649a23e0e82c5a6994
+    spriteID: e1bc7fae4a4976e449dc6a1f47b73886
     internalID: 0
     vertices: []
     indices: 
@@ -210,10 +210,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      stand_0: 2779023822413464520
-      stand_1: -8206780490526076562
-      stand_2: 2477338608294755939
-      stand_3: -1523739029567859866
+      Stand_0: 2147685559727469259
+      Stand_1: 1531825654891787424
+      Stand_2: -6642458161248216228
+      Stand_3: 3305897227715394346
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
