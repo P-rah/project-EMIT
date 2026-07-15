@@ -26,3 +26,4 @@ MonoBehaviour:
   knockbackRate: 4
   knockbackTime: 0.2
   grabForce: 50
+  HitRecoveryTime: 0.2

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyKnockbackState : EnemyState
 {
-    public EnemyKnockbackState(Enemy enemy) : base(enemy) {}
+    public EnemyKnockbackState(Enemy enemy, EnemyAnimator enemyAnim) : base(enemy, enemyAnim) { }
     private Coroutine knockbackRoutine;
 
     public override void EnterState()
@@ -31,14 +31,34 @@ public class EnemyKnockbackState : EnemyState
     {
         enemy.canChangeState = false;
         enemy.rb.AddForce(enemy.currentKnockBackForce * enemy.knockbackRate, ForceMode2D.Impulse);
+        if((enemy.currentKnockBackForce.x > 0f) ==  (enemy.isFacingLeft))
+            enemyAnim.PlayHitFront();
+        else enemyAnim.PlayHitBack();
+
         knockbackRoutine = enemy.StartCoroutine(KnockbackRoutine());
     }
 
     IEnumerator KnockbackRoutine()
     {
         yield return new WaitForSeconds(enemy.knockbackTime);
+        enemy.canChangeHitState = true;
+        enemy.rb.linearVelocity = Vector2.zero;
+        yield return new WaitForSeconds(enemy.HitRecoveryTime);
+        enemy.canChangeHitState = false;
         enemy.canChangeState = true;
+        knockbackRoutine = null;
     }
+
+    public void stopKnockbackRoutine()
+    {
+        if (knockbackRoutine != null)
+        {
+            enemy.canChangeHitState = false;
+            enemy.StopCoroutine(knockbackRoutine);
+            knockbackRoutine = null;
+        }
+    }
+
     public bool isKnockbacking()
     {
         return knockbackRoutine != null;

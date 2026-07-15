@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyGrabbedState : EnemyState
 {
-    public EnemyGrabbedState(Enemy enemy) : base(enemy) { }
+    public EnemyGrabbedState(Enemy enemy, EnemyAnimator enemyAnim) : base(enemy, enemyAnim) { }
 
     private Coroutine grabRoutine;
 
@@ -33,6 +33,10 @@ public class EnemyGrabbedState : EnemyState
         float offsetX = (enemy.target.position.x > enemy.transform.position.x) ? -0.5f : 0.5f;
         Vector2 targetPosition = new Vector2(enemy.target.position.x + offsetX, enemy.transform.position.y);
 
+        if ((offsetX > 0f) == (enemy.isFacingLeft))
+            enemyAnim.PlayHitBack();
+        else enemyAnim.PlayHitFront();
+
         grabRoutine = enemy.StartCoroutine(GrabRoutine(targetPosition));
     }
 
@@ -55,10 +59,23 @@ public class EnemyGrabbedState : EnemyState
 
         enemy.rb.MovePosition(targetPosition);
         enemy.rb.linearVelocity = Vector2.zero;
+        enemy.canChangeHitState = true;
 
-        Debug.Log("당기기 끝");
+        yield return new WaitForSeconds(enemy.HitRecoveryTime);
+
+        enemy.canChangeHitState = false;
         enemy.canChangeState = true;
         grabRoutine = null;
+    }
+
+    public void stopGrapRoutine()
+    {
+        if (grabRoutine != null)
+        {
+            enemy.canChangeHitState = false;
+            enemy.StopCoroutine(grabRoutine);
+            grabRoutine = null;
+        }
     }
 
     public bool isGrabbed()

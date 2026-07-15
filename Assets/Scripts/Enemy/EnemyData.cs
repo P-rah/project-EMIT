@@ -26,4 +26,5 @@ public class EnemyData : ScriptableObject
     public float knockbackRate;
     public float knockbackTime;
     public float grabForce;
+    public float HitRecoveryTime;
 }

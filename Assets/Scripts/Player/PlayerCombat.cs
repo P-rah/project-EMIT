@@ -41,38 +41,30 @@ public class PlayerCombat : MonoBehaviour
                 AnimEvent_stopGrabVisual();
                 AnimEvent_AttackGrapEnd();
             }
-            StartCoroutine(AttackSweepRoutine());
-        }
-    }
-
-    public void ExecuteAttackGrab()
-    {
-        if (canAttackGrap)
-        {
             canAttackSweep = false;
             canAttackGrap = false;
-            state.isAttackingGrab = true;
+            state.isAttackingSweep = true;
             hasTriggeredHitEffect = false;
-
-            grabAttackHitbox.OnTargetGrapHit += handleGrapHit;
         }
     }
 
-    private IEnumerator AttackSweepRoutine()
+    public void AnimEvent_AttackSweepStart()
     {
-        canAttackSweep = false;
-        canAttackGrap = false;
-        state.isAttackingSweep = true;
-        hasTriggeredHitEffect = false;
-
+        Player.Movement.flipable = false;
         sweepAttackHitbox.OnTargetSweepHit += handleSweepHit;
         sweepAttackHitbox.gameObject.SetActive(true);
+    }
 
-        yield return new WaitForSeconds(attackingSweepTime);
-
+    public void AnimEvent_AttackSweepEnd()
+    {
+        Player.Movement.flipable = true;
         sweepAttackHitbox.gameObject.SetActive(false);
         sweepAttackHitbox.OnTargetSweepHit -= handleSweepHit;
+        StartCoroutine(AttackSweepCooldowmRoutine());
+    }
 
+    private IEnumerator AttackSweepCooldowmRoutine()
+    {
         state.isAttackingSweep = false;
 
         yield return new WaitForSeconds(attackCoolTime);
@@ -87,12 +79,25 @@ public class PlayerCombat : MonoBehaviour
             CameraShake.Instance.ShakeCamera(10f, 0.2f);
             hasTriggeredHitEffect = true;
         }
-        if(EmitManager.Instance.isEmitting)
+        if (EmitManager.Instance.isEmitting)
         {
             EventManager.TriggerEvent("OnEmitAborted");
         }
     }
 
+    public void ExecuteAttackGrab()
+    {
+        if (canAttackGrap)
+        {
+            canAttackSweep = false;
+            canAttackGrap = false;
+            state.isAttackingGrab = true;
+            hasTriggeredHitEffect = false;
+            Player.Movement.flipable = false;
+
+            grabAttackHitbox.OnTargetGrapHit += handleGrapHit;
+        }
+    }
 
     private void handleGrapHit(Transform target, Vector2 hitPoint)
     {
@@ -115,6 +120,7 @@ public class PlayerCombat : MonoBehaviour
         currentTargetTransform = null;
 
         state.isAttackingGrab = false;
+        Player.Movement.flipable = true;
 
         canAttackSweep = true;
         canAttackGrap = true;

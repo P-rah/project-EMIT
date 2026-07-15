@@ -8,6 +8,9 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public Transform target; //플레이어의 transform
 
+    private EnemyAnimator enemyAnim;
+    private SpriteRenderer spriteRenderer;
+
     public EnemyIdleState IdleState { get; private set; }
     public EnemyAttackState AttackState { get; private set; }
     public EnemyChaseState ChaseState { get; private set; }
@@ -33,6 +36,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public float knockbackRate;
     public float knockbackTime;
     public float grabForce;
+    public float HitRecoveryTime;
 
     [Header("적 상태")]
     public bool canChangeState; // 다음 프레임에서 State가 자동으로 변경 가능한지만 관여
@@ -40,8 +44,11 @@ public class Enemy : MonoBehaviour, IDamageable
     public bool isRooted;
     public Vector2 currentKnockBackForce;
     public bool isCurrentHitGrab;
+    public bool canChangeHitState;
 
     public Vector2 front; // 적이 바라보는 방향 (넉백 관련 처리 시 필요)
+
+    public bool isFacingLeft = false;
 
     public virtual void Awake() {
 
@@ -52,6 +59,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void Start()
     {
         Debug.Log("Enemy is Ready");
+        ChangeState(IdleState, false);
     }
 
     public virtual void Update()
@@ -63,18 +71,22 @@ public class Enemy : MonoBehaviour, IDamageable
             currentState.UpdateState();
         }
         front = (rb.transform.position.x > target.transform.position.x) ? Vector2.left : Vector2.right;
+        UpdateSpriteFlip();
     }
 
     public virtual void Init()
     {
         target = Player.InstanceTransform; //플레이어의 싱글톤 Transform 받아옴
 
-        IdleState = new EnemyIdleState(this);
-        AttackState = new EnemyAttackState(this);
-        ChaseState = new EnemyChaseState(this);
-        DeadState =  new EnemyDeadState(this);
-        KnockbackState = new EnemyKnockbackState(this);
-        GrabbedState = new EnemyGrabbedState(this);
+        enemyAnim = GetComponent<EnemyAnimator>();
+
+        IdleState = new EnemyIdleState(this, enemyAnim);
+        AttackState = new EnemyAttackState(this, enemyAnim);
+        ChaseState = new EnemyChaseState(this, enemyAnim);
+        DeadState =  new EnemyDeadState(this, enemyAnim);
+        KnockbackState = new EnemyKnockbackState(this, enemyAnim);
+        GrabbedState = new EnemyGrabbedState(this, enemyAnim);
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         rb = GetComponent<Rigidbody2D>();
         if (rb != null)
@@ -100,17 +112,21 @@ public class Enemy : MonoBehaviour, IDamageable
             knockbackRate = data.knockbackRate;
             knockbackTime = data.knockbackTime;
             grabForce = data.grabForce;
+            HitRecoveryTime = data.HitRecoveryTime;
         }
 
         canChangeState = true;
         isRooted = false;
-
-        ChangeState(IdleState);
+        canChangeHitState = false;
     }
 
-    public void ChangeState(EnemyState nextState)
+    public void ChangeState(EnemyState nextState, bool force)
     {
-        if ( currentState == nextState || !canChangeState ) return;
+        if(!force)
+        {
+            if (currentState == nextState || !canChangeState) return;
+        }
+
         currentState?.ExitState();
         currentState = nextState;
         currentState.EnterState();
@@ -158,9 +174,15 @@ public class Enemy : MonoBehaviour, IDamageable
 
         if (currentHealth <= 0)
         {
-            ChangeState(DeadState);
+            ChangeState(DeadState, true);
         }
-        ReceiveKnockback();
+        if (canChangeHitState)
+        {
+            KnockbackState.stopKnockbackRoutine();
+            GrabbedState.stopGrapRoutine();
+            ReceiveKnockback(true);
+        }
+        else ReceiveKnockback(false);
     }
 
     public void ReceiveDamage()
@@ -193,10 +215,12 @@ public class Enemy : MonoBehaviour, IDamageable
         
     }
 
-    public void ReceiveKnockback()
+    public void ReceiveKnockback(bool force)
     {
-        if (!isCurrentHitGrab) ChangeState(KnockbackState);
-        else ChangeState(GrabbedState);
+        if (!isCurrentHitGrab)
+            ChangeState(KnockbackState, force);
+        else
+            ChangeState(GrabbedState, force);
     }
 
     public void ReceiveGrab()
@@ -230,5 +254,14 @@ public class Enemy : MonoBehaviour, IDamageable
     public bool IsCurrentState(EnemyState state)
     {
         return currentState == state;
+    }
+
+    private void UpdateSpriteFlip()
+    {
+        if (canChangeState)
+        {
+            isFacingLeft = (front == Vector2.left);
+            spriteRenderer.flipX = isFacingLeft;
+        }
     }
 }

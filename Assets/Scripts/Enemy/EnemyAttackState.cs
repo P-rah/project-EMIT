@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyAttackState : EnemyState
 {
-    public EnemyAttackState(Enemy enemy) : base(enemy) { }
+    public EnemyAttackState(Enemy enemy, EnemyAnimator enemyAnim) : base(enemy, enemyAnim) { }
     private Coroutine attackCoroutine;
 
     private bool isCancellable = false;
@@ -11,6 +11,7 @@ public class EnemyAttackState : EnemyState
     public override void EnterState()
     {
         Debug.Log(enemy.name + " entered Attack State");
+        enemyAnim.PlayAttack();
         enemy.RootMovement();
         TryAttack();
     }

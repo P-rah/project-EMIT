@@ -9,10 +9,15 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         public Vector2 position;
         public float rotation;
         public EnemyState enemyState;
+        public Sprite sprite;
+        public bool flipX;
     }
     private EmitBuffer<KeyframeStatus> buffer;
     private Enemy _enemy;
     private Rigidbody2D _rb;
+    private SpriteRenderer spriteRenderer;
+    private EnemyAnimator _enemyAnimator;
+
     [SerializeField] private Vector3 spawnPosition;
 
     private void Awake()
@@ -26,6 +31,8 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         _enemy = GetComponent<Enemy>();
         _rb = _enemy.GetComponent<Rigidbody2D>();
         _rb.interpolation = RigidbodyInterpolation2D.Interpolate; // 더 부드러운 이펙트를 위해 필요함
+        spriteRenderer = _enemy.GetComponent<SpriteRenderer>();
+        _enemyAnimator = _enemy.GetComponent<EnemyAnimator>();
     } 
     // 버퍼 동적할당
     private void Start()
@@ -41,6 +48,8 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         frame.position = _rb.position;
         frame.rotation = _rb.rotation;
         frame.enemyState = _enemy.currentState;
+        frame.sprite = spriteRenderer.sprite;
+        frame.flipX = _enemy.isFacingLeft;
         return frame;
     }
 
@@ -52,6 +61,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
 
     void IEmit.BeginEmit()
     {
+        _enemyAnimator.stopAnimControll();
         _enemy.RootMovement();
     }
 
@@ -61,6 +71,8 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         {
             _rb.MovePosition(frame.position);
             _rb.MoveRotation(frame.rotation);
+            spriteRenderer.sprite = frame.sprite;
+            spriteRenderer.flipX = frame.flipX;
             // _rb.MoveRotation(frame.transform.rotation);
         }
         else
@@ -71,6 +83,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
 
     void IEmit.EndEmit()
     {
+        _enemyAnimator.startAnimControll();
         _enemy.UnrootMovement();
     }
 }

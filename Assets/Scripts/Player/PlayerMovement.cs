@@ -23,6 +23,8 @@ public class PlayerMovement : MonoBehaviour
     private float originalGravity;
     private bool canDash = true;
 
+    public bool flipable = true;
+
     private void Awake()
     {
         rb = Player.Instance.Rb;
@@ -61,8 +63,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void Flip()
     {
-        facingDirection = -facingDirection;
-        transform.Rotate(0f, 180f, 0f);
+        if (flipable)
+        {
+            facingDirection = -facingDirection;
+            transform.Rotate(0f, 180f, 0f);
+        }
     }
 
     private IEnumerator DashRoutine()
