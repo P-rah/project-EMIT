@@ -5,11 +5,14 @@ public class EnemyAnimator : MonoBehaviour
 {
     private Animator animator;
 
+    [SerializeField] private GameObject attackEffectObject;
+
     private readonly int hashIdle = Animator.StringToHash("EnemyIdle");
     private readonly int hashWalk = Animator.StringToHash("EnemyWalk");
     private readonly int hashHitFront = Animator.StringToHash("EnemyHitFront");
     private readonly int hashHitBack = Animator.StringToHash("EnemyHitBack");
-    private readonly int hashAttack = Animator.StringToHash("EnemyAttack");
+    private readonly int hashAttackStart = Animator.StringToHash("EnemyAttackStart");
+    private readonly int hashAttackEnd = Animator.StringToHash("EnemyAttackEnd");
 
     public void stopAnimControll()
     {
@@ -48,9 +51,22 @@ public class EnemyAnimator : MonoBehaviour
         animator.Play(hashHitBack);
     }
 
-    public void PlayAttack()
+    public void PlayAttackStart()
     {
-        animator.Play(hashAttack);
+        animator.Play(hashAttackStart);
+    }
+
+    public void PlayAttackEnd()
+    {
+        animator.Play(hashAttackEnd);
+    }
+
+    public void AnimEvent_SpawnAttackEffect()
+    {
+        if (attackEffectObject != null)
+        {
+            attackEffectObject.SetActive(true);
+        }
     }
 
     //public void AnimEvent_TriggerAttack()

@@ -10,7 +10,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         public float rotation;
         public EnemyState enemyState;
         public Sprite sprite;
-        public bool flipX;
+        public bool isFacingLeft;
     }
     private EmitBuffer<KeyframeStatus> buffer;
     private Enemy _enemy;
@@ -49,7 +49,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         frame.rotation = _rb.rotation;
         frame.enemyState = _enemy.currentState;
         frame.sprite = spriteRenderer.sprite;
-        frame.flipX = _enemy.isFacingLeft;
+        frame.isFacingLeft = _enemy.isFacingLeft;
         return frame;
     }
 
@@ -61,6 +61,9 @@ public class EnemyEmitController : MonoBehaviour, IEmit
 
     void IEmit.BeginEmit()
     {
+        _enemy.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        _enemy.isFacingLeft = false;
+        _enemy.ChangeState(_enemy.IdleState, true);
         _enemyAnimator.stopAnimControll();
         _enemy.RootMovement();
     }
@@ -72,7 +75,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
             _rb.MovePosition(frame.position);
             _rb.MoveRotation(frame.rotation);
             spriteRenderer.sprite = frame.sprite;
-            spriteRenderer.flipX = frame.flipX;
+            spriteRenderer.flipX = frame.isFacingLeft;
             // _rb.MoveRotation(frame.transform.rotation);
         }
         else
@@ -83,6 +86,8 @@ public class EnemyEmitController : MonoBehaviour, IEmit
 
     void IEmit.EndEmit()
     {
+        _enemy.Flip();
+        spriteRenderer.flipX = false;
         _enemyAnimator.startAnimControll();
         _enemy.UnrootMovement();
     }

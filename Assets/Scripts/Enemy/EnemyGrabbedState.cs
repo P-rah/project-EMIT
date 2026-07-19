@@ -42,6 +42,7 @@ public class EnemyGrabbedState : EnemyState
 
     IEnumerator GrabRoutine(Vector2 targetPosition)
     {
+        enemy.startDragEffect();
         enemy.rb.linearVelocity = Vector2.zero;
 
         while (Vector2.Distance(enemy.rb.position, targetPosition) > 0.1f)
@@ -57,6 +58,7 @@ public class EnemyGrabbedState : EnemyState
             yield return new WaitForFixedUpdate();
         }
 
+        enemy.endDragEffect();
         enemy.rb.MovePosition(targetPosition);
         enemy.rb.linearVelocity = Vector2.zero;
         enemy.canChangeHitState = true;

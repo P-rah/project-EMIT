@@ -35,11 +35,13 @@ public class PlayerAnimation : MonoBehaviour
         switch(state.CurrentState)
         {
             case State.Idle:
+                animator.SetBool("isJump", false);
                 animator.SetBool("isRun",false);
                 animator.SetBool("isGround", true);
                 animator.SetBool("isDash", false);
                 break;
             case State.Running:
+                animator.SetBool("isJump", false);
                 animator.SetBool("isRun", true);
                 animator.SetBool("isGround", true);
                 animator.SetBool("isDash", false);

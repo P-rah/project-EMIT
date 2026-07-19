@@ -527,7 +527,7 @@ AnimatorController:
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 0
+    m_DefaultBool: 1
     m_Controller: {fileID: 9100000}
   - m_Name: isRun
     m_Type: 4
@@ -542,12 +542,6 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
   - m_Name: isDash
-    m_Type: 4
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: attackReverse
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -921,16 +915,16 @@ AnimatorStateMachine:
     m_Position: {x: 290, y: 110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5231204156289103511}
-    m_Position: {x: 780, y: -10, z: 0}
+    m_Position: {x: 780, y: -30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5030141869496251873}
-    m_Position: {x: 760, y: 290, z: 0}
+    m_Position: {x: 810, y: 340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5901709071446793345}
-    m_Position: {x: 440, y: 300, z: 0}
+    m_Position: {x: 460, y: 360, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5686102171560500912}
-    m_Position: {x: 470, y: -10, z: 0}
+    m_Position: {x: 470, y: -30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3085460288700173823}
     m_Position: {x: 950, y: 110, z: 0}

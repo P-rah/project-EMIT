@@ -40,7 +40,9 @@ public class EnemyKnockbackState : EnemyState
 
     IEnumerator KnockbackRoutine()
     {
+        enemy.startDragEffect();
         yield return new WaitForSeconds(enemy.knockbackTime);
+        enemy.endDragEffect();
         enemy.canChangeHitState = true;
         enemy.rb.linearVelocity = Vector2.zero;
         yield return new WaitForSeconds(enemy.HitRecoveryTime);

@@ -9,7 +9,8 @@ public class Enemy : MonoBehaviour, IDamageable
     public Transform target; //플레이어의 transform
 
     private EnemyAnimator enemyAnim;
-    private SpriteRenderer spriteRenderer;
+
+    public ParticleSystem dragEffect;
 
     public EnemyIdleState IdleState { get; private set; }
     public EnemyAttackState AttackState { get; private set; }
@@ -47,7 +48,6 @@ public class Enemy : MonoBehaviour, IDamageable
     public bool canChangeHitState;
 
     public Vector2 front; // 적이 바라보는 방향 (넉백 관련 처리 시 필요)
-
     public bool isFacingLeft = false;
 
     public virtual void Awake() {
@@ -86,7 +86,6 @@ public class Enemy : MonoBehaviour, IDamageable
         DeadState =  new EnemyDeadState(this, enemyAnim);
         KnockbackState = new EnemyKnockbackState(this, enemyAnim);
         GrabbedState = new EnemyGrabbedState(this, enemyAnim);
-        spriteRenderer = GetComponent<SpriteRenderer>();
 
         rb = GetComponent<Rigidbody2D>();
         if (rb != null)
@@ -164,7 +163,9 @@ public class Enemy : MonoBehaviour, IDamageable
         currentKnockBackForce = attackInfo.knockbackForce;
         isCurrentHitGrab = attackInfo.attackIsGrab;
 
-        if(AttackState.CanBeCancelled())
+        EffectManager.Instance.PlayHitEffect(transform.position, currentKnockBackForce * -1);
+
+        if (AttackState.CanBeCancelled())
         {
             AttackState.ExitState();
         }
@@ -260,8 +261,26 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if (canChangeState)
         {
-            isFacingLeft = (front == Vector2.left);
-            spriteRenderer.flipX = isFacingLeft;
+            Flip();
         }
+    }
+
+    public void Flip()
+    {
+        if (isFacingLeft != (front == Vector2.left))
+        {
+            isFacingLeft = (front == Vector2.left);
+            transform.rotation = Quaternion.Euler(0f, isFacingLeft ? 180f : 0f, 0f);
+        }
+    }
+
+    public void startDragEffect()
+    {
+        dragEffect.Play();
+    }
+
+    public void endDragEffect()
+    {
+        dragEffect.Stop();
     }
 }

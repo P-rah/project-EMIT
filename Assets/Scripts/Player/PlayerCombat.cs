@@ -13,8 +13,6 @@ public class PlayerCombat : MonoBehaviour
     public PlayerGrapHitbox grabAttackHitbox;
 
     [Header("Attack Settings")]
-    public float attackingSweepTime = 0.2f;
-    public float attackingGrabTime = 0.5f;
     public float attackCoolTime = 0.3f;
 
     private bool hasTriggeredHitEffect = false;
@@ -38,7 +36,6 @@ public class PlayerCombat : MonoBehaviour
         {
             if(state.CurrentState == State.AttackingGrab)
             {
-                AnimEvent_stopGrabVisual();
                 AnimEvent_AttackGrapEnd();
             }
             canAttackSweep = false;
@@ -118,6 +115,8 @@ public class PlayerCombat : MonoBehaviour
     {
         grabAttackHitbox.OnTargetGrapHit -= handleGrapHit;
         currentTargetTransform = null;
+        currentTarget = null;
+        grapEffect.StopGrabVisual();
 
         state.isAttackingGrab = false;
         Player.Movement.flipable = true;
@@ -129,23 +128,25 @@ public class PlayerCombat : MonoBehaviour
     public void AnimEvent_GrabHitboxActive()
     {
         grabAttackHitbox.CatchClosestEnemy();
+        startGrabVisual();
     }
 
-    public void AnimEvent_startGrabVisual()
+    private void startGrabVisual()
     {
         if(currentTargetTransform != null)
             grapEffect.StartGrabVisual(currentTargetTransform);
-    }
-
-    public void AnimEvent_stopGrabVisual()
-    {
-        grapEffect.StopGrabVisual();
+        else grapEffect.StartGrabFailVisual();
     }
 
     public void AnimEvent_startEnemyGrab()
     {
         if (currentTarget != null)
             currentTarget.ReceiveGrab();
+        else
+        {
+            grapEffect.StartGrabFailVisualRetract();
+
+        }
         canAttackSweep = true;
     }
 }

@@ -27,16 +27,20 @@ public class PlayerGrapHitbox : MonoBehaviour
 
             if (target != null)
             {
+                float facingDirection = transform.root.right.x > 0 ? 1f : -1f;
                 OnTargetGrapHit?.Invoke(hit.collider.transform, hit.point);
                 Debug.Log(target);
 
                 AttackInfo info = new AttackInfo
                 {
-                    knockbackForce = Vector2.zero,
+                    knockbackForce = new Vector2(facingDirection, 0f),
                     attackIsGrab = true
                 };
                 target.ReceiveAttack(info);
                 break;
+            }
+            else
+            {
             }
         }
     }
