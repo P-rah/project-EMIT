@@ -7,11 +7,14 @@ public class EnemyGrabbedState : EnemyState
 
     private Coroutine grabRoutine;
 
+    private int intensity;
+
     public override void EnterState()
     {
         Debug.Log(enemy.name + " entered Grab State");
         enemy.canChangeState = false;
         enemy.UnrootMovement();
+        intensity = 1;
     }
 
     public override void UpdateState()

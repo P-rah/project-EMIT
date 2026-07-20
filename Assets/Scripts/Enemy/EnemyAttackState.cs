@@ -23,6 +23,10 @@ public class EnemyAttackState : EnemyState
         {
             return;
         }
+        if (EmitManager.Instance.isEmitting)
+        {
+            return;
+        }
         TryAttack();
     }
 

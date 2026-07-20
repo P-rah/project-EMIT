@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +9,9 @@ public class EnemyEmitController : MonoBehaviour, IEmit
     {
         public Vector2 position;
         public float rotation;
+        public Vector2 velocity;
         public EnemyState enemyState;
+        public int power;
         public Sprite sprite;
         public bool flipX;
     }
@@ -47,7 +50,9 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         KeyframeStatus frame;
         frame.position = _rb.position;
         frame.rotation = _rb.rotation;
+        frame.velocity = _rb.linearVelocity;
         frame.enemyState = _enemy.currentState;
+        frame.power = _enemy.currentPower;
         frame.sprite = spriteRenderer.sprite;
         frame.flipX = _enemy.isFacingLeft;
         return frame;
@@ -69,8 +74,11 @@ public class EnemyEmitController : MonoBehaviour, IEmit
     {
         if (buffer.Pop(out KeyframeStatus frame))
         {
+            // _rb.linearVelocity = -frame.velocity;
+            _enemy.SetState(frame.enemyState, -frame.power);
             _rb.MovePosition(frame.position);
             _rb.MoveRotation(frame.rotation);
+            
             spriteRenderer.sprite = frame.sprite;
             spriteRenderer.flipX = frame.flipX;
             // _rb.MoveRotation(frame.transform.rotation);

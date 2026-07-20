@@ -79,10 +79,6 @@ public class PlayerCombat : MonoBehaviour
             CameraShake.Instance.ShakeCamera(10f, 0.2f);
             hasTriggeredHitEffect = true;
         }
-        if (EmitManager.Instance.isEmitting)
-        {
-            EventManager.TriggerEvent("OnEmitAborted");
-        }
     }
 
     public void ExecuteAttackGrab()
@@ -107,10 +103,6 @@ public class PlayerCombat : MonoBehaviour
         {
             CameraShake.Instance.ShakeCamera(10f, 0.2f);
             hasTriggeredHitEffect = true;
-        }
-        if (EmitManager.Instance.isEmitting)
-        {
-            EventManager.TriggerEvent("OnEmitAborted");
         }
     }
 

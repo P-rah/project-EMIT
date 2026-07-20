@@ -900,6 +900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788f01738f3dec146884e2b04aa8cca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  currentStateString: 
   target: {fileID: 0}
   data: {fileID: 11400000, guid: 5bc9bf452556c354a9c53f347f4205d7, type: 2}
   rb: {fileID: 963427682}
@@ -1908,7 +1909,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1840609630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1995,6 +1996,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788f01738f3dec146884e2b04aa8cca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  currentStateString: 
   target: {fileID: 0}
   data: {fileID: 11400000, guid: 5bc9bf452556c354a9c53f347f4205d7, type: 2}
   rb: {fileID: 1840609633}

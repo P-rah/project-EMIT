@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class PlayerGrapHitbox : MonoBehaviour
 {
+    private const int AttackPower = 1;
+
     public event Action<Transform, Vector2> OnTargetGrapHit;
 
-    [Header("Å¸°Ý ¹üÀ§ ¼³Á¤")]
+    [Header("Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public Vector2 boxSize = new Vector2(1f, 1f); 
     public float attackDistance = 5f;
 
@@ -32,6 +34,8 @@ public class PlayerGrapHitbox : MonoBehaviour
 
                 AttackInfo info = new AttackInfo
                 {
+                    baseDamage = 1,
+                    power = -GetFacingDirection() * AttackPower,
                     knockbackForce = Vector2.zero,
                     attackIsGrab = true
                 };
@@ -39,6 +43,11 @@ public class PlayerGrapHitbox : MonoBehaviour
                 break;
             }
         }
+    }
+
+    private int GetFacingDirection()
+    {
+        return transform.root.right.x >= 0f ? 1 : -1;
     }
 
     private void OnDrawGizmosSelected()
