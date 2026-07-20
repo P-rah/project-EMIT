@@ -11,6 +11,7 @@ public class EnemyAttackState : EnemyState
     public override void EnterState()
     {
         Debug.Log(enemy.name + " entered Attack State");
+        enemyAnim.PlayAttack();
         enemy.RootMovement();
         TryAttack();
     }
@@ -22,7 +23,10 @@ public class EnemyAttackState : EnemyState
         {
             return;
         }
-        enemy.Flip();
+        if (EmitManager.Instance.isEmitting)
+        {
+            return;
+        }
         TryAttack();
     }
 
@@ -50,17 +54,15 @@ public class EnemyAttackState : EnemyState
         // 선딜레이 시간
         Debug.Log("Charging Attack...");
         isCancellable = true;
-        enemyAnim.PlayAttackStart();
-
         yield return new WaitForSeconds(enemy.startUpTime);
         // 선딜레이 시간 동안에 넉백을 받았다면 TryAttack이 실패하고 KnockBackState가 되어야 함
-
+        
         // 본공격
         Debug.Log("Enemy Attacked!");
         isCancellable = false;
-        enemyAnim.PlayAttackEnd();
-        CameraShake.Instance.ShakeCamera(10f,0.2f);
-
+        // 공격 판정이 될 콜라이더 활성화
+        // 
+        // 콜라이더 비활성화
         // 후딜레이 시간
         Debug.Log("Recovering from Attack...");
         yield return new WaitForSeconds(enemy.recoveryTime);
@@ -77,10 +79,5 @@ public class EnemyAttackState : EnemyState
     public bool CanBeCancelled()
     {
         return isCancellable;
-    }
-
-    public void SetAttackCancellable()
-    {
-        isCancellable = true;
     }
 }
