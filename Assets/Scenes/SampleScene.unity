@@ -640,7 +640,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.625
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4223,7 +4223,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.29407215, y: 0.4}
     oldSize: {x: 2.625, y: 3.53125}
-    newSize: {x: 2.625, y: 3.53125}
+    newSize: {x: 1.28125, y: 2.8125}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -4306,7 +4306,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.625, y: 3.53125}
+  m_Size: {x: 1.28125, y: 2.8125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -4600,6 +4600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788f01738f3dec146884e2b04aa8cca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  currentStateString: 
   target: {fileID: 0}
   dragEffect: {fileID: 1898318668}
   data: {fileID: 11400000, guid: 5bc9bf452556c354a9c53f347f4205d7, type: 2}
@@ -5645,7 +5646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeManager
   normalTimeScale: 1
-  slowTimeScale: 1
+  slowTimeScale: 0.3
   timeToSlowDown: 0.5
   timeToSpeedUp: 0.5
 --- !u!4 &1983602749

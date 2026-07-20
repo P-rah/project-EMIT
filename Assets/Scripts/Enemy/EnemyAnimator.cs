@@ -11,7 +11,7 @@ public class EnemyAnimator : MonoBehaviour
     private readonly int hashWalk = Animator.StringToHash("EnemyWalk");
     private readonly int hashHitFront = Animator.StringToHash("EnemyHitFront");
     private readonly int hashHitBack = Animator.StringToHash("EnemyHitBack");
-    private readonly int hashAttackStart = Animator.StringToHash("EnemyAttackStart");
+    private readonly int hashAttack = Animator.StringToHash("EnemyAttack");
     private readonly int hashAttackEnd = Animator.StringToHash("EnemyAttackEnd");
 
     public void stopAnimControll()
@@ -22,8 +22,6 @@ public class EnemyAnimator : MonoBehaviour
     {
         animator.enabled = true;
     }
-
-    //public event Action OnAttackFrame;
 
     private void Awake()
     {
@@ -53,7 +51,7 @@ public class EnemyAnimator : MonoBehaviour
 
     public void PlayAttackStart()
     {
-        animator.Play(hashAttackStart);
+        animator.Play(hashAttack);
     }
 
     public void PlayAttackEnd()
@@ -68,9 +66,4 @@ public class EnemyAnimator : MonoBehaviour
             attackEffectObject.SetActive(true);
         }
     }
-
-    //public void AnimEvent_TriggerAttack()
-    //{
-    //    OnAttackFrame?.Invoke();
-    //}
 }

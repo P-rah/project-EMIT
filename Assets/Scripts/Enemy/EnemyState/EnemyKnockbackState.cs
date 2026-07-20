@@ -8,7 +8,6 @@ public class EnemyKnockbackState : EnemyState
 
     public override void EnterState()
     {
-        Debug.Log(enemy.name + " entered Knockback State");
         enemy.UnrootMovement();
         Knockback();
     }

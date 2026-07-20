@@ -38,7 +38,6 @@ public class PlayerGrapHitbox : MonoBehaviour
                     knockbackForce = new Vector2(facingDirection, 0f),
                     baseDamage = 1,
                     power = -GetFacingDirection() * AttackPower,
-                    knockbackForce = Vector2.zero,
                     attackIsGrab = true
                 };
                 target.ReceiveAttack(info);

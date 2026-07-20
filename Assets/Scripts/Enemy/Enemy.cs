@@ -320,6 +320,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public void endDragEffect()
     {
         dragEffect.Stop();
+    }
 
     public bool isMovingLeft()
     {

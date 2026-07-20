@@ -10,7 +10,6 @@ public class EnemyAttackState : EnemyState
 
     public override void EnterState()
     {
-        Debug.Log(enemy.name + " entered Attack State");
         enemy.RootMovement();
         TryAttack();
     }
@@ -32,7 +31,6 @@ public class EnemyAttackState : EnemyState
 
     public override void ExitState()
     {
-        Debug.Log(enemy.name + " exited Attack State");
 
         if (attackCoroutine != null)
         {
@@ -52,7 +50,6 @@ public class EnemyAttackState : EnemyState
     IEnumerator AttackRoutine()
     {
         // 선딜레이 시간
-        Debug.Log("Charging Attack...");
         isCancellable = true;
         enemyAnim.PlayAttackStart();
 
@@ -60,13 +57,11 @@ public class EnemyAttackState : EnemyState
         // 선딜레이 시간 동안에 넉백을 받았다면 TryAttack이 실패하고 KnockBackState가 되어야 함
 
         // 본공격
-        Debug.Log("Enemy Attacked!");
         isCancellable = false;
         enemyAnim.PlayAttackEnd();
         CameraShake.Instance.ShakeCamera(10f,0.2f);
 
         // 후딜레이 시간
-        Debug.Log("Recovering from Attack...");
         yield return new WaitForSeconds(enemy.recoveryTime);
         attackCoroutine = null;
         enemy.UnrootMovement();

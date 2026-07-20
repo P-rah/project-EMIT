@@ -11,7 +11,6 @@ public class EnemyGrabbedState : EnemyState
 
     public override void EnterState()
     {
-        Debug.Log(enemy.name + " entered Grab State");
         enemy.canChangeState = false;
         enemy.UnrootMovement();
         intensity = 1;
