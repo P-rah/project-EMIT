@@ -54,6 +54,7 @@ public class EmitManager : MonoBehaviour
     {
         if (isEmitting)
         {
+            
             // 프레임을 모두 비워내기
             if (emittedFrames < emitBufferFrames)
             {                
