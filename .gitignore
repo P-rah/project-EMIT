@@ -34,8 +34,10 @@
 # Jetbrains Rider personal-layer settings
 *.DotSettings.user
 
-# Visual Studio Code User Preferences
+# IDE User Preferences
 *.vscode
+*.github
+*.agents
 
 # Visual Studio cache directory
 .vs/

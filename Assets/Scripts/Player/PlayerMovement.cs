@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using NUnit.Framework.Interfaces;
+using UnityEngine.UIElements;
+
 /*
  * 플레이어 이동 제어용 클래스
  */
@@ -13,7 +16,16 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Settings")]
     public float moveSpeed = 15f;
     public float moveSpeedWhileAttack = 5f;
-    public float jumpForce = 15f;
+    
+    [Header("Jump Movement")]
+    [SerializeField] private float jumpForce = 15f;
+
+    [Header("Slope Movement")]
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Transform groundCheckPos;
+    [SerializeField] private bool isOnSlope;
+    [SerializeField] private bool isExitingSlope;
+
 
     [Header("Dash Settings")]
     public float dashPower = 40f;
@@ -43,22 +55,92 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isExitingSlope && rb.linearVelocityY <= 0.1f && IsGrounded())
+        {
+            isExitingSlope = false;
+        }
+
+        // 경사면으로 대시하면 콜라이더 뚫음. 물리 업데이트를 안하니까.
         if (state.CurrentState == State.Dashing) return;
-        else if (state.CurrentState == State.AttackingSweep || state.CurrentState == State.AttackingGrab)
-            rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeedWhileAttack, rb.linearVelocity.y);
-        else rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeed, rb.linearVelocity.y);
+        // 수정: 경사면에서 이동하던 도중 공격을 하면 공중으로 뜸.
+        else if (state.isAttackingSweep || state.isAttackingGrab)
+        {
+            if (IsGrounded())
+            {
+                rb.gravityScale = 0f;
+                rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeedWhileAttack, 0f);
+            }
+            else
+            {
+                rb.gravityScale = originalGravity;
+                rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeedWhileAttack, rb.linearVelocityY);
+            }
+        }
+        else if (!isExitingSlope && IsOnSlope())
+        {   
+            // 경사면에 서 있다면, 경사면 방향으로 이동한다.
+            Vector2 moveDir = ProjectOnLine(input.MoveInput, GetGroundNormal()).normalized;
+            rb.linearVelocity = moveDir * moveSpeed;
+            rb.gravityScale = isOnSlope ? 0f : originalGravity;
+        }
+        else
+        {   
+            rb.gravityScale = originalGravity;
+            rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeed, rb.linearVelocity.y);
+        }
+        // 경사면을 탈출한 상황인데, 떨어지거나 매우 느린 상승 중이라면 다시 중력을 사용
     }
     public void ExecuteJump()
     {
-        if (state.IsGrounded)
+        if (IsGrounded())
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            isExitingSlope = true;
+            rb.gravityScale = originalGravity;
+            rb.linearVelocityY = 0f;
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
     }
 
     public void ExecuteDash()
     {
-        if(canDash&& input.MoveInput.x !=0) StartCoroutine(DashRoutine());
+        if (canDash&& input.MoveInput.x !=0) StartCoroutine(DashRoutine());
+    }
+
+    private bool IsGrounded()
+    {
+        if (Physics2D.OverlapCircle(groundCheckPos.position, 0.2f, groundLayer))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool IsOnSlope()
+    {
+        float angle = Vector2.Angle(Vector2.up, GetGroundNormal());
+        isOnSlope =  angle > 0.05f;
+        return isOnSlope; 
+    }
+
+    public Vector2 GetGroundNormal()
+    {
+        float rayLength = 0.5f;
+        RaycastHit2D hit = Physics2D.Raycast(groundCheckPos.position, Vector2.down, rayLength, groundLayer); 
+        if (hit.collider != null)
+        {
+            return hit.normal; 
+        }
+        
+        return Vector2.up;
+    }
+
+    public static Vector2 ProjectOnLine(Vector2 vector, Vector2 normal)
+    {
+        if (normal.sqrMagnitude < Mathf.Epsilon)
+            return vector;
+
+        return vector
+            - normal * (Vector2.Dot(vector, normal) / normal.sqrMagnitude);
     }
 
     public void Flip()
@@ -88,5 +170,8 @@ public class PlayerMovement : MonoBehaviour
 
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
+    }
+    private void OnTriggerEnter2D(Collider2D other) {
+        
     }
 }

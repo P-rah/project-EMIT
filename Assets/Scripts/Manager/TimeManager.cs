@@ -14,11 +14,11 @@ public class TimeManager : MonoBehaviour
         Instance = this;
     }
 
-    [Header("½Ã°£ ¼³Á¤")]
+    [Header("ì‹œê°„ ì„¤ì •")]
     public float normalTimeScale = 1f;
     public float slowTimeScale = 0.3f;
 
-    [Header("ÀüÈ¯ ½Ã°£")]
+    [Header("ì „í™˜ ì‹œê°„")]
     public float timeToSlowDown = 1f;
     public float timeToSpeedUp = 1f;
 
@@ -28,6 +28,7 @@ public class TimeManager : MonoBehaviour
     private void Start()
     {
         targetTimeScale = normalTimeScale;
+        Time.fixedDeltaTime = 0.02f;
     }
 
     private void Update()
@@ -39,7 +40,6 @@ public class TimeManager : MonoBehaviour
                 targetTimeScale,
                 transitionSpeed * Time.unscaledDeltaTime
             );
-            Time.fixedDeltaTime = 0.02f * Time.timeScale;
         }
         else
         {
