@@ -171,6 +171,182 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Robot-1 stand_3
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 56
+        width: 37
+        height: 35
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed89fe5a6e7be594d8f00790d47bcb0e
+      internalID: -1614778620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Robot-1 stand_4
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 31
+        width: 17
+        height: 25
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e2872fbd0aa6b843b66852c5a448e1a
+      internalID: -1457343400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Robot-1 stand_5
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 56
+        width: 12
+        height: 16
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80d10db697ac5ca49aab2a61ec6351d7
+      internalID: 2136359850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Robot-1 stand_6
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 30
+        width: 31
+        height: 26
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3c4632631f071d429f3705ff9f7bb05
+      internalID: -1154788715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Robot-1 stand_7
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 8
+        width: 20
+        height: 23
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59f0b42247fbfd74f8438e2d7fadf89b
+      internalID: -1026074975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Robot-1 stand_8
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 7
+        width: 20
+        height: 23
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c63d24a57bcf7b47865b5c08c5e2d8f
+      internalID: 1673799260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Robot-1 stand_9
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 36
+        width: 30
+        height: 24
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86da33f8dfdd3c246bf624ffdd0278c4
+      internalID: 435258886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Robot-1 stand_10
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 31
+        width: 17
+        height: 25
+      alignment: 9
+      pivot: {x: 0.3, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96e620ace60ab10479ef047cc1755ae3
+      internalID: 1419922260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -187,7 +363,15 @@ TextureImporter:
     nameFileIdTable:
       Robot-1 stand_0: 1341371039235538949
       Robot-1 stand_1: -2512065384870350043
+      Robot-1 stand_10: 1419922260
       Robot-1 stand_2: -3681879213401041899
+      Robot-1 stand_3: -1614778620
+      Robot-1 stand_4: -1457343400
+      Robot-1 stand_5: 2136359850
+      Robot-1 stand_6: -1154788715
+      Robot-1 stand_7: -1026074975
+      Robot-1 stand_8: 1673799260
+      Robot-1 stand_9: 435258886
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
