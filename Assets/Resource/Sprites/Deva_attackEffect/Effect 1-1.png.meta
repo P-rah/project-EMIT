@@ -146,8 +146,8 @@ TextureImporter:
       name: Effect 1-1_1
       rect:
         serializedVersion: 2
-        x: 153
-        y: 18
+        x: 154
+        y: 19
         width: 74
         height: 48
       alignment: 0
@@ -168,8 +168,8 @@ TextureImporter:
       name: Effect 1-1_2
       rect:
         serializedVersion: 2
-        x: 237
-        y: 17
+        x: 238
+        y: 18
         width: 74
         height: 48
       alignment: 0
