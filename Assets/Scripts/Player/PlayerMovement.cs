@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInputHandler input;
     private PlayerState state;
     private DashEffectController dashEffectController;
+    private PlayerDropDownPlatform playerDropThroughPlatform;
 
     [Header("Movement Settings")]
     public float moveSpeed = 15f;
@@ -35,12 +36,13 @@ public class PlayerMovement : MonoBehaviour
     private float originalGravity;
     private bool canDash = true;
 
-    public bool flipable = true;
+    public bool flippable = true;
 
     private void Awake()
     {
         rb = Player.Instance.Rb;
-        input = Player.InputHandler;
+        input = GetComponent<PlayerInputHandler>();
+        playerDropThroughPlatform = GetComponent<PlayerDropDownPlatform>();
         state = Player.State;
         dashEffectController = Player.DashEffect;
 
@@ -49,8 +51,25 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        HandleInputs();
         if (input.MoveInput.x > 0 && facingDirection < 0f) Flip();
         else if (input.MoveInput.x < 0 && facingDirection > 0f) Flip();
+    }
+
+    private void HandleInputs()
+    {
+        if (input.ConsumeJump())
+        {
+            ExecuteJump();
+        }
+        if (input.ConsumeDash())
+        {
+            ExecuteDash();
+        }
+        if (input.ConsumeDown())
+        {
+            playerDropThroughPlatform.TryDropDown();
+        }
     }
 
     private void FixedUpdate()
@@ -90,22 +109,24 @@ public class PlayerMovement : MonoBehaviour
         }
         // 경사면을 탈출한 상황인데, 떨어지거나 매우 느린 상승 중이라면 다시 중력을 사용
     }
-    public void ExecuteJump()
+
+    private void ExecuteJump()
     {
-        if (IsGrounded())
+        if (!IsGrounded())
         {
-            isExitingSlope = true;
-            rb.gravityScale = originalGravity;
-            rb.linearVelocityY = 0f;
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            return;
         }
+        isExitingSlope = true;
+        rb.gravityScale = originalGravity;
+        rb.linearVelocityY = 0f;
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 
-    public void ExecuteDash()
+    private void ExecuteDash()
     {
         if ( canDash && input.MoveInput.x !=0) StartCoroutine(DashRoutine());
     }
-    
+
     private bool IsGrounded()
     {
         if (Physics2D.OverlapCircle(groundCheckPos.position, 0.2f, groundLayer))
@@ -145,7 +166,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Flip()
     {
-        if (flipable)
+        if (flippable)
         {
             facingDirection = -facingDirection;
             transform.Rotate(0f, 180f, 0f);
@@ -171,6 +192,7 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
+
     private void OnTriggerEnter2D(Collider2D other) {
         
     }

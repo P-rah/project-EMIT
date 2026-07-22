@@ -1,10 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 /*
  * 플레이어 공격, 역행 관리용 클래스
  */
 public class PlayerCombat : MonoBehaviour
 {
+    private PlayerInputHandler input;
+
     private PlayerState state;
     private GrapEffect grapEffect;
 
@@ -26,8 +29,26 @@ public class PlayerCombat : MonoBehaviour
 
     private void Awake()
     {
+        input = GetComponent<PlayerInputHandler>();
         state = Player.State;
         grapEffect = Player.GrapEffect;
+    }
+
+    private void Update()
+    {
+        CheckInputs();
+    }
+
+    private void CheckInputs()
+    {
+        if (input.ConsumeAttackSweep())
+        {
+            ExecuteAttackSweep();
+        }
+        if (input.ConsumeAttackGrab())
+        {
+            ExecuteAttackGrab();
+        }
     }
 
     public void ExecuteAttackSweep()
@@ -47,14 +68,14 @@ public class PlayerCombat : MonoBehaviour
 
     public void AnimEvent_AttackSweepStart()
     {
-        Player.Movement.flipable = false;
+        Player.Movement.flippable = false;
         sweepAttackHitbox.OnTargetSweepHit += handleSweepHit;
         sweepAttackHitbox.gameObject.SetActive(true);
     }
 
     public void AnimEvent_AttackSweepEnd()
     {
-        Player.Movement.flipable = true;
+        Player.Movement.flippable = true;
         sweepAttackHitbox.gameObject.SetActive(false);
         sweepAttackHitbox.OnTargetSweepHit -= handleSweepHit;
         StartCoroutine(AttackSweepCooldowmRoutine());
@@ -86,7 +107,7 @@ public class PlayerCombat : MonoBehaviour
             canAttackGrap = false;
             state.isAttackingGrab = true;
             hasTriggeredHitEffect = false;
-            Player.Movement.flipable = false;
+            Player.Movement.flippable = false;
 
             grabAttackHitbox.OnTargetGrapHit += handleGrapHit;
         }
@@ -111,7 +132,7 @@ public class PlayerCombat : MonoBehaviour
         grapEffect.StopGrabVisual();
 
         state.isAttackingGrab = false;
-        Player.Movement.flipable = true;
+        Player.Movement.flippable = true;
 
         canAttackSweep = true;
         canAttackGrap = true;

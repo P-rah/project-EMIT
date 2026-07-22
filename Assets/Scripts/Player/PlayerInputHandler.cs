@@ -1,25 +1,31 @@
 using System;
+using NUnit.Framework.Interfaces;
 using UnityEngine;
 using UnityEngine.InputSystem;
 /*
- * 플레이어 입력을 받아 이벤트를 발생시키는 Handler 클래스
+ * 플레이어 입력을 받아 인풋을 처리하고 이벤트를 발생시키는 Handler 클래스
  */
 public class PlayerInputHandler : MonoBehaviour
 {
-    private PlayerMovement PlayerMovement;
-    private PlayerCombat PlayerCombat;
-    private PlayerDropThroughPlatform PlayerDropThroughPlatform;
-    
+    /*
+        ===============================================
+        LAYER 1: 인풋을 이용하는 스크립트들이 참조할 input flag들
+        =============================================== 
+    */
+
     public Vector2 MoveInput { get; private set; }
+    public bool JumpInput;
+    public bool DownInput;
+    public bool DashInput;
+    public bool EmitInput { get; private set; }
+    public bool AttackSweepInput { get; private set; }
+    public bool AttackGrabInput { get; private set; }
 
-    public bool EmitTriggered { get; private set; }
-
-    public void Awake()
-    {
-        PlayerMovement = GetComponent<PlayerMovement>();
-        PlayerCombat = GetComponent<PlayerCombat>();
-        PlayerDropThroughPlatform = GetComponent<PlayerDropThroughPlatform>();
-    }
+    /*
+        ===============================================
+        LAYER 2: Send Messages가 인식할 Input을 받아오는 함수들
+        ===============================================
+    */
 
     public void OnMove(InputValue value)
     {
@@ -30,7 +36,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            PlayerMovement.ExecuteJump();
+            JumpInput = true;
         }
     }
 
@@ -38,7 +44,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            PlayerDropThroughPlatform.TryDropDown();
+            DownInput = true;
         }
     }
 
@@ -46,7 +52,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            PlayerMovement.ExecuteDash();
+            DashInput = true;
         }
     }
 
@@ -54,7 +60,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            if(EmitManager.Instance.isEmitable)
+            if(EmitManager.Instance.isEmittable)
                 EventManager.TriggerEvent("OnEmitPressed");
         }
     }
@@ -63,7 +69,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            PlayerCombat.ExecuteAttackSweep();
+            AttackSweepInput = true;
         }
     }
 
@@ -71,7 +77,48 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            PlayerCombat.ExecuteAttackGrab();
+            AttackGrabInput = true;
         }
+    }
+    
+    /*
+        ===============================================
+        LAYER 3: 1회성 입력을 처리하는 함수들 (누를 때 시전)
+        ===============================================
+    */
+
+    public bool ConsumeJump()
+    {
+        bool result = JumpInput;
+        JumpInput = false;
+        return result;
+    }
+
+    public bool ConsumeDash()
+    {
+        bool result = DashInput;
+        DashInput = false;
+        return result;
+    }
+
+    public bool ConsumeDown()
+    {
+        bool result = DownInput;
+        DownInput = false;
+        return result;
+    }
+
+    public bool ConsumeAttackSweep()
+    {
+        bool result = AttackSweepInput;
+        AttackSweepInput = false;
+        return result;
+    }
+
+    public bool ConsumeAttackGrab()
+    {
+        bool result = AttackGrabInput;
+        AttackGrabInput = false;
+        return result;
     }
 }

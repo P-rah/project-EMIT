@@ -2,9 +2,10 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerDropThroughPlatform : MonoBehaviour
+public class PlayerDropDownPlatform : MonoBehaviour
 {
     [Header("References")]
+    [SerializeField] private PlayerInputHandler input;
     [SerializeField] private Collider2D playerCollider;
 
     [Header("Drop Through")]
