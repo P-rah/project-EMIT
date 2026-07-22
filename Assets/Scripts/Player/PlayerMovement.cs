@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInputHandler input;
     private PlayerState state;
     private DashEffectController dashEffectController;
-    private PlayerDropDownPlatform playerDropThroughPlatform;
+    private PlayerDropDownPlatform playerDropDownPlatform;
 
     [Header("Movement Settings")]
     public float moveSpeed = 15f;
@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = Player.Instance.Rb;
         input = GetComponent<PlayerInputHandler>();
-        playerDropThroughPlatform = GetComponent<PlayerDropDownPlatform>();
+        playerDropDownPlatform = GetComponent<PlayerDropDownPlatform>();
         state = Player.State;
         dashEffectController = Player.DashEffect;
 
@@ -52,8 +52,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         HandleInputs();
-        if (input.MoveInput.x > 0 && facingDirection < 0f) Flip();
-        else if (input.MoveInput.x < 0 && facingDirection > 0f) Flip();
+        FlipPlayer();
     }
 
     private void HandleInputs()
@@ -68,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (input.ConsumeDown())
         {
-            playerDropThroughPlatform.TryDropDown();
+            playerDropDownPlatform.TryDropDown();
         }
     }
 
@@ -80,9 +79,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // 경사면으로 대시하면 콜라이더 뚫음. 물리 업데이트를 안하니까.
-        if (state.CurrentState == State.Dashing) return;
+        // if (state.CurrentState == State.Dashing) return;
         // 수정: 경사면에서 이동하던 도중 공격을 하면 공중으로 뜸.
-        else if (state.isAttackingSweep || state.isAttackingGrab)
+        if (state.IsAttackingSweep || state.IsAttackingGrab)
         {
             if (IsGrounded())
             {
@@ -95,19 +94,18 @@ public class PlayerMovement : MonoBehaviour
                 rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeedWhileAttack, rb.linearVelocityY);
             }
         }
-        else if (!isExitingSlope && IsOnSlope())
+        else if (!isExitingSlope && IsOnSlope() && IsGrounded())
         {   
             // 경사면에 서 있다면, 경사면 방향으로 이동한다.
             Vector2 moveDir = ProjectOnLine(input.MoveInput, GetGroundNormal()).normalized;
             rb.linearVelocity = moveDir * moveSpeed;
             rb.gravityScale = isOnSlope ? 0f : originalGravity;
         }
-        else
+        else if (state.CurrentState != State.Dashing)
         {   
             rb.gravityScale = originalGravity;
             rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeed, rb.linearVelocity.y);
         }
-        // 경사면을 탈출한 상황인데, 떨어지거나 매우 느린 상승 중이라면 다시 중력을 사용
     }
 
     private void ExecuteJump()
@@ -164,13 +162,18 @@ public class PlayerMovement : MonoBehaviour
             - normal * (Vector2.Dot(vector, normal) / normal.sqrMagnitude);
     }
 
+    private void FlipPlayer()
+    {
+        if (!flippable) return;
+
+        if (input.MoveInput.x > 0 && facingDirection < 0f) Flip();
+        else if (input.MoveInput.x < 0 && facingDirection > 0f) Flip();
+    }
+
     public void Flip()
     {
-        if (flippable)
-        {
-            facingDirection = -facingDirection;
-            transform.Rotate(0f, 180f, 0f);
-        }
+        facingDirection = -facingDirection;
+        transform.Rotate(0f, 180f, 0f);
     }
 
     private IEnumerator DashRoutine()

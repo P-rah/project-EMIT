@@ -61,7 +61,7 @@ public class PlayerCombat : MonoBehaviour
             }
             canAttackSweep = false;
             canAttackGrap = false;
-            state.isAttackingSweep = true;
+            state.IsAttackingSweep = true;
             hasTriggeredHitEffect = false;
         }
     }
@@ -83,7 +83,7 @@ public class PlayerCombat : MonoBehaviour
 
     private IEnumerator AttackSweepCooldowmRoutine()
     {
-        state.isAttackingSweep = false;
+        state.IsAttackingSweep = false;
 
         yield return new WaitForSeconds(attackCoolTime);
         canAttackSweep = true;
@@ -105,7 +105,7 @@ public class PlayerCombat : MonoBehaviour
         {
             canAttackSweep = false;
             canAttackGrap = false;
-            state.isAttackingGrab = true;
+            state.IsAttackingGrab = true;
             hasTriggeredHitEffect = false;
             Player.Movement.flippable = false;
 
@@ -131,7 +131,7 @@ public class PlayerCombat : MonoBehaviour
         currentTarget = null;
         grapEffect.StopGrabVisual();
 
-        state.isAttackingGrab = false;
+        state.IsAttackingGrab = false;
         Player.Movement.flippable = true;
 
         canAttackSweep = true;
