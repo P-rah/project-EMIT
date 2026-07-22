@@ -79,6 +79,7 @@ public class PlayerState : MonoBehaviour
         if (newState != CurrentState)
         {
             ChangeState(newState);
+            Debug.Log(newState);
         }
     }
 
