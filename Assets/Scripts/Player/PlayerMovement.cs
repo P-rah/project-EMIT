@@ -34,8 +34,7 @@ public class PlayerMovement : MonoBehaviour
     public float dashCooldown = 0.5f;
     private float facingDirection = 1f;
     private float originalGravity;
-    
-    private bool canDash = true;
+    [SerializeField] private bool canDash = true;
 
     public bool flippable = true;
 
@@ -74,13 +73,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // 경사면으로 대시하면 콜라이더 뚫음. 물리 업데이트를 안하니까.
+        if (state.IsDashing) return;
+
         if (isExitingSlope && rb.linearVelocityY <= 0.1f && IsGrounded())
         {
             isExitingSlope = false;
         }
-
-        // 경사면으로 대시하면 콜라이더 뚫음. 물리 업데이트를 안하니까.
-        // if (state.CurrentState == State.Dashing) return;
         // 수정: 경사면에서 이동하던 도중 공격을 하면 공중으로 뜸.
         if (state.IsAttackingSweep || state.IsAttackingGrab)
         {
@@ -102,7 +101,7 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = moveDir * moveSpeed;
             rb.gravityScale = isOnSlope ? 0f : originalGravity;
         }
-        else if (state.CurrentState != State.Dashing)
+        else
         {   
             rb.gravityScale = originalGravity;
             rb.linearVelocity = new Vector2(input.MoveInput.x * moveSpeed, rb.linearVelocity.y);
