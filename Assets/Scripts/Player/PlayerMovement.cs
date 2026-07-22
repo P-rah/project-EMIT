@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     public float dashCooldown = 0.5f;
     private float facingDirection = 1f;
     private float originalGravity;
+    
     private bool canDash = true;
 
     public bool flipable = true;
