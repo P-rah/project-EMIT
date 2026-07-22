@@ -103,9 +103,9 @@ public class PlayerMovement : MonoBehaviour
 
     public void ExecuteDash()
     {
-        if (canDash&& input.MoveInput.x !=0) StartCoroutine(DashRoutine());
+        if ( canDash && input.MoveInput.x !=0) StartCoroutine(DashRoutine());
     }
-
+    
     private bool IsGrounded()
     {
         if (Physics2D.OverlapCircle(groundCheckPos.position, 0.2f, groundLayer))

@@ -8,6 +8,7 @@ public class PlayerInputHandler : MonoBehaviour
 {
     private PlayerMovement PlayerMovement;
     private PlayerCombat PlayerCombat;
+    private PlayerDropThroughPlatform PlayerDropThroughPlatform;
     
     public Vector2 MoveInput { get; private set; }
 
@@ -17,6 +18,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         PlayerMovement = GetComponent<PlayerMovement>();
         PlayerCombat = GetComponent<PlayerCombat>();
+        PlayerDropThroughPlatform = GetComponent<PlayerDropThroughPlatform>();
     }
 
     public void OnMove(InputValue value)
@@ -29,6 +31,14 @@ public class PlayerInputHandler : MonoBehaviour
         if (value.isPressed)
         {
             PlayerMovement.ExecuteJump();
+        }
+    }
+
+    public void OnDown(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            PlayerDropThroughPlatform.TryDropDown();
         }
     }
 
