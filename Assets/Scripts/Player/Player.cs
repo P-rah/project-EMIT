@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     public static DashEffectController DashEffect { get; private set; }
     public static GrapEffect GrapEffect { get; private set; }
 
-    private void Awake()
+private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);

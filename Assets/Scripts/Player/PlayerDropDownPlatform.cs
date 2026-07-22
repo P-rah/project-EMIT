@@ -20,7 +20,6 @@ public class PlayerDropDownPlatform : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
-
         if (playerCollider == null)
         {
             playerCollider = GetComponent<Collider2D>();
