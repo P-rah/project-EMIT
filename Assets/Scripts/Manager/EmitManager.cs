@@ -20,7 +20,7 @@ public class EmitManager : MonoBehaviour
 
     [Header("현재 EMIT 상태")]
     [SerializeField] public bool isEmitting;
-    public bool isEmitable = true;
+    public bool isEmittable = true;
 
 
     private void Awake()
@@ -83,7 +83,7 @@ public class EmitManager : MonoBehaviour
 
     private void OnEmitPressed()
     {
-        isEmitable = false;
+        isEmittable = false;
         Debug.Log("Emit Started");
         emittedFrames = 0;
         foreach (IEmit obj in emitObjects)
@@ -125,6 +125,6 @@ public class EmitManager : MonoBehaviour
     private IEnumerator emitCoolDownRoutine()
     {
         yield return new WaitForSeconds(emitCooldownTime);
-        isEmitable = true;
+        isEmittable = true;
     }
 }
