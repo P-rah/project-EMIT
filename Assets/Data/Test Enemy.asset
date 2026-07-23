@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: "\uD6C8\uB828\uC6A9 \uBD07"
   enemyInfo: "\uD6C8\uB828\uC6A9 \uBD07\uC784"
-  baseHealth: 1
+  baseHealth: 10
   baseAttack: 2
   baseSpeed: 3
   jumpHeight: 1
