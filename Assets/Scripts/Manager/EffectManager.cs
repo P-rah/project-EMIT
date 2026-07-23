@@ -7,9 +7,14 @@ public class EffectManager : MonoBehaviour
 
     [Header("¿˚ ««∞› ¿Ã∆Â∆Æ")]
     public GameObject enemyHitEffectPrefab;
-    public int poolSize = 10;
+    public int effectPoolSize = 10;
+
+    [Header("ªÁ∏¡ ¿Ã∆Â∆Æ º≥¡§")]
+    public GameObject deathEffectPrefab;
+    public int deathPoolSize = 5;
 
     private Queue<GameObject> effectPool = new Queue<GameObject>();
+    private Queue<GameObject> deathEffectPool = new Queue<GameObject>();
 
     private void Awake()
     {
@@ -19,12 +24,13 @@ public class EffectManager : MonoBehaviour
             return;
         }
         Instance = this;
-        InitializePool();
+        InitializeEffectPool();
+        InitializeDeathPool();
     }
 
-    private void InitializePool()
+    private void InitializeEffectPool()
     {
-        for (int i = 0; i < poolSize; i++)
+        for (int i = 0; i < effectPoolSize; i++)
         {
             GameObject effect = Instantiate(enemyHitEffectPrefab, transform);
             effect.SetActive(false);
@@ -69,5 +75,32 @@ public class EffectManager : MonoBehaviour
         effect.SetActive(false);
         effectPool.Enqueue(effect);
 
+    }
+
+    //ªÁ∏¡ ∆ƒ∆Ì »ø∞˙
+    private void InitializeDeathPool()
+    {
+        for (int i = 0; i < deathPoolSize; i++)
+        {
+            GameObject DieEffect = Instantiate(deathEffectPrefab, transform);
+            DieEffect.SetActive(false);
+            deathEffectPool.Enqueue(DieEffect);
+        }
+    }
+
+    public void PlayDeathEffect(Vector2 position)
+    {
+        GameObject DieEffect;
+        if (deathEffectPool.Count > 0) DieEffect = deathEffectPool.Dequeue();
+        else DieEffect = Instantiate(deathEffectPrefab, transform);
+
+        DieEffect.transform.position = position;
+        DieEffect.SetActive(true);
+    }
+
+    public void ReturnDeathEffect(GameObject effect)
+    {
+        effect.SetActive(false);
+        deathEffectPool.Enqueue(effect);
     }
 }

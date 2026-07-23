@@ -1,7 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-[DefaultExecutionOrder(200)]
 public class BackgroundController : MonoBehaviour
 {
     private float _initialPosX;
@@ -10,7 +9,7 @@ public class BackgroundController : MonoBehaviour
 
     [SerializeField] private Vector2 parallaxEffect = new Vector2(1f, 0f);
     [SerializeField] public GameObject camera;
-    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -19,8 +18,8 @@ public class BackgroundController : MonoBehaviour
         _backgroundWidth = GetComponent<SpriteRenderer>().bounds.size.x;
     }
 
-    // Update is called once per frame
-    void LateUpdate()
+    // Update is called once per frame
+    void LateUpdate()
     {
         float distanceHorizontal = camera.transform.position.x * parallaxEffect.x;
         float distanceVertical = camera.transform.position.y * parallaxEffect.y;
@@ -30,7 +29,7 @@ public class BackgroundController : MonoBehaviour
         transform.position = new Vector2(_initialPosX + distanceHorizontal, _initialPosY + distanceVertical);
 
         ResetInitialPos(horizontalMovement);
-        
+
     }
 
     private void ResetInitialPos(float horizontalMovement)
@@ -45,6 +44,7 @@ public class BackgroundController : MonoBehaviour
         }
     }
 
+}
     /*
 
         이후에 DefaultExecutionOrder 사용하지 않을 시, 
@@ -89,4 +89,3 @@ public class BackgroundController : MonoBehaviour
             }
         }
     */
-}

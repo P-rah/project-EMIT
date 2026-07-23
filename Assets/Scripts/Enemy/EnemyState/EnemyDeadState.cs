@@ -7,6 +7,7 @@ public class EnemyDeadState : EnemyState
     public override void EnterState()
     {
         Debug.Log("Enemy is Dead");
+        EffectManager.Instance.PlayDeathEffect(enemy.transform.position);
     }
 
     // public override void UpdateState() { }
@@ -14,6 +15,7 @@ public class EnemyDeadState : EnemyState
     public override void ExitState()
     {
         // 적이 죽은 이후 실행시킬 로직
+
     }
 
     public override void CheckState()
