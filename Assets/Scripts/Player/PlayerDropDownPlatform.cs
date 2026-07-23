@@ -1,12 +1,14 @@
 using System.Collections;
+using UnityEditor.Callbacks;
 using UnityEngine;
+
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerDropDownPlatform : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private PlayerInputHandler input;
-    [SerializeField] private Collider2D playerCollider;
+    [SerializeField] private CapsuleCollider2D playerCollider;
+    [SerializeField] private CircleCollider2D feetCollider;
 
     [Header("Drop Through")]
     [SerializeField] private float ignoreDuration = 0.2f;
@@ -15,45 +17,52 @@ public class PlayerDropDownPlatform : MonoBehaviour
     [Header("Current Platform")]
     [SerializeField] private Collider2D _standingPlatform;
     private Rigidbody2D _rb;
-    private bool _isDropping;
+    public bool IsDropping;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+
         if (playerCollider == null)
         {
-            playerCollider = GetComponent<Collider2D>();
+            playerCollider = GetComponent<CapsuleCollider2D>();
+        }
+        if (feetCollider == null)
+        {
+            feetCollider = GetComponentInChildren<CircleCollider2D>();
         }
     }
+
     
-    private void OnCollisionStay2D(Collision2D collision)
+
+    private void OnTriggerStay2D (Collider2D other)
     {
-        if (!IsStandingOnPlatform(collision))
+        if (!IsStandingOnPlatform(other))
         {
             return;
         }
 
-        _standingPlatform = collision.collider;
+        _standingPlatform = other;
     }
 
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (!_isDropping && collision.collider == _standingPlatform)
+        if (!IsDropping && other == _standingPlatform)
         {
             _standingPlatform = null;
         }
     }
 
-    private bool IsStandingOnPlatform(Collision2D collision)
+    private bool IsStandingOnPlatform(Collider2D other)
     {
         // platform 타일맵만 usedByEffector를 true로 설정함
-        return collision.collider.usedByEffector;
+        return other.usedByEffector;
     }
     
     public void TryDropDown()
     {
-        if (_isDropping || _standingPlatform == null)
+        if (IsDropping || _standingPlatform == null)
         {
             return;
         }
@@ -63,11 +72,14 @@ public class PlayerDropDownPlatform : MonoBehaviour
 
     private IEnumerator DropThroughRoutine(Collider2D platformCollider)
     {
-        _isDropping = true;
+        IsDropping = true;
         _standingPlatform = null;
 
         Physics2D.IgnoreCollision(
             playerCollider, platformCollider, true);
+
+        Physics2D.IgnoreCollision(
+                feetCollider, platformCollider, true);
 
         // 실제로 아래쪽으로 빠져나가도록 최소 하강 속도 부여
         _rb.linearVelocity = new Vector2(
@@ -77,20 +89,20 @@ public class PlayerDropDownPlatform : MonoBehaviour
 
         yield return new WaitForSeconds(ignoreDuration);
 
-        if (platformCollider != null && playerCollider != null)
+        if (platformCollider != null && feetCollider != null)
         {
             Physics2D.IgnoreCollision(
                 playerCollider,
                 platformCollider,
                 false
             );
+            Physics2D.IgnoreCollision(
+                feetCollider,
+                platformCollider,
+                false
+            );
         }
 
-        _isDropping = false;
-    }
-
-    private static bool IsInLayerMask(int layer, LayerMask layerMask)
-    {
-        return (layerMask.value & (1 << layer)) != 0;
+        IsDropping = false;
     }
 }
