@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement Settings")]
     public float moveSpeed = 15f;
-    public float moveSpeedWhileAttack = 5f;
+    public float moveSpeedWhileAttack = 0f;
     
     [Header("Jump Movement")]
     [SerializeField] private float jumpForce = 15f;
