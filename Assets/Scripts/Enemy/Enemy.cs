@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -47,12 +48,15 @@ public class Enemy : MonoBehaviour, IDamageable
     public bool isRooted;
     public Vector2 currentKnockBackForce;
     public int currentPower { get; private set; }
+    public bool isUltCondition { get; set; }
     public bool isCurrentHitGrab;
     public bool canChangeHitState;
 
     public Vector2 front; // 적이 바라보는 방향 (넉백 관련 처리 시 필요)
     public bool isFacingLeft = false;
 
+    private float ultTime = 1f;
+    private Coroutine ultRoutine;
     public virtual void Awake() {
 
         Debug.Log("Enemy Awake");
@@ -180,15 +184,19 @@ public class Enemy : MonoBehaviour, IDamageable
         currentKnockBackForce = attackInfo.knockbackForce;
         isCurrentHitGrab = attackInfo.attackIsGrab;
 
-        EffectManager.Instance.PlayHitEffect(transform.position, currentKnockBackForce * -1);
-
         if (AttackState.CanBeCancelled())
         {
             AttackState.ExitState();
         }
-        // FIX: 임시로 struct 만들어둠
-        // 데미지를 받고
-        ReceiveDamage(attackInfo);
+
+        int damage = ReceiveDamage(attackInfo);
+        HitEffectBasedOnDamage(damage);
+
+        if (EmitManager.Instance.isEmitting)
+        {
+            if (isUltCondition) EventManager.TriggerEvent("OnEmitUlted");
+            else EventManager.TriggerEvent("OnEmitAborted");
+        }
 
         if (currentHealth <= 0)
         {
@@ -208,7 +216,7 @@ public class Enemy : MonoBehaviour, IDamageable
             : 0;
     }
 
-    public void ReceiveDamage(AttackInfo atk)
+    public int ReceiveDamage(AttackInfo atk)
     {
         int damage = DamageCalculation.Calculate(atk, this);
         
@@ -219,21 +227,29 @@ public class Enemy : MonoBehaviour, IDamageable
             Debug.Log("Enemy is Dead!");
             gameObject.SetActive(false);
         }
-        EventManager.TriggerEvent("OnEmitAborted");
-        /*
-        //int damage = atk.damage;
-        //if (currentState == KnockbackState)
-        //{
-        //    damage *= 2; // FIX: HARDCODED
-        //}
-        // 평타 = 1
-        // 넉백 + 반대방향 평타 = 2
-        // 역행 + 반대방향 평타 = 4
-        // 역행 + 역행방향 넉백 + 반대방향 평타 = 즉사
+        return damage;
+    }
 
-        평타 = 1
-        그랩 후 
-        */
+    private void HitEffectBasedOnDamage(int damage)
+    {
+        switch(damage)
+        {
+            case 1:
+                CameraShake.Instance.ShakeCamera(10f, 0.2f);
+                return;
+            case 2:
+                CameraShake.Instance.ShakeCamera(15f, 0.3f);
+                EffectManager.Instance.PlayHitEffect(transform.position, currentKnockBackForce * -1);
+                return;
+            case 4:
+                CameraShake.Instance.ShakeCamera(20f, 0.4f);
+                return;
+            case 8:
+                CameraShake.Instance.ShakeCamera(25f, 0.5f);
+                return;
+            default:
+                return;
+        }
     }
 
     private int GetEffectivePower(int power)
@@ -325,5 +341,30 @@ public class Enemy : MonoBehaviour, IDamageable
     public bool isMovingLeft()
     {
         return rb.linearVelocityX * Vector2.left.magnitude > 0f;
+    }
+    
+    public void startUltTimer()
+    {
+        ultRoutine = StartCoroutine(UltTimerRoutine());
+    }
+
+    public void cancelUltTimer()
+    {
+        if (ultRoutine != null)
+        {
+            StopCoroutine(ultRoutine);
+            isUltCondition = false;
+            EventManager.TriggerEvent("OnEmitAborted");
+            ultRoutine = null;
+        }
+    }
+
+    private IEnumerator UltTimerRoutine()
+    {
+        yield return new WaitForSeconds(ultTime);
+        isUltCondition = false;
+        EventManager.TriggerEvent("OnEmitAborted");
+
+        ultRoutine = null;
     }
 }

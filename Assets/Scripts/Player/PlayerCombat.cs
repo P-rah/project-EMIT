@@ -94,7 +94,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!hasTriggeredHitEffect)
         {
-            CameraShake.Instance.ShakeCamera(10f, 0.2f);
+            //공격이 적중했을 떄
             hasTriggeredHitEffect = true;
         }
     }
@@ -119,7 +119,7 @@ public class PlayerCombat : MonoBehaviour
         currentTargetTransform = target;
         if (!hasTriggeredHitEffect)
         {
-            CameraShake.Instance.ShakeCamera(10f, 0.2f);
+            //공격이 적중했을 때
             hasTriggeredHitEffect = true;
         }
     }
