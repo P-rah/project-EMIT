@@ -83,13 +83,15 @@ Material:
     - _BUILTIN_QueueOffset: 0
     - _BaseRad: 0
     - _CenterStrength: 0.97
-    - _DistanceFromCenter: 0.09
+    - _DistanceFromCenter: -0.1
+    - _EmitShaderActive: 0
     - _EnableExternalAlpha: 0
     - _FilterColorExposure: 1.5
     - _FilterOriginalColorRate: 0.133
     - _FilterResExposure: 0.7
-    - _FilterTolerance: 1
+    - _FilterTolerance: 0.17
     - _GrowthRateCurve: 0.089
+    - _ImpactActive: 0
     - _NoiseAmp: 0.757
     - _NoiseDensity: 3
     - _NoiseRandomness: 5
@@ -101,8 +103,8 @@ Material:
     - _QueueOffset: 0
     - _ShaderRad: 0
     - _ShaderRadius: 0.04
-    - _Size: 0.05
-    - _Strength: -0.1
+    - _Size: 1.08
+    - _Strength: -0.35
     - _XsizeRatio: 1.6
     - _ZWrite: 0
     - _distortionAmp: 0.208

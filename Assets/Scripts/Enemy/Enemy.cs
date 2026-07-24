@@ -49,6 +49,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public Vector2 currentKnockBackForce;
     public int currentPower { get; private set; }
     public bool isUltCondition { get; set; }
+    public int ultPower { get; set; }
     public bool isCurrentHitGrab;
     public bool canChangeHitState;
 
@@ -57,6 +58,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private float ultTime = 1f;
     private Coroutine ultRoutine;
+    public int dmgType { get; set; }
+
     public virtual void Awake() {
 
         Debug.Log("Enemy Awake");
@@ -120,7 +123,7 @@ public class Enemy : MonoBehaviour, IDamageable
             knockbackTime = data.knockbackTime;
             grabForce = data.grabForce;
             HitRecoveryTime = data.HitRecoveryTime;
-        }
+}
 
         canChangeState = true;
         isRooted = false;
@@ -189,8 +192,17 @@ public class Enemy : MonoBehaviour, IDamageable
             AttackState.ExitState();
         }
 
-        int damage = ReceiveDamage(attackInfo);
-        HitEffectBasedOnDamage(damage);
+        ReceiveDamage(attackInfo);
+        HitEffectBasedOnDamageType(dmgType);
+
+        if (currentHealth <= 0)
+        {
+            Debug.Log("Enemy is Dead!");
+            ChangeState(DeadState, true);
+            EventManager.TriggerEvent("OnEmitAborted");
+            gameObject.SetActive(false);
+            return;
+        }
 
         if (EmitManager.Instance.isEmitting)
         {
@@ -198,11 +210,6 @@ public class Enemy : MonoBehaviour, IDamageable
             else EventManager.TriggerEvent("OnEmitAborted");
         }
 
-        if (currentHealth <= 0)
-        {
-            ChangeState(DeadState, true);
-            return;
-        }
         if (canChangeHitState)
         {
             KnockbackState.stopKnockbackRoutine();
@@ -216,38 +223,34 @@ public class Enemy : MonoBehaviour, IDamageable
             : 0;
     }
 
-    public int ReceiveDamage(AttackInfo atk)
+    public void ReceiveDamage(AttackInfo atk)
     {
         int damage = DamageCalculation.Calculate(atk, this);
         
         currentHealth -= damage;
         Debug.Log($"Enemy가 데미지를 {damage} 입음");
-        if (currentHealth <= 0)
-        {
-            Debug.Log("Enemy is Dead!");
-            gameObject.SetActive(false);
-        }
-        return damage;
     }
 
-    private void HitEffectBasedOnDamage(int damage)
+    private void HitEffectBasedOnDamageType(int dmgType)
     {
-        switch(damage)
+        switch(dmgType)
         {
             case 1:
                 CameraShake.Instance.ShakeCamera(10f, 0.2f);
                 return;
             case 2:
-                CameraShake.Instance.ShakeCamera(15f, 0.3f);
+                CameraShake.Instance.ShakeCamera(20f, 0.3f);
+                EffectManager.Instance.PlayHitEffect(transform.position, currentKnockBackForce * -1);
+                return;
+            case 3:
+                CameraShake.Instance.ShakeCamera(30f, 0.4f);
                 EffectManager.Instance.PlayHitEffect(transform.position, currentKnockBackForce * -1);
                 return;
             case 4:
-                CameraShake.Instance.ShakeCamera(20f, 0.4f);
-                return;
-            case 8:
-                CameraShake.Instance.ShakeCamera(25f, 0.5f);
+                CameraShake.Instance.ShakeCamera(40f, 0.5f);
                 return;
             default:
+                Debug.Log("잘못된 데미지 타입");
                 return;
         }
     }

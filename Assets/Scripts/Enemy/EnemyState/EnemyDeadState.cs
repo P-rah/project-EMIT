@@ -8,6 +8,7 @@ public class EnemyDeadState : EnemyState
     {
         Debug.Log("Enemy is Dead");
         EffectManager.Instance.PlayDeathEffect(enemy.transform.position);
+        EmitManager.Instance.isEmittable = true;
     }
 
     // public override void UpdateState() { }

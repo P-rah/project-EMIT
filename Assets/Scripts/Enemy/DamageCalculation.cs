@@ -23,7 +23,7 @@ public static class DamageCalculation {
     
     Level 4: 역행 + (밀 + 당) / 역행 + (당 + 밀)
         - Emit 상태이고 state가 당/밀인 상태에서 직접 당/밀을 한 상태로 밀/당 공격
-        Dmg : 8
+        Dmg : 20
     */
 
     public static int Calculate(AttackInfo attack, Enemy enemy)
@@ -32,10 +32,11 @@ public static class DamageCalculation {
 
         if(enemy.isUltCondition)        //궁극기 조건 충족
         {
-            if (enemy.currentPower * attack.power > 0)      //반대방향이면
+            if (enemy.ultPower * attack.power < 0)      //반대방향이면
             {
+                enemy.dmgType = 4;
                 enemy.cancelUltTimer();
-                return damage = 8;
+                return damage = 20;
             }
         }
 
@@ -43,11 +44,13 @@ public static class DamageCalculation {
         {
             if (enemy.currentPower * attack.power < 0)      //반대방향이면
             {
+                enemy.dmgType = 3;
                 return damage = 4;
             }
             else if (enemy.currentPower * attack.power > 0)      //같은 방향이면
             {
                 enemy.isUltCondition = true;
+                enemy.ultPower = enemy.currentPower;
                 enemy.startUltTimer();
             }
         }
@@ -55,10 +58,12 @@ public static class DamageCalculation {
         {
             if (enemy.currentPower * attack.power < 0)      //반대방향이면
             {
+                enemy.dmgType = 2;
                 return damage = 2;
             }
         }
 
+        enemy.dmgType = 1;
         return damage;
     }
     //    int incomingPower = EmitManager.Instance.isEmitting

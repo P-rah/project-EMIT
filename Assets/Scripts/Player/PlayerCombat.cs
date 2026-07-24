@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.InputSystem;
 /*
@@ -84,10 +85,10 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator AttackSweepCooldowmRoutine()
     {
         state.IsAttackingSweep = false;
+        canAttackGrap = true;
 
         yield return new WaitForSeconds(attackCoolTime);
         canAttackSweep = true;
-        canAttackGrap = true;
     }
 
     private void handleSweepHit(Transform target, Vector2 hitPoint)
@@ -146,19 +147,18 @@ public class PlayerCombat : MonoBehaviour
 
     private void startGrabVisual()
     {
-        if(currentTargetTransform != null)
+        if(currentTargetTransform != null && currentTarget.currentState != currentTarget.DeadState)
             grapEffect.StartGrabVisual(currentTargetTransform);
         else grapEffect.StartGrabFailVisual();
     }
 
     public void AnimEvent_startEnemyGrab()
     {
-        if (currentTarget != null)
+        if (currentTarget != null && currentTarget.currentState != currentTarget.DeadState)
             currentTarget.ReceiveGrab();
         else
         {
             grapEffect.StartGrabFailVisualRetract();
-
         }
         canAttackSweep = true;
     }
