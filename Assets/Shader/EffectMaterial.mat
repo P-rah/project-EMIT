@@ -88,8 +88,8 @@ Material:
     - _EnableExternalAlpha: 0
     - _FilterColorExposure: 1.5
     - _FilterOriginalColorRate: 0.133
-    - _FilterResExposure: 0.7
-    - _FilterTolerance: 0.17
+    - _FilterResExposure: 0.5
+    - _FilterTolerance: 0.7
     - _GrowthRateCurve: 0.089
     - _ImpactActive: 0
     - _NoiseAmp: 0.757
