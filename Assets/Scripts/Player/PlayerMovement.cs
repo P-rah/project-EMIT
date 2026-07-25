@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (Player.State.isDeath) return;
         HandleInputs();
         FlipPlayer();
     }
@@ -76,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (Player.State.isDeath) return;
         if (playerDropDownPlatform.IsDropping)
     {
         SetGravityScale(initialGravityScale);

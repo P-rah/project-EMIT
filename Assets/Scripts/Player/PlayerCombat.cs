@@ -37,6 +37,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
+        if (Player.State.isDeath) return;
         CheckInputs();
     }
 
