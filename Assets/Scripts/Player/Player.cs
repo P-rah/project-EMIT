@@ -20,8 +20,9 @@ public class Player : MonoBehaviour
     public static PlayerAnimation Animation { get; private set; }
     public static DashEffectController DashEffect { get; private set; }
     public static GrapEffect GrapEffect { get; private set; }
+    public static PlayerHealth PlayerHealth { get; private set; }
 
-private void Awake()
+    private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
@@ -38,5 +39,6 @@ private void Awake()
         Animation = GetComponent<PlayerAnimation>();
         DashEffect = GetComponent<DashEffectController>();
         GrapEffect = GetComponent<GrapEffect>();
+        PlayerHealth = GetComponent<PlayerHealth>();
     }
 }

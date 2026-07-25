@@ -17,7 +17,8 @@ public enum State
     Falling,
     Dashing,
     AttackingSweep,
-    AttackingGrab
+    AttackingGrab,
+    Death
 }
 
 public class PlayerState : MonoBehaviour
@@ -28,6 +29,7 @@ public class PlayerState : MonoBehaviour
     public bool IsDashing { get; set; }
     public bool IsAttackingSweep { get; set; }
     public bool IsAttackingGrab { get; set; }
+    public bool isDeath { get; set; }
 
     [Header("Ground Check Settings")]
     public Transform groundCheck;
@@ -57,8 +59,8 @@ public class PlayerState : MonoBehaviour
     {
         State newState = CurrentState;
 
-        if (IsAttackingSweep) newState = State.AttackingSweep;
-
+        if (isDeath) newState = State.Death;
+        else if (IsAttackingSweep) newState = State.AttackingSweep;
         else if (IsAttackingGrab) newState = State.AttackingGrab;
         else if (IsDashing) newState = State.Dashing;
         else if (IsGrounded)
