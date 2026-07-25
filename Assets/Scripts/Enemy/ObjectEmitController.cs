@@ -69,6 +69,11 @@ public class ObjectEmitController : MonoBehaviour, IEmit
         UnrootMovement();
     }
 
+    void IEmit.ResetFrame()
+    {
+        buffer.Clear();
+    }
+
     public void RootMovement()
     {
         _rb.linearVelocity = Vector2.zero;

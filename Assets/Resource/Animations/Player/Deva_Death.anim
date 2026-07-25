@@ -22,19 +22,17 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: 5598852822911981616, guid: a597eec26178ca746995639c97bf61e1, type: 3}
-    - time: 0.33333334
+    - time: 0.083333336
       value: {fileID: -8711521973950498667, guid: a597eec26178ca746995639c97bf61e1, type: 3}
-    - time: 0.41666666
+    - time: 0.16666667
       value: {fileID: 4531186398881703502, guid: a597eec26178ca746995639c97bf61e1, type: 3}
-    - time: 0.5
+    - time: 0.25
       value: {fileID: -4265179511769387052, guid: a597eec26178ca746995639c97bf61e1, type: 3}
     - time: 1.0833334
       value: {fileID: -7922056342359199013, guid: a597eec26178ca746995639c97bf61e1, type: 3}
     - time: 1.5
       value: {fileID: -8192636150029297583, guid: a597eec26178ca746995639c97bf61e1, type: 3}
     - time: 1.5833334
-      value: {fileID: 4570544694174008894, guid: a597eec26178ca746995639c97bf61e1, type: 3}
-    - time: 1.9166666
       value: {fileID: 4570544694174008894, guid: a597eec26178ca746995639c97bf61e1, type: 3}
     attribute: m_Sprite
     path: 
@@ -66,18 +64,17 @@ AnimationClip:
     - {fileID: -7922056342359199013, guid: a597eec26178ca746995639c97bf61e1, type: 3}
     - {fileID: -8192636150029297583, guid: a597eec26178ca746995639c97bf61e1, type: 3}
     - {fileID: 4570544694174008894, guid: a597eec26178ca746995639c97bf61e1, type: 3}
-    - {fileID: 4570544694174008894, guid: a597eec26178ca746995639c97bf61e1, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 2
+    m_StopTime: 1.75
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 1
+    m_LoopTime: 0
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
@@ -91,4 +88,18 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 1.5
+    functionName: AnimEvent_DeadEmitActive
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.75
+    functionName: AnimEvent_SceneReset
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

@@ -2,6 +2,7 @@ using System;
 using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class EnemyEmitController : MonoBehaviour, IEmit
 {
@@ -98,5 +99,10 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         spriteRenderer.flipX = false;
         _enemyAnimator.startAnimControll();
         _enemy.UnrootMovement();
+    }
+
+    void IEmit.ResetFrame()
+    {
+        buffer.Clear();
     }
 }

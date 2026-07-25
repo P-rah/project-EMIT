@@ -22,7 +22,6 @@ public class EmitManager : MonoBehaviour
     [SerializeField] public bool isEmitting;
     public bool isEmittable = true;
 
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -33,7 +32,7 @@ public class EmitManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        emitBufferFrames = (int) (emitDurationTime * (1/Time.deltaTime));
+        emitBufferFrames = (int)(emitDurationTime * (1 / Time.deltaTime));
         emittedFrames = 0;
         emitObjects = new List<IEmit>(emitBufferFrames);
     }
@@ -43,6 +42,7 @@ public class EmitManager : MonoBehaviour
         EventManager.StartListening("OnEmitPressed", OnEmitPressed);
         EventManager.StartListening("OnEmitAborted", OnEmitAborted);
         EventManager.StartListening("OnEmitUlted", OnEmitAborted);
+        EventManager.StartListening("EmitReset", EmitReset);
     }
 
     private void OnDisable()
@@ -50,6 +50,7 @@ public class EmitManager : MonoBehaviour
         EventManager.StopListening("OnEmitPressed", OnEmitPressed);
         EventManager.StopListening("OnEmitAborted", OnEmitAborted);
         EventManager.StopListening("OnEmitUlted", OnEmitAborted);
+        EventManager.StopListening("EmitReset", EmitReset);
     }
 
     private void FixedUpdate()
@@ -122,6 +123,19 @@ public class EmitManager : MonoBehaviour
         isEmitting = false;
         TimeManager.Instance.InstantNormalTime();
         //StartCoroutine(emitCoolDownRoutine());
+    }
+
+    private void EmitReset()
+    {
+        Debug.Log("Emit Reset");
+        // 리셋
+        foreach (IEmit obj in emitObjects)
+        {
+            obj.ResetFrame();
+        }
+        emittedFrames = 0;
+        isEmitting = false;
+        TimeManager.Instance.InstantNormalTime();
     }
 
     //private IEnumerator emitCoolDownRoutine()

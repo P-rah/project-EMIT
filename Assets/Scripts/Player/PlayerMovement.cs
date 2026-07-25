@@ -239,6 +239,12 @@ public class PlayerMovement : MonoBehaviour
         canDash = true;
     }
 
+    public void stopMove()
+    {
+        rb.linearVelocity = Vector2.zero;
+        rb.gravityScale = initialGravityScale;
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

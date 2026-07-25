@@ -46,4 +46,9 @@ public class EmitBuffer<T>
         return true;
     }
 
+    public void Clear()
+    {
+        _head = 0;
+        _count = 0;
+    }
 }

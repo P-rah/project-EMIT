@@ -18,4 +18,5 @@ public interface IEmit
     public void BeginEmit();
     public void EmitFrame();
     public void EndEmit();
+    public void ResetFrame();
 }
