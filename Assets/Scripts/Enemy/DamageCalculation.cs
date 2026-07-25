@@ -38,6 +38,7 @@ public static class DamageCalculation {
                 enemy.cancelUltTimer();
                 return damage = 20;
             }
+            else enemy.cancelUltTimer();
         }
 
         if (EmitManager.Instance.isEmitting)    //역행 중

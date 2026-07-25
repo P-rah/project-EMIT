@@ -72,6 +72,7 @@ public class GrapEffect : MonoBehaviour
     public void StopGrabVisual()
     {
         targetPoint = null;
+        isFailed = false;
     }
 
     public void StartGrabFailVisual()

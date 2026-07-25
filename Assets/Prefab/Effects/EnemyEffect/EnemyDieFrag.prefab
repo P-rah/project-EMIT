@@ -1055,7 +1055,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DieFragment
   minForce: 10
-  maxForce: 20
+  maxForce: 15
   maxTorque: 50
   lifeTime: 2
   fadeDuration: 1
