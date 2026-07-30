@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,12 @@ public class EmitManager : MonoBehaviour
     [Header("현재 EMIT 상태")]
     [SerializeField] public bool isEmitting;
     public bool isEmittable = true;
+
+    [Header("EMIT 효과음")]
+    public AudioClip emitStartSound;
+    public AudioClip emitEndSound;
+    public AudioClip emitClockSound1;
+    public AudioClip emitClockSound2;
 
     private void Awake()
     {
@@ -54,7 +61,6 @@ public class EmitManager : MonoBehaviour
     {
         if (isEmitting)
         {
-            
             // 프레임을 모두 비워내기
             if (emittedFrames < emitBufferFrames)
             {                
@@ -92,6 +98,9 @@ public class EmitManager : MonoBehaviour
         }
         isEmitting = true;
         TimeManager.Instance.StartSlowMotion();
+        SoundManager.instance.PlaySFX(emitStartSound);
+        StartCoroutine(emitClockSound());
+        SoundManager.instance.StartEmitBGM();
     }
 
     private void OnEmitFinished()
@@ -104,6 +113,8 @@ public class EmitManager : MonoBehaviour
         emittedFrames = 0;
         isEmitting = false;
         TimeManager.Instance.StopSlowMotion();
+        SoundManager.instance.PlaySFX(emitEndSound);
+        SoundManager.instance.StopEmitBGM();
         EventManager.TriggerEvent("OnEmitFinished");
         //StartCoroutine(emitCoolDownRoutine());
     }
@@ -119,6 +130,7 @@ public class EmitManager : MonoBehaviour
         emittedFrames = 0;
         isEmitting = false;
         TimeManager.Instance.InstantNormalTime();
+        SoundManager.instance.StopEmitBGM();
         //StartCoroutine(emitCoolDownRoutine());
     }
 
@@ -133,6 +145,20 @@ public class EmitManager : MonoBehaviour
         emittedFrames = 0;
         isEmitting = false;
         TimeManager.Instance.InstantNormalTime();
+    }
+
+    private IEnumerator emitClockSound()
+    {
+        while (isEmitting)
+        {
+            SoundManager.instance.PlaySFX(emitClockSound1);
+
+            yield return new WaitForSeconds(0.3f);
+
+            SoundManager.instance.PlaySFX(emitClockSound2);
+
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 
     //private IEnumerator emitCoolDownRoutine()

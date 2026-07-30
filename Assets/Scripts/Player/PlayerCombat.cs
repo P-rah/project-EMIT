@@ -143,7 +143,8 @@ public class PlayerCombat : MonoBehaviour
     {
         grabAttackHitbox.CatchClosestEnemy();
         startGrabVisual();
-        SoundManager.instance.PlaySFX(Player.Instance.grabThrowSound);
+        SoundManager.instance.PlaySFX(Player.Instance.grabThrowSound1);
+        SoundManager.instance.PlaySFX(Player.Instance.grabThrowSound2);
     }
 
     private void startGrabVisual()

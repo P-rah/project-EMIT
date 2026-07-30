@@ -38,6 +38,16 @@ public class SoundManager : MonoBehaviour
         bgmPlayer.Stop();
     }
 
+    public void StopEmitBGM()
+    {
+        bgmPlayer.pitch = 1f;
+    }
+
+    public void StartEmitBGM()
+    {
+        bgmPlayer.pitch = -1f;
+    }
+
     public void PlaySFX(AudioClip clip, float pitchRandom = 0f)
     {
         //pitchRandom 값에 따라 랜덤하게 피치를 조절해줌

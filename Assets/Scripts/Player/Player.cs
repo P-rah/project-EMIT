@@ -27,7 +27,8 @@ public class Player : MonoBehaviour
     public AudioClip landSound;
     public AudioClip dashSound;
     public AudioClip sweepSound;
-    public AudioClip grabThrowSound;
+    public AudioClip grabThrowSound1;
+    public AudioClip grabThrowSound2;
     public AudioClip grabRetreiveSound;
 
     private void Awake()
