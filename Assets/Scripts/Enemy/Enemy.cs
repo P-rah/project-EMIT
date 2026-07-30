@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System.Collections;
 using UnityEngine;
 
@@ -12,6 +11,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public Transform target; //플레이어의 transform
 
     private EnemyAnimator enemyAnim;
+    public AudioSource myAudioSource;
 
     public ParticleSystem dragEffect;
 
@@ -41,6 +41,13 @@ public class Enemy : MonoBehaviour, IDamageable
     public float knockbackTime;
     public float grabForce;
     public float HitRecoveryTime;
+
+    public AudioClip walkSound;
+    public AudioClip attackReadySound;
+    public AudioClip attackSound;
+    public AudioClip sweepHitSound;
+    public AudioClip grabHitSound;
+    public AudioClip deathSound;
 
     [Header("적 상태")]
     public bool canChangeState; // 다음 프레임에서 State가 자동으로 변경 가능한지만 관여
@@ -123,6 +130,13 @@ public class Enemy : MonoBehaviour, IDamageable
             knockbackTime = data.knockbackTime;
             grabForce = data.grabForce;
             HitRecoveryTime = data.HitRecoveryTime;
+
+            walkSound = data.walkSound;
+            attackReadySound = data.attackReadySound;
+            attackSound = data.attackSound;
+            sweepHitSound = data.sweepHitSound;
+            grabHitSound = data.grabHitSound;
+            deathSound = data.deathSound;
 }
 
         canChangeState = true;
@@ -187,6 +201,9 @@ public class Enemy : MonoBehaviour, IDamageable
         currentKnockBackForce = attackInfo.knockbackForce;
         isCurrentHitGrab = attackInfo.attackIsGrab;
 
+        if(!isCurrentHitGrab) myAudioSource.PlayOneShot(sweepHitSound);
+        else myAudioSource.PlayOneShot(grabHitSound);
+
         if (AttackState.CanBeCancelled())
         {
             AttackState.ExitState();
@@ -198,6 +215,7 @@ public class Enemy : MonoBehaviour, IDamageable
         if (currentHealth <= 0)
         {
             Debug.Log("Enemy is Dead!");
+            SoundManager.instance.PlaySFX(deathSound);  //비활성화되면 소리 안나니까 얘만 매니저에서 재생
             ChangeState(DeadState, true);
             EventManager.TriggerEvent("OnEmitAborted");
             gameObject.SetActive(false);
@@ -360,6 +378,13 @@ public class Enemy : MonoBehaviour, IDamageable
             EventManager.TriggerEvent("OnEmitAborted");
             ultRoutine = null;
         }
+    }
+
+    public void Animevent_playWalkSound()
+    {
+        myAudioSource.pitch = 1.0f + Random.Range(-0.2f, 0.2f);
+        myAudioSource.PlayOneShot(walkSound);
+        myAudioSource.pitch = 1.0f;
     }
 
     private IEnumerator UltTimerRoutine()

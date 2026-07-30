@@ -22,6 +22,14 @@ public class Player : MonoBehaviour
     public static GrapEffect GrapEffect { get; private set; }
     public static PlayerHealth PlayerHealth { get; private set; }
 
+    public AudioClip walkSound;
+    public AudioClip jumpSound;
+    public AudioClip landSound;
+    public AudioClip dashSound;
+    public AudioClip sweepSound;
+    public AudioClip grabThrowSound;
+    public AudioClip grabRetreiveSound;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;

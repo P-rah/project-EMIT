@@ -1,4 +1,4 @@
-using UnityEngine;
+    using UnityEngine;
 /*
  * 플레이어 애니메이션 관리용 클래스
  */

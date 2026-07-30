@@ -31,6 +31,8 @@ public class PlayerState : MonoBehaviour
     public bool IsAttackingGrab { get; set; }
     public bool isDeath { get; set; }
 
+    private bool isFalling; //공중에 있다가 착지 감지용
+
     [Header("Ground Check Settings")]
     public Transform groundCheck;
     public float checkRadius = 0.2f;
@@ -53,6 +55,12 @@ public class PlayerState : MonoBehaviour
     private void CheckGrounded()
     {
         IsGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+        if (!IsGrounded) isFalling = true;
+        else if(isFalling)
+        {
+            SoundManager.instance.PlaySFX(Player.Instance.landSound);
+            isFalling = false;
+        }
     }
 
     private void DetermineState()

@@ -27,4 +27,12 @@ public class EnemyData : ScriptableObject
     public float knockbackTime;
     public float grabForce;
     public float HitRecoveryTime;
+
+    [Header("사운드 관련")]
+    public AudioClip walkSound;
+    public AudioClip attackReadySound;
+    public AudioClip attackSound;
+    public AudioClip sweepHitSound;
+    public AudioClip grabHitSound;
+    public AudioClip deathSound;
 }

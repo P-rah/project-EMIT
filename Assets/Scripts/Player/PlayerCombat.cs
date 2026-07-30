@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Xml;
 using UnityEngine;
-using UnityEngine.InputSystem;
 /*
  * 플레이어 공격, 역행 관리용 클래스
  */
@@ -73,6 +71,7 @@ public class PlayerCombat : MonoBehaviour
         Player.Movement.flippable = false;
         sweepAttackHitbox.OnTargetSweepHit += handleSweepHit;
         sweepAttackHitbox.gameObject.SetActive(true);
+        SoundManager.instance.PlaySFX(Player.Instance.sweepSound);
     }
 
     public void AnimEvent_AttackSweepEnd()
@@ -144,6 +143,7 @@ public class PlayerCombat : MonoBehaviour
     {
         grabAttackHitbox.CatchClosestEnemy();
         startGrabVisual();
+        SoundManager.instance.PlaySFX(Player.Instance.grabThrowSound);
     }
 
     private void startGrabVisual()
@@ -162,5 +162,6 @@ public class PlayerCombat : MonoBehaviour
             grapEffect.StartGrabFailVisualRetract();
         }
         canAttackSweep = true;
+        SoundManager.instance.PlaySFX(Player.Instance.grabRetreiveSound);
     }
 }

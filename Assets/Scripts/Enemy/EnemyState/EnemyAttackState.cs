@@ -52,6 +52,7 @@ public class EnemyAttackState : EnemyState
         // 선딜레이 시간
         isCancellable = true;
         enemyAnim.PlayAttackStart();
+        enemy.myAudioSource.PlayOneShot(enemy.attackReadySound);
 
         yield return new WaitForSeconds(enemy.startUpTime);
         // 선딜레이 시간 동안에 넉백을 받았다면 TryAttack이 실패하고 KnockBackState가 되어야 함
@@ -60,6 +61,7 @@ public class EnemyAttackState : EnemyState
         isCancellable = false;
         enemyAnim.PlayAttackEnd();
         CameraShake.Instance.ShakeCamera(10f,0.2f);
+        enemy.myAudioSource.PlayOneShot(enemy.attackSound);
 
         // 후딜레이 시간
         yield return new WaitForSeconds(enemy.recoveryTime);

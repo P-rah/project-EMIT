@@ -1,8 +1,4 @@
-using System;
-using UnityEditor.Callbacks;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
 
 public class EnemyEmitController : MonoBehaviour, IEmit
 {
