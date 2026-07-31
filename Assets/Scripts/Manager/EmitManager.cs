@@ -36,7 +36,8 @@ public class EmitManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        emitBufferFrames = (int)(emitDurationTime * (1 / Time.deltaTime));
+        //emitBufferFrames = (int)(emitDurationTime * (1 / Time.deltaTime));    이거 로딩할때 deltaTime변해서 fixed로 해야할듯
+        emitBufferFrames = (int)(emitDurationTime * (1 / Time.fixedDeltaTime));
         emittedFrames = 0;
         emitObjects = new List<IEmit>(emitBufferFrames);
     }
@@ -46,7 +47,6 @@ public class EmitManager : MonoBehaviour
         EventManager.StartListening("OnEmitPressed", OnEmitPressed);
         EventManager.StartListening("OnEmitAborted", OnEmitAborted);
         EventManager.StartListening("OnEmitUlted", OnEmitAborted);
-        EventManager.StartListening("EmitReset", EmitReset);
     }
 
     private void OnDisable()
@@ -54,7 +54,6 @@ public class EmitManager : MonoBehaviour
         EventManager.StopListening("OnEmitPressed", OnEmitPressed);
         EventManager.StopListening("OnEmitAborted", OnEmitAborted);
         EventManager.StopListening("OnEmitUlted", OnEmitAborted);
-        EventManager.StopListening("EmitReset", EmitReset);
     }
 
     private void FixedUpdate()
@@ -134,7 +133,7 @@ public class EmitManager : MonoBehaviour
         //StartCoroutine(emitCoolDownRoutine());
     }
 
-    private void EmitReset()
+    public void EmitReset()
     {
         Debug.Log("Emit Reset");
         // 리셋
@@ -142,8 +141,10 @@ public class EmitManager : MonoBehaviour
         {
             obj.ResetFrame();
         }
+        emitObjects.Clear();
         emittedFrames = 0;
         isEmitting = false;
+        isEmittable = true;
         TimeManager.Instance.InstantNormalTime();
     }
 

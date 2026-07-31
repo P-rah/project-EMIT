@@ -76,6 +76,8 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void Start()
     {
         Debug.Log("Enemy is Ready");
+        StageManager.Instance.AddEnemy();   //적 카운드 증가
+
         ChangeState(IdleState, false);
     }
 
@@ -216,6 +218,8 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             Debug.Log("Enemy is Dead!");
             SoundManager.instance.PlaySFX(deathSound);  //비활성화되면 소리 안나니까 얘만 매니저에서 재생
+            StageManager.Instance.EnemyDied();
+
             ChangeState(DeadState, true);
             EventManager.TriggerEvent("OnEmitAborted");
             gameObject.SetActive(false);

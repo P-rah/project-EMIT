@@ -12,8 +12,8 @@ public class EmitShaderController : MonoBehaviour
     private void OnDisable()
     {
         EventManager.StopListening("OnEmitPressed", StartEffect);
-        EventManager.StartListening("OnEmitAborted", AbortEffect);
-        EventManager.StartListening("OnEmitFinished", EndEffect);
+        EventManager.StopListening("OnEmitAborted", AbortEffect);
+        EventManager.StopListening("OnEmitFinished", EndEffect);
     }
 
     [SerializeField]

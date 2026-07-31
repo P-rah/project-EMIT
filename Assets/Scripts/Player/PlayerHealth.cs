@@ -14,14 +14,6 @@ public class PlayerHealth : MonoBehaviour
     }
     public void AnimEvent_SceneReset()
     {
-        //EventManager.TriggerEvent("EmitReset");
-        Destroy(EffectManager.Instance.gameObject);
-        Destroy(EmitManager.Instance.gameObject);
-        Destroy(EventManager.Instance.gameObject);
-        TimeManager.Instance.InstantNormalTime();
-        Destroy(TimeManager.Instance.gameObject);
-        //ÀÏ´Ü ÀÓ½Ã·Î ÆÄ±«ÇØµÒ
-
-        GameManager.Instance.ReloadCurrentScene();
+        StageManager.Instance.ReloadCurrentScene();
     }
 }
