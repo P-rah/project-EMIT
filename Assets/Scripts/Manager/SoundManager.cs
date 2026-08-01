@@ -7,9 +7,9 @@ public class SoundManager : MonoBehaviour
 
     public AudioSource[] objectPoolSpeakers;
 
-    [Header("½ºÇÇÄ¿ (Audio Source)")]
-    public AudioSource bgmPlayer; // ¹è°æÀ½¾Ç Àü¿ë (¹İº¹ Àç»ı)
-    public AudioSource sfxPlayer; // ÇÃ·¹ÀÌ¾î È¿°úÀ½ Àü¿ë (¹İº¹ Àç»ı ¾øÀ½)
+    [Header("ìŠ¤í”¼ì»¤ (Audio Source)")]
+    public AudioSource bgmPlayer; // ë°°ê²½ìŒì•… ì „ìš© (ë°˜ë³µ ì¬ìƒ)
+    public AudioSource sfxPlayer; // í”Œë ˆì´ì–´ íš¨ê³¼ìŒ ì „ìš© (ë°˜ë³µ ì¬ìƒ ì—†ìŒ)
 
 
     private void Awake()
@@ -50,7 +50,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySFX(AudioClip clip, float pitchRandom = 0f)
     {
-        //pitchRandom °ª¿¡ µû¶ó ·£´ıÇÏ°Ô ÇÇÄ¡¸¦ Á¶ÀıÇØÁÜ
+        //pitchRandom ê°’ì— ë”°ë¼ ëœë¤í•˜ê²Œ í”¼ì¹˜ë¥¼ ì¡°ì ˆí•´ì¤Œ
         sfxPlayer.pitch = 1.0f + Random.Range(-pitchRandom, pitchRandom);
         sfxPlayer.PlayOneShot(clip);
         sfxPlayer.pitch = 1.0f;

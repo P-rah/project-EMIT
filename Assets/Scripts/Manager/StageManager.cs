@@ -6,7 +6,7 @@ public class StageManager : MonoBehaviour
 {
     public static StageManager Instance { get; private set; }
 
-    [Header("½ºÅ×ÀÌÁö Á¤º¸")]
+    [Header("ìŠ¤í…Œì´ì§€ ì •ë³´")]
     public int currentEnemyCount = 0;
     public string nextSceneName;
 
@@ -52,7 +52,7 @@ public class StageManager : MonoBehaviour
 
     private IEnumerator StageClearRoutine()
     {
-        Debug.Log("½ºÅ×ÀÌÁö Å¬¸®¾î");
+        Debug.Log("ìŠ¤í…Œì´ì§€ í´ë¦¬ì–´");
 
         yield return new WaitForSeconds(2.0f);
 

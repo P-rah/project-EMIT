@@ -3,12 +3,12 @@ using System.Collections;
 
 public class GrapEffect : MonoBehaviour
 {
-    [Header("¿¬°á ÁöÁ¡ ¼³Á¤")]
+    [Header("ì—°ê²° ì§€ì  ì„¤ì •")]
     public Transform startPoint;
     private Transform targetPoint;
     public Transform EndPoint;
 
-    [Header("»ç½½ ºñÁÖ¾ó ¿ä¼Ò")]
+    [Header("ì‚¬ìŠ¬ ë¹„ì£¼ì–¼ ìš”ì†Œ")]
     public SpriteRenderer chainRenderer;
     public Transform Weapon;
     public Transform WeaponFull;

@@ -3,12 +3,12 @@ using System.Collections;
 
 public class DieFragment : MonoBehaviour
 {
-    [Header("Æø¹ß Èû ¼³Á¤")]
+    [Header("í­ë°œ í˜ ì„¤ì •")]
     public float minForce = 5f;
     public float maxForce = 10f;
     public float maxTorque = 50f;
 
-    [Header("ÆäÀÌµå¾Æ¿ô ¼³Á¤")]
+    [Header("í˜ì´ë“œì•„ì›ƒ ì„¤ì •")]
     public float lifeTime = 2f;
     public float fadeDuration = 1f;
 

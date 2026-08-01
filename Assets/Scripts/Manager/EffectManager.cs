@@ -5,11 +5,11 @@ public class EffectManager : MonoBehaviour
 {
     public static EffectManager Instance { get; private set; }
 
-    [Header("Àû ÇÇ°İ ÀÌÆåÆ®")]
+    [Header("ì  í”¼ê²© ì´í™íŠ¸")]
     public GameObject enemyHitEffectPrefab;
     public int effectPoolSize = 10;
 
-    [Header("»ç¸Á ÀÌÆåÆ® ¼³Á¤")]
+    [Header("ì‚¬ë§ ì´í™íŠ¸ ì„¤ì •")]
     public GameObject deathEffectPrefab;
     public int deathPoolSize = 5;
 
@@ -77,7 +77,7 @@ public class EffectManager : MonoBehaviour
 
     }
 
-    //»ç¸Á ÆÄÆí È¿°ú
+    //ì‚¬ë§ íŒŒí¸ íš¨ê³¼
     private void InitializeDeathPool()
     {
         for (int i = 0; i < deathPoolSize; i++)

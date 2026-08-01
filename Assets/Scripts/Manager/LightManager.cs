@@ -6,7 +6,7 @@ public class LightManager : MonoBehaviour
 {
     public static LightManager Instance;
 
-    [Header("Α¶Έν Ό³Α¤")]
+    [Header("μ΅°λª… μ„¤μ •")]
     public Light2D globalLight;
 
     private void Awake()
