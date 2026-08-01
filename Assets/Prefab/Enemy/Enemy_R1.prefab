@@ -357,7 +357,8 @@ MonoBehaviour:
   attackReadySound: {fileID: 0}
   attackSound: {fileID: 0}
   sweepHitSound: {fileID: 0}
-  GrabHitSound: {fileID: 0}
+  grabHitSound: {fileID: 0}
+  deathSound: {fileID: 0}
   canChangeState: 0
   currentHealth: 0
   isRooted: 0
@@ -462,8 +463,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 10
+  MinDistance: 3
+  MaxDistance: 20
   Pan2D: 0
   rolloffMode: 1
   BypassEffects: 0

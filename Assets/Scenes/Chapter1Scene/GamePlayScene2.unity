@@ -80881,6 +80881,51 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &897337447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 897337449}
+  - component: {fileID: 897337448}
+  m_Layer: 0
+  m_Name: LightManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &897337448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897337447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ec5f9048c2a4cc4bb4b57e6ef025eee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightManager
+  globalLight: {fileID: 619394801}
+--- !u!4 &897337449
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897337447}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 139.59311, y: -42.68568, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &911813870
 GameObject:
   m_ObjectHideFlags: 0
@@ -94647,6 +94692,10 @@ MonoBehaviour:
   sweepAttackHitbox: {fileID: 1334886135}
   grabAttackHitbox: {fileID: 520831767}
   attackCoolTime: 0.05
+  attackRecoveryTime: 1
+  maxAttackCount: 2
+  emitRecoveryCount: 5
+  currentEmitRecoveryCount: 0
 --- !u!114 &1518561166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96139,6 +96188,7 @@ SceneRoots:
   - {fileID: 138688623}
   - {fileID: 2115546574}
   - {fileID: 1983602749}
+  - {fileID: 897337449}
   - {fileID: 1707551242}
   - {fileID: 1301783910}
   - {fileID: 707156053}

@@ -16,12 +16,18 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Attack Settings")]
     public float attackCoolTime = 0.3f;
-
-    private bool hasTriggeredHitEffect = false;
+    public float attackRecoveryTime = 1f;
+    public int maxAttackCount = 2;
+    private int currentAttackCount;
+    private Coroutine attackRecoveryRoutine;
 
     [Header("Emit Settings")]
+    public int emitRecoveryCount = 5;
+    public int currentEmitRecoveryCount = 0;
+
     private bool canAttackSweep = true;
     private bool canAttackGrap = true;
+    private bool hasTriggeredHitEffect = false;
 
     private Enemy currentTarget;
     private Transform currentTargetTransform;
@@ -31,12 +37,28 @@ public class PlayerCombat : MonoBehaviour
         input = GetComponent<PlayerInputHandler>();
         state = Player.State;
         grapEffect = Player.GrapEffect;
+
+        currentAttackCount = maxAttackCount;
+    }
+
+    private void OnEnable()
+    {
+        EventManager.StartListening("OnEmitPressed", OnEmitPressed);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.StopListening("OnEmitPressed", OnEmitPressed);
     }
 
     private void Update()
     {
         if (Player.State.isDeath) return;
         CheckInputs();
+        if(currentAttackCount < maxAttackCount && attackRecoveryRoutine == null)
+        {
+            attackRecoveryRoutine = StartCoroutine(AttackRecoveryRoutine());
+        }
     }
 
     private void CheckInputs()
@@ -53,7 +75,8 @@ public class PlayerCombat : MonoBehaviour
 
     public void ExecuteAttackSweep()
     {
-        if (canAttackSweep)
+        if (currentAttackCount == 0) return;
+        else if (canAttackSweep)
         {
             if(state.CurrentState == State.AttackingGrab)
             {
@@ -63,6 +86,8 @@ public class PlayerCombat : MonoBehaviour
             canAttackGrap = false;
             state.IsAttackingSweep = true;
             hasTriggeredHitEffect = false;
+
+            currentAttackCount--;
         }
     }
 
@@ -97,18 +122,22 @@ public class PlayerCombat : MonoBehaviour
         {
             //공격이 적중했을 떄
             hasTriggeredHitEffect = true;
+            EmitRecoveryCalculate();
         }
     }
 
     public void ExecuteAttackGrab()
     {
-        if (canAttackGrap)
+        if (currentAttackCount == 0) return;
+        else if (canAttackGrap)
         {
             canAttackSweep = false;
             canAttackGrap = false;
             state.IsAttackingGrab = true;
             hasTriggeredHitEffect = false;
             Player.Movement.flippable = false;
+
+            currentAttackCount--;
 
             grabAttackHitbox.OnTargetGrapHit += handleGrapHit;
         }
@@ -122,6 +151,7 @@ public class PlayerCombat : MonoBehaviour
         {
             //공격이 적중했을 때
             hasTriggeredHitEffect = true;
+            EmitRecoveryCalculate();
         }
     }
 
@@ -164,5 +194,39 @@ public class PlayerCombat : MonoBehaviour
         }
         canAttackSweep = true;
         SoundManager.instance.PlaySFX(Player.Instance.grabRetreiveSound);
+    }
+
+    private IEnumerator AttackRecoveryRoutine()
+    {
+        yield return new WaitForSeconds(attackRecoveryTime);
+        currentAttackCount++;
+        attackRecoveryRoutine = null;
+    }
+
+    private void StopAttackRecoveryRoutine()
+    {
+        StopCoroutine(attackRecoveryRoutine);
+        attackRecoveryRoutine = null;
+    }
+
+    private void OnEmitPressed()
+    {
+        if(currentAttackCount < maxAttackCount)
+            currentAttackCount++;
+
+        if (currentAttackCount == maxAttackCount && attackRecoveryRoutine != null)
+            StopAttackRecoveryRoutine();
+
+        currentEmitRecoveryCount = 0;
+    }
+
+    private void EmitRecoveryCalculate()
+    {
+        currentEmitRecoveryCount++;
+        if (currentEmitRecoveryCount >= emitRecoveryCount)
+        {
+            currentEmitRecoveryCount = 0;
+            EmitManager.Instance.isEmittable = true;
+        }
     }
 }

@@ -10486,7 +10486,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -58062,11 +58062,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!82 &963427687 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 5682029497126305882, guid: e7e116c8a540ce947b5bd0501282c1a9, type: 3}
-  m_PrefabInstance: {fileID: 7781864183339059135}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &989511081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59071,6 +59066,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BackgroundController
   parallaxEffect: {x: 0.3, y: 0.3}
   targetCamera: {fileID: 519420028}
+--- !u!1 &1155070091
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1155070093}
+  - component: {fileID: 1155070092}
+  m_Layer: 0
+  m_Name: LightManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1155070092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1155070091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ec5f9048c2a4cc4bb4b57e6ef025eee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightManager
+  globalLight: {fileID: 619394801}
+--- !u!4 &1155070093
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1155070091}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 139.59311, y: -42.68568, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1159012723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59791,7 +59831,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -59944,7 +59984,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -64202,7 +64242,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -64493,6 +64533,10 @@ MonoBehaviour:
   sweepAttackHitbox: {fileID: 1334886135}
   grabAttackHitbox: {fileID: 520831767}
   attackCoolTime: 0.05
+  attackRecoveryTime: 1
+  maxAttackCount: 2
+  emitRecoveryCount: 5
+  currentEmitRecoveryCount: 0
 --- !u!114 &1518561166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64712,7 +64756,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -66074,18 +66118,14 @@ PrefabInstance:
       propertyPath: MinDistance
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 5682029497126305882, guid: e7e116c8a540ce947b5bd0501282c1a9, type: 3}
-      propertyPath: spreadCustomCurve.m_Curve.Array.data[0].value
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6143233822747344136, guid: e7e116c8a540ce947b5bd0501282c1a9, type: 3}
       propertyPath: m_Name
       value: Enemy_R1
       objectReference: {fileID: 0}
-    - target: {fileID: 6962601109016340121, guid: e7e116c8a540ce947b5bd0501282c1a9, type: 3}
-      propertyPath: myAudioSource
+    - target: {fileID: 7342205570695384537, guid: e7e116c8a540ce947b5bd0501282c1a9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 963427687}
+      objectReference: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -66111,6 +66151,7 @@ SceneRoots:
   - {fileID: 1983602749}
   - {fileID: 1707551242}
   - {fileID: 1301783910}
+  - {fileID: 1155070093}
   - {fileID: 707156053}
   - {fileID: 1184060386}
   - {fileID: 1188197774}

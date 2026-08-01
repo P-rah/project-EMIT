@@ -88,13 +88,14 @@ public class EffectManager : MonoBehaviour
         }
     }
 
-    public void PlayDeathEffect(Vector2 position)
+    public void PlayDeathEffect(Vector2 position, bool isFacingLeft)
     {
         GameObject DieEffect;
         if (deathEffectPool.Count > 0) DieEffect = deathEffectPool.Dequeue();
         else DieEffect = Instantiate(deathEffectPrefab, transform);
 
         DieEffect.transform.position = position;
+        DieEffect.transform.rotation = Quaternion.Euler(0f, isFacingLeft ? 180f : 0f, 0f);
         DieEffect.SetActive(true);
     }
 

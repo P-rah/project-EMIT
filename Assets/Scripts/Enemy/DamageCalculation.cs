@@ -30,37 +30,37 @@ public static class DamageCalculation {
     {
         int damage = attack.baseDamage;
 
-        if(enemy.isUltCondition)        //궁극기 조건 충족
-        {
-            if (enemy.ultPower * attack.power < 0)      //반대방향이면
-            {
-                enemy.dmgType = 4;
-                enemy.cancelUltTimer();
-                return damage = 20;
-            }
-            else enemy.cancelUltTimer();
-        }
+        //if(enemy.isUltCondition)        //궁극기 조건 충족
+        //{
+        //    if (enemy.ultPower * attack.power < 0)      //반대방향이면
+        //    {
+        //        enemy.dmgType = 4;
+        //        enemy.cancelUltTimer();
+        //        return damage = 20;
+        //    }
+        //    else enemy.cancelUltTimer();
+        //}
 
         if (EmitManager.Instance.isEmitting)    //역행 중
         {
             if (enemy.currentPower * attack.power < 0)      //반대방향이면
             {
                 enemy.dmgType = 3;
-                return damage = 4;
+                return damage = 10;
             }
-            else if (enemy.currentPower * attack.power > 0)      //같은 방향이면
-            {
-                enemy.isUltCondition = true;
-                enemy.ultPower = enemy.currentPower;
-                enemy.startUltTimer();
-            }
+            //else if (enemy.currentPower * attack.power > 0)      //같은 방향이면
+            //{
+            //    enemy.isUltCondition = true;
+            //    enemy.ultPower = enemy.currentPower;
+            //    enemy.startUltTimer();
+            //}
         }
         else
         {
             if (enemy.currentPower * attack.power < 0)      //반대방향이면
             {
                 enemy.dmgType = 2;
-                return damage = 2;
+                return damage = 5;
             }
         }
 

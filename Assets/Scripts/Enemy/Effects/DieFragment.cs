@@ -12,15 +12,40 @@ public class DieFragment : MonoBehaviour
     public float lifeTime = 2f;
     public float fadeDuration = 1f;
 
+    private struct TransformData
+    {
+        public Transform childTransform;
+        public Vector3 originalLocalPosition;
+        public Quaternion originalLocalRotation;
+    }
+    private TransformData[] fragments;
+    private Rigidbody2D[] rigidbodies;
     private SpriteRenderer[] renderers;
 
     private void Awake()
     {
+        int childCount = transform.childCount;
+        fragments = new TransformData[childCount];
+
+        for (int i = 0; i < childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            fragments[i] = new TransformData
+            {
+                childTransform = child,
+                originalLocalPosition = child.localPosition,
+                originalLocalRotation = child.localRotation
+            };
+        }
+
+        rigidbodies = GetComponentsInChildren<Rigidbody2D>();
         renderers = GetComponentsInChildren<SpriteRenderer>();
     }
 
     private void OnEnable()
     {
+        ResetTransform();
+
         ResetAlpha();
 
         Explode();
@@ -74,6 +99,20 @@ public class DieFragment : MonoBehaviour
         }
 
         DisableDieFrag();
+    }
+
+    private void ResetTransform()
+    {
+        for (int i = 0; i < fragments.Length; i++)
+        {
+            fragments[i].childTransform.localPosition = fragments[i].originalLocalPosition;
+            fragments[i].childTransform.localRotation = fragments[i].originalLocalRotation;
+        }
+        for (int i = 0; i < rigidbodies.Length; i++)
+        {
+            rigidbodies[i].linearVelocity = Vector2.zero;
+            rigidbodies[i].angularVelocity = 0f;
+        }
     }
 
     private void ResetAlpha()

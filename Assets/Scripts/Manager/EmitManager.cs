@@ -46,14 +46,14 @@ public class EmitManager : MonoBehaviour
         // Event 구독
         EventManager.StartListening("OnEmitPressed", OnEmitPressed);
         EventManager.StartListening("OnEmitAborted", OnEmitAborted);
-        EventManager.StartListening("OnEmitUlted", OnEmitAborted);
+        //EventManager.StartListening("OnEmitUlted", OnEmitAborted);
     }
 
     private void OnDisable()
     {
         EventManager.StopListening("OnEmitPressed", OnEmitPressed);
         EventManager.StopListening("OnEmitAborted", OnEmitAborted);
-        EventManager.StopListening("OnEmitUlted", OnEmitAborted);
+        //EventManager.StopListening("OnEmitUlted", OnEmitAborted);
     }
 
     private void FixedUpdate()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class TimeManager : MonoBehaviour
 {
@@ -12,7 +13,10 @@ public class TimeManager : MonoBehaviour
             return;
         }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
+
+    private bool timeChangeable = true;
 
     [Header("시간 설정")]
     public float normalTimeScale = 1f;
@@ -33,6 +37,7 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
+        if (!timeChangeable) return;
         if (Mathf.Abs(Time.timeScale - targetTimeScale) > 0.001f)
         {
             Time.timeScale = Mathf.MoveTowards(
@@ -61,8 +66,25 @@ public class TimeManager : MonoBehaviour
 
     public void InstantNormalTime()
     {
+        if (!timeChangeable) return;
         targetTimeScale = normalTimeScale;
         Time.timeScale = normalTimeScale;
         Time.fixedDeltaTime = 0.02f;
+    }
+
+    public void StopTimeFor(float durationTime)
+    {
+        StartCoroutine(StopTimeRoutine(durationTime));
+    }
+
+    private IEnumerator StopTimeRoutine(float duration)
+    {
+        timeChangeable = false;
+        Time.timeScale = 0.1f;
+
+        yield return new WaitForSecondsRealtime(duration);
+
+        timeChangeable = true;
+        InstantNormalTime();
     }
 }

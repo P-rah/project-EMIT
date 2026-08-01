@@ -55,16 +55,17 @@ public class Enemy : MonoBehaviour, IDamageable
     public bool isRooted;
     public Vector2 currentKnockBackForce;
     public int currentPower { get; private set; }
-    public bool isUltCondition { get; set; }
-    public int ultPower { get; set; }
     public bool isCurrentHitGrab;
     public bool canChangeHitState;
+
+    //public bool isUltCondition { get; set; }
+    //public int ultPower { get; set; }
 
     public Vector2 front; // 적이 바라보는 방향 (넉백 관련 처리 시 필요)
     public bool isFacingLeft = false;
 
-    private float ultTime = 1f;
-    private Coroutine ultRoutine;
+    //private float ultTime = 1f;
+    //private Coroutine ultRoutine;
     public int dmgType { get; set; }
 
     public virtual void Awake() {
@@ -228,8 +229,9 @@ public class Enemy : MonoBehaviour, IDamageable
 
         if (EmitManager.Instance.isEmitting)
         {
-            if (isUltCondition) EventManager.TriggerEvent("OnEmitUlted");
-            else EventManager.TriggerEvent("OnEmitAborted");
+            //if (isUltCondition) EventManager.TriggerEvent("OnEmitUlted");
+            //else 
+            EventManager.TriggerEvent("OnEmitAborted");
         }
 
         if (canChangeHitState)
@@ -265,11 +267,12 @@ public class Enemy : MonoBehaviour, IDamageable
                 EffectManager.Instance.PlayHitEffect(transform.position, currentKnockBackForce * -1);
                 return;
             case 3:
-                CameraShake.Instance.ShakeCamera(30f, 0.4f);
+                CameraShake.Instance.ShakeCamera(40f, 0.1f);
                 EffectManager.Instance.PlayHitEffect(transform.position, currentKnockBackForce * -1);
-                return;
-            case 4:
-                CameraShake.Instance.ShakeCamera(40f, 0.5f);
+
+                LightManager.Instance.BlinkLight(0.05f, 0.8f);
+                TimeManager.Instance.StopTimeFor(0.8f);
+
                 return;
             default:
                 Debug.Log("잘못된 데미지 타입");
@@ -367,22 +370,6 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         return rb.linearVelocityX * Vector2.left.magnitude > 0f;
     }
-    
-    public void startUltTimer()
-    {
-        ultRoutine = StartCoroutine(UltTimerRoutine());
-    }
-
-    public void cancelUltTimer()
-    {
-        if (ultRoutine != null)
-        {
-            StopCoroutine(ultRoutine);
-            isUltCondition = false;
-            EventManager.TriggerEvent("OnEmitAborted");
-            ultRoutine = null;
-        }
-    }
 
     public void Animevent_playWalkSound()
     {
@@ -391,12 +378,28 @@ public class Enemy : MonoBehaviour, IDamageable
         myAudioSource.pitch = 1.0f;
     }
 
-    private IEnumerator UltTimerRoutine()
-    {
-        yield return new WaitForSeconds(ultTime);
-        isUltCondition = false;
-        EventManager.TriggerEvent("OnEmitAborted");
+    //public void startUltTimer()
+    //{
+    //    ultRoutine = StartCoroutine(UltTimerRoutine());
+    //}
 
-        ultRoutine = null;
-    }
+    //public void cancelUltTimer()
+    //{
+    //    if (ultRoutine != null)
+    //    {
+    //        StopCoroutine(ultRoutine);
+    //        isUltCondition = false;
+    //        EventManager.TriggerEvent("OnEmitAborted");
+    //        ultRoutine = null;
+    //    }
+    //}
+
+    //private IEnumerator UltTimerRoutine()
+    //{
+    //    yield return new WaitForSeconds(ultTime);
+    //    isUltCondition = false;
+    //    EventManager.TriggerEvent("OnEmitAborted");
+
+    //    ultRoutine = null;
+    //}
 }
