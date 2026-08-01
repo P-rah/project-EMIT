@@ -17,7 +17,7 @@ public class EnemyAttackHitbox : MonoBehaviour
 
             //if (player != null)
             //{
-            //    // ÀûÀÌ ¹Ù¶óº¸´Â ¹æÇâ(facingDirection)À» ±×´ë·Î ÇÃ·¹ÀÌ¾îÀÇ ³Ë¹é ¹æÇâÀ¸·Î Àü´Ş!
+            //    // ì ì´ ë°”ë¼ë³´ëŠ” ë°©í–¥(facingDirection)ì„ ê·¸ëŒ€ë¡œ í”Œë ˆì´ì–´ì˜ ë„‰ë°± ë°©í–¥ìœ¼ë¡œ ì „ë‹¬!
             //    player.TakeDamage(damage, enemy.facingDirection * knockbackPower);
             //}
             player.PlayerDead();
@@ -27,7 +27,7 @@ public class EnemyAttackHitbox : MonoBehaviour
 
     public void AnimEvent_DisableEffect()
     {
-        enemy.AttackState.SetAttackCancellable();
+        enemy.StateMachine.AttackState.SetAttackCancellable();
         gameObject.SetActive(false);
     }
 }

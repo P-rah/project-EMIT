@@ -1,26 +1,19 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(EnemyEmitController))]
 public class Enemy : MonoBehaviour, IDamageable
 {
-    public EnemyState currentState { get; private set; }
-    public string currentStateString;
+    public EnemyStateMachine StateMachine { get; private set; }
+    public EnemyState CurrentState => StateMachine?.CurrentState;
 
     public Transform target; //플레이어의 transform
 
-    private EnemyAnimator enemyAnim;
+    public EnemyAnimator enemyAnim;
     public AudioSource myAudioSource;
 
     public ParticleSystem dragEffect;
-
-    public EnemyIdleState IdleState { get; private set; }
-    public EnemyAttackState AttackState { get; private set; }
-    public EnemyChaseState ChaseState { get; private set; }
-    public EnemyDeadState DeadState { get; private set; }
-    public EnemyKnockbackState KnockbackState { get; private set;}  //넉백(밀치기) 상태
-    public EnemyGrabbedState GrabbedState { get; private set; }     //넉백이랑 당겨오는 상태랑 분리
 
     [Header("적 데이터")]
     [SerializeField] private EnemyData data;
@@ -71,23 +64,21 @@ public class Enemy : MonoBehaviour, IDamageable
 
         Debug.Log("Enemy Awake");
         Init();
+        StateMachine = new EnemyStateMachine(this);
     }
 
     public virtual void Start()
     {
         Debug.Log("Enemy is Ready");
-        ChangeState(IdleState, false);
+        StateMachine.ChangeState(StateMachine.IdleState);
     }
 
     public virtual void Update()
     {
         if (EmitManager.Instance.isEmitting) return;
 
-        if (currentState != DeadState) // race condition 방지
-        {        
-            currentState.UpdateState();
-            currentStateString = currentState.GetType().Name;
-        }
+        StateMachine.UpdateState();
+
         front = (rb.transform.position.x > target.transform.position.x) ? Vector2.left : Vector2.right;
         UpdateSpriteFlip();
     }
@@ -97,14 +88,6 @@ public class Enemy : MonoBehaviour, IDamageable
         target = Player.InstanceTransform; //플레이어의 싱글톤 Transform 받아옴
 
         enemyAnim = GetComponent<EnemyAnimator>();
-
-        IdleState = new EnemyIdleState(this, enemyAnim);
-        AttackState = new EnemyAttackState(this, enemyAnim);
-        ChaseState = new EnemyChaseState(this, enemyAnim);
-        DeadState =  new EnemyDeadState(this, enemyAnim);
-        KnockbackState = new EnemyKnockbackState(this, enemyAnim);
-        GrabbedState = new EnemyGrabbedState(this, enemyAnim);
-
         rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
@@ -146,15 +129,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void ChangeState(EnemyState nextState, bool force)
     {
-        if(!force)
-        {
-            if (currentState == nextState || !canChangeState) return;
-        }
-
-        currentState?.ExitState();
-        currentState = nextState;
-        ResetPowerOutsideHitReaction();
-        currentState.EnterState();
+        StateMachine.ChangeState(nextState, force);
     }
     
     /// <summary>
@@ -162,9 +137,8 @@ public class Enemy : MonoBehaviour, IDamageable
     /// </summary>
     public void SetState(EnemyState nextState, int replayPower)
     {
-        currentState = nextState;
-        currentPower = IsHitReactionState(currentState) ? replayPower : 0;
-        currentStateString = currentState.GetType().Name;
+        StateMachine.SetState(nextState);
+        currentPower = IsHitReactionState(nextState) ? replayPower : 0;
     }
 
     private void OnDrawGizmos()
@@ -176,22 +150,13 @@ public class Enemy : MonoBehaviour, IDamageable
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, visionRange);
-
-        
-        if (currentState == AttackState)
-        {
-            Vector3 dir = new Vector3(target.transform.position.x - transform.position.x, 0, 0).normalized;
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, transform.position + dir * attackRange);
-        }
-        
     }
 
     public void FixedUpdate()
     {   
         if (isRooted) return;
 
-        currentState?.Move();
+        StateMachine.Move();
     }
 
     public void ReceiveAttack(AttackInfo attackInfo)
@@ -204,9 +169,9 @@ public class Enemy : MonoBehaviour, IDamageable
         if(!isCurrentHitGrab) myAudioSource.PlayOneShot(sweepHitSound);
         else myAudioSource.PlayOneShot(grabHitSound);
 
-        if (AttackState.CanBeCancelled())
+        if (StateMachine.AttackState.CanBeCancelled())
         {
-            AttackState.ExitState();
+            StateMachine.AttackState.ExitState();
         }
 
         ReceiveDamage(attackInfo);
@@ -216,7 +181,7 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             Debug.Log("Enemy is Dead!");
             SoundManager.instance.PlaySFX(deathSound);  //비활성화되면 소리 안나니까 얘만 매니저에서 재생
-            ChangeState(DeadState, true);
+            StateMachine.ChangeState(StateMachine.DeadState, true);
             EventManager.TriggerEvent("OnEmitAborted");
             gameObject.SetActive(false);
             return;
@@ -230,13 +195,13 @@ public class Enemy : MonoBehaviour, IDamageable
 
         if (canChangeHitState)
         {
-            KnockbackState.stopKnockbackRoutine();
-            GrabbedState.stopGrapRoutine();
+            StateMachine.KnockbackState.stopKnockbackRoutine();
+            StateMachine.GrabbedState.stopGrapRoutine();
             ReceiveKnockback(true);
         }
         else ReceiveKnockback(false);
 
-        currentPower = IsHitReactionState(currentState)
+        currentPower = IsHitReactionState(CurrentState)
             ? incomingPower
             : 0;
     }
@@ -280,12 +245,12 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private bool IsHitReactionState(EnemyState state)
     {
-        return state == KnockbackState || state == GrabbedState;
+        return state == StateMachine.KnockbackState || state == StateMachine.GrabbedState;
     }
 
-    private void ResetPowerOutsideHitReaction()
+    public void ResetPowerOutsideHitReaction()
     {
-        if (!IsHitReactionState(currentState))
+        if (!IsHitReactionState(CurrentState))
         {
             currentPower = 0;
         }
@@ -294,15 +259,15 @@ public class Enemy : MonoBehaviour, IDamageable
     public void ReceiveKnockback(bool force)
     {
         if (!isCurrentHitGrab)
-            ChangeState(KnockbackState, force);
+            StateMachine.ChangeState(StateMachine.KnockbackState, force);
         else
-            ChangeState(GrabbedState, force);
+            StateMachine.ChangeState(StateMachine.GrabbedState, force);
     }
 
     public void ReceiveGrab()
     {
-        if(currentState == GrabbedState)
-            GrabbedState.Grab();
+        if (StateMachine.IsCurrentState(StateMachine.GrabbedState))
+            StateMachine.GrabbedState.Grab();
     }
 
     public bool isPlayerInVision()
@@ -315,12 +280,14 @@ public class Enemy : MonoBehaviour, IDamageable
         return Physics2D.Raycast(transform.position, front, startAttackRange, LayerMask.GetMask("Player"));
 
     }
+
     public void RootMovement()
     {
         rb.linearVelocity = Vector2.zero;
         rb.bodyType = RigidbodyType2D.Kinematic;
         isRooted = true;
     }
+
     public void UnrootMovement()
     {
         rb.bodyType = RigidbodyType2D.Dynamic;
@@ -329,7 +296,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public bool IsCurrentState(EnemyState state)
     {
-        return currentState == state;
+        return StateMachine.IsCurrentState(state);
     }
 
     private void UpdateSpriteFlip()

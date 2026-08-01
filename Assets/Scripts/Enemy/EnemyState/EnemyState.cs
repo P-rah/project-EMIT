@@ -1,12 +1,19 @@
+using Unity.VisualScripting;
+
 public abstract class EnemyState
 {
+    /// <summary>
+    /// 책임 및 기능: 각 State에서 Enemy가 움직이는 방식
+    /// </summary>
+    protected EnemyStateMachine stateMachine;
     protected Enemy enemy;
     protected EnemyAnimator enemyAnim;
 
-    public EnemyState(Enemy enemy, EnemyAnimator enemyAnim)
+    public EnemyState(EnemyStateMachine stateMachine)
     {
-        this.enemy = enemy;
-        this.enemyAnim = enemyAnim;
+        this.stateMachine = stateMachine;
+        this.enemy = stateMachine.Owner;
+        this.enemyAnim = enemy.enemyAnim;
     }
 
     public abstract void EnterState();
@@ -20,15 +27,15 @@ public abstract class EnemyState
     {
         if (enemy.isPlayerInAttackRange())
         {
-            enemy.ChangeState(enemy.AttackState, false);
+            stateMachine.ChangeState(stateMachine.AttackState);
             return;
         }
         if (enemy.isPlayerInVision())
         {
-            enemy.ChangeState(enemy.ChaseState, false);
+            stateMachine.ChangeState(stateMachine.ChaseState);
             return;
         }
-        enemy.ChangeState(enemy.IdleState, false);
+        stateMachine.ChangeState(stateMachine.IdleState);
     }
 
     public abstract void ExitState();

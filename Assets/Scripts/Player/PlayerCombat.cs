@@ -149,14 +149,14 @@ public class PlayerCombat : MonoBehaviour
 
     private void startGrabVisual()
     {
-        if(currentTargetTransform != null && currentTarget.currentState != currentTarget.DeadState)
+        if(currentTargetTransform != null && currentTarget.CurrentState != currentTarget.StateMachine.DeadState)
             grapEffect.StartGrabVisual(currentTargetTransform);
         else grapEffect.StartGrabFailVisual();
     }
 
     public void AnimEvent_startEnemyGrab()
     {
-        if (currentTarget != null && currentTarget.currentState != currentTarget.DeadState)
+        if (currentTarget != null && currentTarget.CurrentState != currentTarget.StateMachine.DeadState)
             currentTarget.ReceiveGrab();
         else
         {

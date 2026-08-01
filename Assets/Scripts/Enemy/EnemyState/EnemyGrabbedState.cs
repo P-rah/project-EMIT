@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyGrabbedState : EnemyState
 {
-    public EnemyGrabbedState(Enemy enemy, EnemyAnimator enemyAnim) : base(enemy, enemyAnim) { }
+    public EnemyGrabbedState(EnemyStateMachine stateMachine) : base(stateMachine) { }
 
     private Coroutine grabRoutine;
 
@@ -19,7 +19,7 @@ public class EnemyGrabbedState : EnemyState
     public override void UpdateState()
     {
         base.UpdateState();
-        if (!enemy.IsCurrentState(this) || isGrabbed())
+        if (!stateMachine.IsCurrentState(this) || isGrabbed())
         {
             return;
         }
@@ -36,8 +36,8 @@ public class EnemyGrabbedState : EnemyState
         Vector2 targetPosition = new Vector2(enemy.target.position.x + offsetX, enemy.transform.position.y);
 
         if ((offsetX > 0f) == (enemy.isFacingLeft))
-            enemyAnim.PlayHitBack();
-        else enemyAnim.PlayHitFront();
+            enemy.enemyAnim.PlayHitBack();
+        else enemy.enemyAnim.PlayHitFront();
 
         grabRoutine = enemy.StartCoroutine(GrabRoutine(targetPosition));
     }

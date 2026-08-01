@@ -1,8 +1,9 @@
+using System.Data;
 using UnityEngine;
 
 public class EnemyDeadState : EnemyState
 {
-    public EnemyDeadState(Enemy enemy, EnemyAnimator enemyAnim) : base(enemy, enemyAnim) {}
+    public EnemyDeadState(EnemyStateMachine stateMachine) : base(stateMachine) {}
 
     public override void EnterState()
     {

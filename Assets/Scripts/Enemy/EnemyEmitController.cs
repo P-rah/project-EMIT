@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Enemy))]
 public class EnemyEmitController : MonoBehaviour, IEmit
 {
     public struct KeyframeStatus
@@ -7,7 +8,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         public Vector2 position;
         public float rotation;
         public Vector2 velocity;
-        public EnemyState enemyState;
+        public EnemyState state;
         public int power;
         public Sprite sprite;
         public bool isFacingLeft;
@@ -48,7 +49,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         frame.position = _rb.position;
         frame.rotation = _rb.rotation;
         frame.velocity = _rb.linearVelocity;
-        frame.enemyState = _enemy.currentState;
+        frame.state = _enemy.CurrentState;
         frame.power = _enemy.currentPower;
         frame.sprite = spriteRenderer.sprite;
         frame.isFacingLeft = _enemy.isFacingLeft;
@@ -65,7 +66,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
     {
         _enemy.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         _enemy.isFacingLeft = false;
-        _enemy.ChangeState(_enemy.IdleState, true);
+        // _enemy.ChangeState(_enemy.IdleState, true);
         _enemyAnimator.stopAnimControll();
         _enemy.RootMovement();
     }
@@ -75,7 +76,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         if (buffer.Pop(out KeyframeStatus frame))
         {
             // _rb.linearVelocity = -frame.velocity;
-            _enemy.SetState(frame.enemyState, -frame.power);
+            _enemy.SetState(frame.state, -frame.power);
             _rb.MovePosition(frame.position);
             _rb.MoveRotation(frame.rotation);
             

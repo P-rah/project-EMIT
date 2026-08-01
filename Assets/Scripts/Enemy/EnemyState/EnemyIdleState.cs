@@ -1,12 +1,13 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyIdleState : EnemyState
 {
-    public EnemyIdleState(Enemy enemy, EnemyAnimator enemyAnim) : base(enemy, enemyAnim) { }
+    public EnemyIdleState(EnemyStateMachine stateMachine) : base(stateMachine) { }
 
     public override void EnterState()
     {
-        enemyAnim.PlayIdle();
+        enemy.enemyAnim.PlayIdle();
     }
 
     // public override void UpdateState() { }

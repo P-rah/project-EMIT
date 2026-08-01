@@ -3,11 +3,11 @@ using UnityEngine.Scripting.APIUpdating;
 
 public class EnemyChaseState : EnemyState
 {
-    public EnemyChaseState(Enemy enemy, EnemyAnimator enemyAnim) : base(enemy, enemyAnim) { }
+    public EnemyChaseState(EnemyStateMachine stateMachine) : base(stateMachine) { }
 
     public override void EnterState()
     {
-        enemyAnim.PlayWalk();
+        enemy.enemyAnim.PlayWalk();
     }
 
     // public override void UpdateState() { }
@@ -25,7 +25,7 @@ public class EnemyChaseState : EnemyState
             Debug.LogError("Enemy requires RigidBody2D");
             return;
         }
-
+        // 추후 PlayerMovement와 같이 Slope 이동 가능하도록 수정
         enemy.rb.linearVelocity = new Vector2(enemy.baseSpeed, 0) * enemy.front;
     }
 }

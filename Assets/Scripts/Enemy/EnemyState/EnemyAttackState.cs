@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyAttackState : EnemyState
 {
-    public EnemyAttackState(Enemy enemy, EnemyAnimator enemyAnim) : base(enemy, enemyAnim) { }
+    public EnemyAttackState(EnemyStateMachine stateMachine) : base(stateMachine) { }
     private Coroutine attackCoroutine;
 
     private bool isCancellable = false;
@@ -17,7 +17,7 @@ public class EnemyAttackState : EnemyState
     public override void UpdateState()
     {
         base.UpdateState();
-        if (!enemy.IsCurrentState(this) || IsAttacking())
+        if (!stateMachine.IsCurrentState(this) || IsAttacking())
         {
             return;
         }
@@ -51,7 +51,7 @@ public class EnemyAttackState : EnemyState
     {
         // 선딜레이 시간
         isCancellable = true;
-        enemyAnim.PlayAttackStart();
+        enemy.enemyAnim.PlayAttackStart();
         enemy.myAudioSource.PlayOneShot(enemy.attackReadySound);
 
         yield return new WaitForSeconds(enemy.startUpTime);
@@ -59,7 +59,7 @@ public class EnemyAttackState : EnemyState
 
         // 본공격
         isCancellable = false;
-        enemyAnim.PlayAttackEnd();
+        enemy.enemyAnim.PlayAttackEnd();
         CameraShake.Instance.ShakeCamera(10f,0.2f);
         enemy.myAudioSource.PlayOneShot(enemy.attackSound);
 
