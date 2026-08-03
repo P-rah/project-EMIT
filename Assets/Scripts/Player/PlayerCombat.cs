@@ -24,6 +24,7 @@ public class PlayerCombat : MonoBehaviour
     [Header("Emit Settings")]
     public int emitRecoveryCount = 5;
     public int currentEmitRecoveryCount = 0;
+    private bool hasTriggeredEmit;
 
     private bool canAttackSweep = true;
     private bool canAttackGrap = true;
@@ -39,6 +40,7 @@ public class PlayerCombat : MonoBehaviour
         grapEffect = Player.GrapEffect;
 
         currentAttackCount = maxAttackCount;
+        currentEmitRecoveryCount = emitRecoveryCount;
     }
 
     private void OnEnable()
@@ -55,7 +57,8 @@ public class PlayerCombat : MonoBehaviour
     {
         if (Player.State.isDeath) return;
         CheckInputs();
-        if(currentAttackCount < maxAttackCount && attackRecoveryRoutine == null)
+        CheckEmitable();
+        if (currentAttackCount < maxAttackCount && attackRecoveryRoutine == null)
         {
             attackRecoveryRoutine = StartCoroutine(AttackRecoveryRoutine());
         }
@@ -122,7 +125,7 @@ public class PlayerCombat : MonoBehaviour
         {
             //공격이 적중했을 떄
             hasTriggeredHitEffect = true;
-            EmitRecoveryCalculate();
+            addEmitCount();
         }
     }
 
@@ -151,7 +154,7 @@ public class PlayerCombat : MonoBehaviour
         {
             //공격이 적중했을 때
             hasTriggeredHitEffect = true;
-            EmitRecoveryCalculate();
+            addEmitCount();
         }
     }
 
@@ -218,15 +221,32 @@ public class PlayerCombat : MonoBehaviour
             StopAttackRecoveryRoutine();
 
         currentEmitRecoveryCount = 0;
+        hasTriggeredEmit = false;
+        Player.OutlineController.setOutlineColorOrg();
     }
 
-    private void EmitRecoveryCalculate()
+    private void addEmitCount()
     {
-        currentEmitRecoveryCount++;
         if (currentEmitRecoveryCount >= emitRecoveryCount)
         {
-            currentEmitRecoveryCount = 0;
             EmitManager.Instance.isEmittable = true;
+        }
+        else
+        {
+            currentEmitRecoveryCount++;
+            Player.OutlineController.setOutlineColor(new Color(1f, 1f, (7 - currentEmitRecoveryCount) / 7f, 1f), 1f);
+        }
+    }
+
+    //역행 카운트 계산 및 검사
+    private void CheckEmitable()
+    {
+        //역행 가능상태가 되었을 시 한번만 동작
+        if(EmitManager.Instance.isEmittable && !hasTriggeredEmit)
+        {
+            Player.OutlineController.setOutlineColorEmitable();
+            SoundManager.instance.PlaySFX(Player.Instance.canEmitSound);
+            hasTriggeredEmit = true;
         }
     }
 }

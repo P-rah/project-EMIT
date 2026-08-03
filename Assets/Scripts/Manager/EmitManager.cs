@@ -21,7 +21,8 @@ public class EmitManager : MonoBehaviour
     public bool isEmittable = true;
 
     [Header("EMIT 효과음")]
-    public AudioClip emitStartSound;
+    public AudioClip emitStartSound1;
+    public AudioClip emitStartSound2;
     public AudioClip emitEndSound;
     public AudioClip emitClockSound1;
     public AudioClip emitClockSound2;
@@ -97,7 +98,8 @@ public class EmitManager : MonoBehaviour
         }
         isEmitting = true;
         TimeManager.Instance.StartSlowMotion();
-        SoundManager.instance.PlaySFX(emitStartSound);
+        SoundManager.instance.PlaySFX(emitStartSound1);
+        SoundManager.instance.PlaySFX(emitStartSound2);
         StartCoroutine(emitClockSound());
         SoundManager.instance.StartEmitBGM();
     }

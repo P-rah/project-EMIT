@@ -31,7 +31,7 @@ public class EnemyAttackState : EnemyState
 
     public override void ExitState()
     {
-
+        enemy.outlineController.setDefaultOutline();
         if (attackCoroutine != null)
         {
             enemy.StopCoroutine(attackCoroutine);
@@ -50,9 +50,10 @@ public class EnemyAttackState : EnemyState
     IEnumerator AttackRoutine()
     {
         // 선딜레이 시간
-        isCancellable = true;
+        isCancellable = false;
         enemyAnim.PlayAttackStart();
         enemy.myAudioSource.PlayOneShot(enemy.attackReadySound);
+        enemy.outlineController.setAtrackOutline();
 
         yield return new WaitForSeconds(enemy.startUpTime);
         // 선딜레이 시간 동안에 넉백을 받았다면 TryAttack이 실패하고 KnockBackState가 되어야 함

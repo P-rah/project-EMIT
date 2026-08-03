@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public AudioSource myAudioSource;
 
     public ParticleSystem dragEffect;
+    public EnemyOutlineController outlineController;
 
     public EnemyIdleState IdleState { get; private set; }
     public EnemyAttackState AttackState { get; private set; }
@@ -41,6 +42,10 @@ public class Enemy : MonoBehaviour, IDamageable
     public float knockbackTime;
     public float grabForce;
     public float HitRecoveryTime;
+
+    public Color defaultOutlineColor;
+    public Color attackOutlineColor;
+    public Color emitOutlineColor;
 
     public AudioClip walkSound;
     public AudioClip attackReadySound;
@@ -101,6 +106,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
         enemyAnim = GetComponent<EnemyAnimator>();
 
+        outlineController = GetComponent<EnemyOutlineController>();
+
         IdleState = new EnemyIdleState(this, enemyAnim);
         AttackState = new EnemyAttackState(this, enemyAnim);
         ChaseState = new EnemyChaseState(this, enemyAnim);
@@ -133,8 +140,11 @@ public class Enemy : MonoBehaviour, IDamageable
             knockbackTime = data.knockbackTime;
             grabForce = data.grabForce;
             HitRecoveryTime = data.HitRecoveryTime;
+            defaultOutlineColor = data.defaultOutlineColor;
+            attackOutlineColor = data.attackOutlineColor;
+            emitOutlineColor = data.emitOutlineColor;
 
-            walkSound = data.walkSound;
+    walkSound = data.walkSound;
             attackReadySound = data.attackReadySound;
             attackSound = data.attackSound;
             sweepHitSound = data.sweepHitSound;

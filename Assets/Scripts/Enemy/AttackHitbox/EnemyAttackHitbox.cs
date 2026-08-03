@@ -29,5 +29,6 @@ public class EnemyAttackHitbox : MonoBehaviour
     {
         enemy.AttackState.SetAttackCancellable();
         gameObject.SetActive(false);
+        enemy.outlineController.setDefaultOutline();
     }
 }

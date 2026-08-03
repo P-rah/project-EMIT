@@ -15,7 +15,7 @@ TagManager:
   - Enemy
   - Attack
   - EnemyFrag
-  - 
+  - BackGround
   - 
   - 
   - 
@@ -38,11 +38,17 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Lights
+    uniqueID: 1786708611
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
   - name: CameraSortingLayer
     uniqueID: 1681239963
+    locked: 0
+  - name: Darkness
+    uniqueID: 3454904089
     locked: 0
   m_RenderingLayers:
   - Default

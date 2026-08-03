@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
 
     public Rigidbody2D Rb { get; private set; }
     public Animator animator { get; private set; }
+    public SpriteRenderer spriteRenderer { get; private set; }
 
     public static PlayerState State { get; private set; }
     public static PlayerInputHandler InputHandler { get; private set; }
@@ -21,6 +22,7 @@ public class Player : MonoBehaviour
     public static DashEffectController DashEffect { get; private set; }
     public static GrapEffect GrapEffect { get; private set; }
     public static PlayerHealth PlayerHealth { get; private set; }
+    public static PlayerOutlineController OutlineController { get; private set; }
 
     public AudioClip walkSound;
     public AudioClip jumpSound;
@@ -30,6 +32,7 @@ public class Player : MonoBehaviour
     public AudioClip grabThrowSound1;
     public AudioClip grabThrowSound2;
     public AudioClip grabRetreiveSound;
+    public AudioClip canEmitSound;
 
     private void Awake()
     {
@@ -40,6 +43,7 @@ public class Player : MonoBehaviour
 
         Rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         State = GetComponent<PlayerState>();
         InputHandler = GetComponent<PlayerInputHandler>();
@@ -49,5 +53,6 @@ public class Player : MonoBehaviour
         DashEffect = GetComponent<DashEffectController>();
         GrapEffect = GetComponent<GrapEffect>();
         PlayerHealth = GetComponent<PlayerHealth>();
+        OutlineController = GetComponent<PlayerOutlineController>();
     }
 }

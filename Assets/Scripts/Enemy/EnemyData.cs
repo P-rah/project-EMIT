@@ -35,4 +35,9 @@ public class EnemyData : ScriptableObject
     public AudioClip sweepHitSound;
     public AudioClip grabHitSound;
     public AudioClip deathSound;
+
+    [Header("외곽선 관련")]
+    public Color defaultOutlineColor;
+    public Color attackOutlineColor;
+    public Color emitOutlineColor;
 }

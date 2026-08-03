@@ -68,6 +68,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         _enemy.ChangeState(_enemy.IdleState, true);
         _enemyAnimator.stopAnimControll();
         _enemy.RootMovement();
+        _enemy.outlineController.setEmitOutline();
     }
 
     void IEmit.EmitFrame()
@@ -95,6 +96,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         spriteRenderer.flipX = false;
         _enemyAnimator.startAnimControll();
         _enemy.UnrootMovement();
+        _enemy.outlineController.setDefaultOutline();
     }
 
     void IEmit.ResetFrame()
