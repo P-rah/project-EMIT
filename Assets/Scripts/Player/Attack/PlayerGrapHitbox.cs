@@ -16,7 +16,7 @@ public class PlayerGrapHitbox : MonoBehaviour
 
     public event Action<Transform, Vector2> OnTargetGrapHit;
 
-    [Header("Ÿ�� ���� ����")]
+    [Header("히트박스 설정")]
     public Vector2 boxSize = new Vector2(1f, 1f); 
     public float attackDistance = 5f;
 
