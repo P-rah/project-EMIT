@@ -1,4 +1,5 @@
 using System.Collections;
+using EMIT.Utilities;
 using UnityEngine;
 
 public class EnemyKnockbackState : EnemyState
@@ -30,7 +31,7 @@ public class EnemyKnockbackState : EnemyState
     {
         enemy.canChangeState = false;
         enemy.rb.AddForce(enemy.currentKnockBackForce * enemy.knockbackRate, ForceMode2D.Impulse);
-        if((enemy.currentKnockBackForce.x > 0f) ==  (enemy.isFacingLeft))
+        if (Direction2D.IsOpposite(enemy.currentKnockBackForce, enemy.FacingDir))
             enemy.enemyAnim.PlayHitFront();
         else enemy.enemyAnim.PlayHitBack();
 

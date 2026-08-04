@@ -1,4 +1,5 @@
 using System.Collections;
+using EMIT.Utilities;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,6 +8,26 @@ public class Enemy : MonoBehaviour, IDamageable
 {
     public EnemyStateMachine StateMachine { get; private set; }
     public EnemyState CurrentState => StateMachine?.CurrentState;
+
+    // main 병합용 호환 프로퍼티. main이 사용하는 이름을 StateMachine 상태에 연결한다.
+    public EnemyIdleState IdleState => StateMachine?.IdleState;
+    public EnemyDeadState DeadState => StateMachine?.DeadState;
+
+    /*
+     * POST-MERGE:
+     * 1. IdleState/DeadState 호환 프로퍼티를 사용하는 main 코드가 모두 StateMachine 직접 접근으로
+     *    바뀌면 두 프로퍼티를 제거한다.
+     * 2. front/isFacingLeft는 main 및 직렬화 호환용이다. 프리팹 마이그레이션 후 모든 참조를
+     *    targetDir/FacingDir로 바꾸고 두 필드를 제거한다.
+     * 3. StageManager의 적 등록/사망 집계는 풀링 환경에서 중복 호출되지 않는지 확인한 뒤,
+     *    필요하면 Start 기반 등록을 OnEnable/OnDisable 기반으로 변경한다.
+     * 4. LightManager/TimeManager 연출 수치는 플레이 테스트 후 EnemyData로 이동할 수 있다.
+     * 5. 궁극기를 복구하려면 주석 처리된 필드/타이머와 DamageCalculation의 같은 방향 분기를
+     *    한 번에 복구하고 Direction2D 기반 판정을 적용한다.
+     * 6. main 호환을 위해 isMovingLeft는 기존 식을 유지한다. 병합 후 실제 왼쪽 이동 판정이
+     *    필요하면 반환식을 rb.linearVelocityX < 0f로 변경한다.
+     * 7. main과 동일하게 유지한 "//else " 줄의 후행 공백은 병합 완료 후 제거한다.
+     */
 
     public Transform target; //플레이어의 transform
 
@@ -48,17 +69,21 @@ public class Enemy : MonoBehaviour, IDamageable
     public bool isRooted;
     public Vector2 currentKnockBackForce;
     public int currentPower { get; private set; }
-    public bool isUltCondition { get; set; }
-    public int ultPower { get; set; }
     public bool isCurrentHitGrab;
     public bool canChangeHitState;
+
+    //public bool isUltCondition { get; set; }
+    //public int ultPower { get; set; }
 
     public Vector2 front; // 적이 바라보는 방향 (넉백 관련 처리 시 필요)
     public bool isFacingLeft = false;
 
-    private float ultTime = 1f;
-    private Coroutine ultRoutine;
+    //private float ultTime = 1f;
+    //private Coroutine ultRoutine;
     public int dmgType { get; set; }
+
+    public Vector2 targetDir; // 플레이어가 있는 수평 방향
+    public Vector2 FacingDir { get; private set; } = Vector2.right;
 
     public virtual void Awake() {
 
@@ -70,7 +95,9 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void Start()
     {
         Debug.Log("Enemy is Ready");
-        StateMachine.ChangeState(StateMachine.IdleState);
+        // StageManager.Instance.AddEnemy();   //적 카운드 증가
+
+        ChangeState(IdleState, false);
     }
 
     public virtual void Update()
@@ -79,8 +106,9 @@ public class Enemy : MonoBehaviour, IDamageable
 
         StateMachine.UpdateState();
 
-        front = (rb.transform.position.x > target.transform.position.x) ? Vector2.left : Vector2.right;
-        UpdateSpriteFlip();
+        targetDir = Direction2D.FacingDir(target.position.x - rb.position.x);
+        front = targetDir;
+        UpdateFacingDirection();
     }
 
     public virtual void Init()
@@ -114,12 +142,12 @@ public class Enemy : MonoBehaviour, IDamageable
             grabForce = data.grabForce;
             HitRecoveryTime = data.HitRecoveryTime;
 
-            walkSound = data.walkSound;
-            attackReadySound = data.attackReadySound;
-            attackSound = data.attackSound;
-            sweepHitSound = data.sweepHitSound;
-            grabHitSound = data.grabHitSound;
-            deathSound = data.deathSound;
+            // walkSound = data.walkSound;
+            // attackReadySound = data.attackReadySound;
+            // attackSound = data.attackSound;
+            // sweepHitSound = data.sweepHitSound;
+            // grabHitSound = data.grabHitSound;
+            // deathSound = data.deathSound;
 }
 
         canChangeState = true;
@@ -152,7 +180,7 @@ public class Enemy : MonoBehaviour, IDamageable
         Gizmos.DrawWireSphere(transform.position, visionRange);
     }
 
-    public void FixedUpdate()
+    public virtual void FixedUpdate()
     {   
         if (isRooted) return;
 
@@ -163,11 +191,11 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         int incomingPower = GetEffectivePower(attackInfo.power);
 
-        currentKnockBackForce = attackInfo.knockbackForce;
+        currentKnockBackForce = attackInfo.knockback;
         isCurrentHitGrab = attackInfo.attackIsGrab;
 
-        if(!isCurrentHitGrab) myAudioSource.PlayOneShot(sweepHitSound);
-        else myAudioSource.PlayOneShot(grabHitSound);
+        // if(!isCurrentHitGrab) myAudioSource.PlayOneShot(sweepHitSound);
+        // else myAudioSource.PlayOneShot(grabHitSound);
 
         if (StateMachine.AttackState.CanBeCancelled())
         {
@@ -180,8 +208,10 @@ public class Enemy : MonoBehaviour, IDamageable
         if (currentHealth <= 0)
         {
             Debug.Log("Enemy is Dead!");
-            SoundManager.instance.PlaySFX(deathSound);  //비활성화되면 소리 안나니까 얘만 매니저에서 재생
-            StateMachine.ChangeState(StateMachine.DeadState, true);
+            // SoundManager.instance.PlaySFX(deathSound);  //비활성화되면 소리 안나니까 얘만 매니저에서 재생
+            // StageManager.Instance.EnemyDied();
+
+            ChangeState(DeadState, true);
             EventManager.TriggerEvent("OnEmitAborted");
             gameObject.SetActive(false);
             return;
@@ -189,8 +219,9 @@ public class Enemy : MonoBehaviour, IDamageable
 
         if (EmitManager.Instance.isEmitting)
         {
-            if (isUltCondition) EventManager.TriggerEvent("OnEmitUlted");
-            else EventManager.TriggerEvent("OnEmitAborted");
+            //if (isUltCondition) EventManager.TriggerEvent("OnEmitUlted");
+            //else 
+            EventManager.TriggerEvent("OnEmitAborted");
         }
 
         if (canChangeHitState)
@@ -226,11 +257,12 @@ public class Enemy : MonoBehaviour, IDamageable
                 EffectManager.Instance.PlayHitEffect(transform.position, currentKnockBackForce * -1);
                 return;
             case 3:
-                CameraShake.Instance.ShakeCamera(30f, 0.4f);
+                CameraShake.Instance.ShakeCamera(40f, 0.1f);
                 EffectManager.Instance.PlayHitEffect(transform.position, currentKnockBackForce * -1);
-                return;
-            case 4:
-                CameraShake.Instance.ShakeCamera(40f, 0.5f);
+
+                // LightManager.Instance.BlinkLight(0.05f, 0.8f);
+                // TimeManager.Instance.StopTimeFor(0.8f);
+
                 return;
             default:
                 Debug.Log("잘못된 데미지 타입");
@@ -277,7 +309,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public bool isPlayerInAttackRange()
     {
-        return Physics2D.Raycast(transform.position, front, startAttackRange, LayerMask.GetMask("Player"));
+        return Physics2D.Raycast(transform.position, targetDir, startAttackRange, LayerMask.GetMask("Player"));
 
     }
 
@@ -299,7 +331,7 @@ public class Enemy : MonoBehaviour, IDamageable
         return StateMachine.IsCurrentState(state);
     }
 
-    private void UpdateSpriteFlip()
+    private void UpdateFacingDirection()
     {
         if (canChangeState)
         {
@@ -309,11 +341,18 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void Flip()
     {
-        if (isFacingLeft != (front == Vector2.left))
-        {
-            isFacingLeft = (front == Vector2.left);
-            transform.rotation = Quaternion.Euler(0f, isFacingLeft ? 180f : 0f, 0f);
-        }
+        SetFacingDirection(targetDir);
+    }
+
+    public void SetFacingDirection(Vector2 direction)
+    {
+        Vector2 nextFacingDir = Direction2D.FacingDir(direction);
+
+        if (nextFacingDir == Vector2.zero || !Direction2D.IsOpposite(FacingDir, nextFacingDir)) return;
+
+        FacingDir = nextFacingDir;
+        isFacingLeft = FacingDir == Vector2.left;
+        transform.rotation = Quaternion.Euler(0f, isFacingLeft ? 180f : 0f, 0f);
     }
 
     public void startDragEffect()
@@ -330,36 +369,36 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         return rb.linearVelocityX * Vector2.left.magnitude > 0f;
     }
-    
-    public void startUltTimer()
-    {
-        ultRoutine = StartCoroutine(UltTimerRoutine());
-    }
-
-    public void cancelUltTimer()
-    {
-        if (ultRoutine != null)
-        {
-            StopCoroutine(ultRoutine);
-            isUltCondition = false;
-            EventManager.TriggerEvent("OnEmitAborted");
-            ultRoutine = null;
-        }
-    }
 
     public void Animevent_playWalkSound()
     {
-        myAudioSource.pitch = 1.0f + Random.Range(-0.2f, 0.2f);
-        myAudioSource.PlayOneShot(walkSound);
-        myAudioSource.pitch = 1.0f;
+        // myAudioSource.pitch = 1.0f + Random.Range(-0.2f, 0.2f);
+        // myAudioSource.PlayOneShot(walkSound);
+        // myAudioSource.pitch = 1.0f;
     }
 
-    private IEnumerator UltTimerRoutine()
-    {
-        yield return new WaitForSeconds(ultTime);
-        isUltCondition = false;
-        EventManager.TriggerEvent("OnEmitAborted");
+    //public void startUltTimer()
+    //{
+    //    ultRoutine = StartCoroutine(UltTimerRoutine());
+    //}
 
-        ultRoutine = null;
-    }
+    //public void cancelUltTimer()
+    //{
+    //    if (ultRoutine != null)
+    //    {
+    //        StopCoroutine(ultRoutine);
+    //        isUltCondition = false;
+    //        EventManager.TriggerEvent("OnEmitAborted");
+    //        ultRoutine = null;
+    //    }
+    //}
+
+    //private IEnumerator UltTimerRoutine()
+    //{
+    //    yield return new WaitForSeconds(ultTime);
+    //    isUltCondition = false;
+    //    EventManager.TriggerEvent("OnEmitAborted");
+
+    //    ultRoutine = null;
+    //}
 }

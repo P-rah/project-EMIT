@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using EMIT.Utilities;
 
 /*
  * 플레이어 이동 제어용 클래스
@@ -33,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
     public float dashPower = 40f;
     public float dashTime = 0.1f;
     public float dashCooldown = 0.5f;
-    private float facingDirection = 1f;
+    private Vector2 facingDir = Vector2.right;
     private float initialGravityScale;
     [SerializeField] private bool canDash = true;
 
@@ -207,14 +208,17 @@ public class PlayerMovement : MonoBehaviour
     private void FlipPlayer()
     {
         if (!flippable) return;
-
+        
+        if (Direction2D.IsOpposite(input.MoveInput, facingDir)) Flip();
+        /*
         if (input.MoveInput.x > 0 && facingDirection < 0f) Flip();
         else if (input.MoveInput.x < 0 && facingDirection > 0f) Flip();
+        */
     }
 
     public void Flip()
     {
-        facingDirection = -facingDirection;
+        facingDir = -facingDir;
         transform.Rotate(0f, 180f, 0f);
     }
 
@@ -222,11 +226,11 @@ public class PlayerMovement : MonoBehaviour
     {
         canDash = false;
         state.IsDashing = true;
-        SoundManager.instance.PlaySFX(Player.Instance.dashSound);
+        // SoundManager.instance.PlaySFX(Player.Instance.dashSound);
 
         rb.gravityScale = 0f;
 
-        rb.linearVelocity = new Vector2(facingDirection * dashPower, 0f);
+        rb.linearVelocity = facingDir * dashPower;
         dashEffectController.StartDashTrail();
 
         yield return new WaitForSeconds(dashTime);

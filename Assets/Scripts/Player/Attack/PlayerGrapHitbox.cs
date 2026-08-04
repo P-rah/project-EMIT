@@ -1,4 +1,5 @@
 using System;
+using EMIT.Utilities;
 using UnityEngine;
 
 public class PlayerGrapHitbox : MonoBehaviour
@@ -26,26 +27,22 @@ public class PlayerGrapHitbox : MonoBehaviour
         foreach (RaycastHit2D hit in hits)
         {
             IDamageable target = hit.collider.GetComponent<IDamageable>();
+            
+            if (target == null) continue;
+            
+            Vector2 facingDir = Direction2D.FacingDir(transform.root);
+            OnTargetGrapHit?.Invoke(hit.collider.transform, hit.point);
+            Debug.Log(target);
 
-            if (target != null)
+            AttackInfo info = new AttackInfo
             {
-                float facingDirection = transform.root.right.x > 0 ? 1f : -1f;
-                OnTargetGrapHit?.Invoke(hit.collider.transform, hit.point);
-                Debug.Log(target);
-
-                AttackInfo info = new AttackInfo
-                {
-                    knockbackForce = new Vector2(facingDirection, 0f),
-                    baseDamage = 1,
-                    power = -GetFacingDirection() * AttackPower,
-                    attackIsGrab = true
-                };
-                target.ReceiveAttack(info);
-                break;
-            }
-            else
-            {
-            }
+                knockback = facingDir,
+                baseDamage = 1,
+                power = (int) facingDir.x * AttackPower,
+                attackIsGrab = true
+            };
+            target.ReceiveAttack(info);
+            break;
         }
     }
 

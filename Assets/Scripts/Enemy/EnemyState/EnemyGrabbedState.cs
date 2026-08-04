@@ -1,4 +1,5 @@
 using System.Collections;
+using EMIT.Utilities;
 using UnityEngine;
 
 public class EnemyGrabbedState : EnemyState
@@ -7,13 +8,10 @@ public class EnemyGrabbedState : EnemyState
 
     private Coroutine grabRoutine;
 
-    private int intensity;
-
     public override void EnterState()
     {
         enemy.canChangeState = false;
         enemy.UnrootMovement();
-        intensity = 1;
     }
 
     public override void UpdateState()
@@ -35,7 +33,7 @@ public class EnemyGrabbedState : EnemyState
         float offsetX = (enemy.target.position.x > enemy.transform.position.x) ? -0.5f : 0.5f;
         Vector2 targetPosition = new Vector2(enemy.target.position.x + offsetX, enemy.transform.position.y);
 
-        if ((offsetX > 0f) == (enemy.isFacingLeft))
+        if (Direction2D.IsOpposite(offsetX, enemy.FacingDir.x))
             enemy.enemyAnim.PlayHitBack();
         else enemy.enemyAnim.PlayHitFront();
 

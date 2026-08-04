@@ -1,3 +1,4 @@
+using EMIT.Utilities;
 using UnityEngine;
 
 [RequireComponent(typeof(Enemy))]
@@ -11,7 +12,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         public EnemyState state;
         public int power;
         public Sprite sprite;
-        public bool isFacingLeft;
+        public Vector2 facingDir;
     }
     private EmitBuffer<KeyframeStatus> buffer;
     private Enemy _enemy;
@@ -52,7 +53,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         frame.state = _enemy.CurrentState;
         frame.power = _enemy.currentPower;
         frame.sprite = spriteRenderer.sprite;
-        frame.isFacingLeft = _enemy.isFacingLeft;
+        frame.facingDir = _enemy.FacingDir;
         return frame;
     }
 
@@ -64,10 +65,12 @@ public class EnemyEmitController : MonoBehaviour, IEmit
 
     void IEmit.BeginEmit()
     {
-        _enemy.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        _enemy.isFacingLeft = false;
+        _enemy.SetFacingDirection(Vector2.right);
         // _enemy.ChangeState(_enemy.IdleState, true);
-        _enemyAnimator.stopAnimControll();
+        if (_enemyAnimator != null)
+        {
+            _enemyAnimator.StopAnimControl();
+        }
         _enemy.RootMovement();
     }
 
@@ -81,7 +84,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
             _rb.MoveRotation(frame.rotation);
             
             spriteRenderer.sprite = frame.sprite;
-            spriteRenderer.flipX = frame.isFacingLeft;
+            spriteRenderer.flipX = Direction2D.IsOpposite(frame.facingDir, Vector2.right);
             // _rb.MoveRotation(frame.transform.rotation);
         }
         else
@@ -94,7 +97,10 @@ public class EnemyEmitController : MonoBehaviour, IEmit
     {
         _enemy.Flip();
         spriteRenderer.flipX = false;
-        _enemyAnimator.startAnimControll();
+        if (_enemyAnimator != null)
+        {
+            _enemyAnimator.StartAnimControl(); 
+        }
         _enemy.UnrootMovement();
     }
 

@@ -26,6 +26,6 @@ public class EnemyChaseState : EnemyState
             return;
         }
         // 추후 PlayerMovement와 같이 Slope 이동 가능하도록 수정
-        enemy.rb.linearVelocity = new Vector2(enemy.baseSpeed, 0) * enemy.front;
+        enemy.rb.linearVelocity = new Vector2(enemy.baseSpeed, 0) * enemy.targetDir;
     }
 }

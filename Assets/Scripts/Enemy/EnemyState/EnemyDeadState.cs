@@ -1,4 +1,3 @@
-using System.Data;
 using UnityEngine;
 
 public class EnemyDeadState : EnemyState
@@ -8,8 +7,8 @@ public class EnemyDeadState : EnemyState
     public override void EnterState()
     {
         Debug.Log("Enemy is Dead");
-        EffectManager.Instance.PlayDeathEffect(enemy.transform.position);
-        EmitManager.Instance.isEmittable = true;
+        enemy.Flip();
+        // EffectManager.Instance.PlayDeathEffect(enemy.transform.position, enemy.isFacingLeft);
     }
 
     // public override void UpdateState() { }

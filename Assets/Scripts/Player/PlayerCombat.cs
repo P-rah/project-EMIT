@@ -24,6 +24,7 @@ public class PlayerCombat : MonoBehaviour
     private bool canAttackGrap = true;
 
     private Enemy currentTarget;
+    private Boss1 currentBossTarget;
     private Transform currentTargetTransform;
 
     private void Awake()
@@ -117,6 +118,7 @@ public class PlayerCombat : MonoBehaviour
     private void handleGrapHit(Transform target, Vector2 hitPoint)
     {
         currentTarget = target.GetComponent<Enemy>();
+        currentBossTarget = target.GetComponent<Boss1>();
         currentTargetTransform = target;
         if (!hasTriggeredHitEffect)
         {
@@ -130,6 +132,7 @@ public class PlayerCombat : MonoBehaviour
         grabAttackHitbox.OnTargetGrapHit -= handleGrapHit;
         currentTargetTransform = null;
         currentTarget = null;
+        currentBossTarget = null;
         grapEffect.StopGrabVisual();
 
         state.IsAttackingGrab = false;
@@ -149,7 +152,10 @@ public class PlayerCombat : MonoBehaviour
 
     private void startGrabVisual()
     {
-        if(currentTargetTransform != null && currentTarget.CurrentState != currentTarget.StateMachine.DeadState)
+        bool isTargetAlive = currentTarget == null
+            || currentTarget.CurrentState != currentTarget.StateMachine.DeadState;
+
+        if (currentTargetTransform != null && isTargetAlive)
             grapEffect.StartGrabVisual(currentTargetTransform);
         else grapEffect.StartGrabFailVisual();
     }
@@ -158,7 +164,9 @@ public class PlayerCombat : MonoBehaviour
     {
         if (currentTarget != null && currentTarget.CurrentState != currentTarget.StateMachine.DeadState)
             currentTarget.ReceiveGrab();
-        else
+        else if (currentBossTarget != null)
+            currentBossTarget.ReceiveGrab();
+        else if (currentTargetTransform == null)
         {
             grapEffect.StartGrabFailVisualRetract();
         }
