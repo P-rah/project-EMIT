@@ -20,7 +20,7 @@ public class EnemyAttackHitbox : MonoBehaviour
             //    // 적이 바라보는 방향(facingDirection)을 그대로 플레이어의 넉백 방향으로 전달!
             //    player.TakeDamage(damage, enemy.facingDirection * knockbackPower);
             //}
-            player.PlayerDead();
+            EventManager.TriggerEvent("OnPlayerHit");
             Debug.Log("Player Hit");
         }
     }

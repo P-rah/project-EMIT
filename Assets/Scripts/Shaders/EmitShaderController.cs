@@ -8,12 +8,14 @@ public class EmitShaderController : MonoBehaviour
         EventManager.StartListening("OnEmitPressed", StartEffect);
         EventManager.StartListening("OnEmitAborted", AbortEffect);
         EventManager.StartListening("OnEmitFinished", EndEffect);
+        EventManager.StartListening("OnPlayerHit", startHitVinette);
     }
     private void OnDisable()
     {
         EventManager.StopListening("OnEmitPressed", StartEffect);
         EventManager.StopListening("OnEmitAborted", AbortEffect);
         EventManager.StopListening("OnEmitFinished", EndEffect);
+        EventManager.StopListening("OnPlayerHit", startHitVinette);
     }
 
     [SerializeField]
@@ -23,6 +25,11 @@ public class EmitShaderController : MonoBehaviour
     private static int _startPoint = Shader.PropertyToID("_StartPoint");
     public Transform startPoint;
     private Coroutine emitDistortionAction;
+
+    private static int _vinettingIntensity = Shader.PropertyToID("_VinettingIntensity");
+    private float maxVinetteIntense = 0.2f;
+    private float vinetteTime = 1f;
+
 
     private void Awake()
     {
@@ -37,6 +44,7 @@ public class EmitShaderController : MonoBehaviour
     {
         emitDistortionAction = StartCoroutine(EmitDistortionAction(2f, -0.1f));
     }
+
     private void AbortEffect()
     {
         cancelEffect();
@@ -70,4 +78,28 @@ public class EmitShaderController : MonoBehaviour
             yield return null;
         }
     }
+
+    private void startHitVinette()
+    {
+        StartCoroutine(HitVinetteAction());
+    }
+
+    IEnumerator HitVinetteAction()
+    {
+        float timer = 0f;
+        _material.SetFloat(_vinettingIntensity, maxVinetteIntense);
+
+        while (timer < vinetteTime)
+        {
+            timer += Time.unscaledDeltaTime;
+
+            float currentIntensity = Mathf.Lerp(maxVinetteIntense, 0f, timer / vinetteTime);
+
+            _material.SetFloat(_vinettingIntensity, currentIntensity);
+
+            yield return null;
+        }
+        _material.SetFloat(_vinettingIntensity, 0f);
+    }
+
 }

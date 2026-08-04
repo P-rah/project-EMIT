@@ -18,7 +18,7 @@ public class PlayerCombat : MonoBehaviour
     public float attackCoolTime = 0.3f;
     public float attackRecoveryTime = 1f;
     public int maxAttackCount = 2;
-    private int currentAttackCount;
+    public int currentAttackCount;
     private Coroutine attackRecoveryRoutine;
 
     [Header("Emit Settings")]
@@ -91,6 +91,7 @@ public class PlayerCombat : MonoBehaviour
             hasTriggeredHitEffect = false;
 
             currentAttackCount--;
+            Player.UIController.UpdateAttackBar();
         }
     }
 
@@ -141,6 +142,7 @@ public class PlayerCombat : MonoBehaviour
             Player.Movement.flippable = false;
 
             currentAttackCount--;
+            Player.UIController.UpdateAttackBar();
 
             grabAttackHitbox.OnTargetGrapHit += handleGrapHit;
         }
@@ -203,6 +205,7 @@ public class PlayerCombat : MonoBehaviour
     {
         yield return new WaitForSeconds(attackRecoveryTime);
         currentAttackCount++;
+        Player.UIController.UpdateAttackBar();
         attackRecoveryRoutine = null;
     }
 

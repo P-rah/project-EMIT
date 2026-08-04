@@ -86,8 +86,8 @@ Material:
     - _DistanceFromCenter: -0.1
     - _EmitShaderActive: 0
     - _EnableExternalAlpha: 0
-    - _FilterColorExposure: 1.5
-    - _FilterOriginalColorRate: 0.4
+    - _FilterColorExposure: 5
+    - _FilterOriginalColorRate: 0.5
     - _FilterResExposure: 0.35
     - _FilterTolerance: 0.7
     - _GrowthRateCurve: 0.089
@@ -105,6 +105,8 @@ Material:
     - _ShaderRadius: 0.04
     - _Size: 1.08
     - _Strength: -0.35
+    - _VinettingIntensity: 0
+    - _VinettingRad: 0
     - _XsizeRatio: 1.6
     - _ZWrite: 0
     - _distortionAmp: 0.208
@@ -120,5 +122,6 @@ Material:
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _RingSpawnPosition: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _StartPoint: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _VinettingColor: {r: 1, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

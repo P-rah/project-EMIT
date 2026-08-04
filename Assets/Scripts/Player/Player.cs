@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     public static GrapEffect GrapEffect { get; private set; }
     public static PlayerHealth PlayerHealth { get; private set; }
     public static PlayerOutlineController OutlineController { get; private set; }
+    public static PlayerUIController UIController { get; private set; }
 
     public AudioClip walkSound;
     public AudioClip jumpSound;
@@ -54,5 +55,6 @@ public class Player : MonoBehaviour
         GrapEffect = GetComponent<GrapEffect>();
         PlayerHealth = GetComponent<PlayerHealth>();
         OutlineController = GetComponent<PlayerOutlineController>();
+        UIController = GetComponent<PlayerUIController>();
     }
 }
