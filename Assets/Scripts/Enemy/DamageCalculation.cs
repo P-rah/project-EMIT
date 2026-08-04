@@ -4,6 +4,16 @@ using UnityEngine;
 
 public static class DamageCalculation {
 
+    /* INTEGRATION:
+     * 이 계산은 공격의 power 부호를 월드 X축 방향으로 보고, 직전 피격 방향(currentPower)과 반대일 때
+     * 연계 피해를 주는 로직이다. integration/enemy-state-merge도 같은 10/5 피해값과 비활성화된 궁극기
+     * 분기를 갖고 있으므로 중복 구현하지 말고 이 Calculate 본문을 한 벌만 유지한다.
+     * 궁극기를 다시 활성화할 때는 Enemy의 궁극기 필드/타이머와 아래의 두 주석 분기를 함께 복구해야 한다.
+     * 방향 비교를 Direction2D.IsOpposite로 바꿀 경우 반대 방향 분기에만 사용하고, 같은 방향은 곱이 0보다
+     * 큰지 별도로 검사한다. 두 분기 모두 IsOpposite를 사용하면 궁극기 준비 분기가 절대 실행되지 않는다.
+     * 피해량 10/5는 현재 양쪽 브랜치의 기준값이며 밸런싱 후 EnemyData 등 데이터 계층으로 옮길 수 있다.
+     */
+
     /*
     필요한 정보
     - 역행 중인지 아닌지

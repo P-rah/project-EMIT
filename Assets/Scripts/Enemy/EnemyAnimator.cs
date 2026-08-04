@@ -14,11 +14,11 @@ public class EnemyAnimator : MonoBehaviour
     private readonly int hashAttack = Animator.StringToHash("EnemyAttack");
     private readonly int hashAttackEnd = Animator.StringToHash("EnemyAttackEnd");
 
-    public void stopAnimControll()
+    public void StopAnimControl()
     {
         animator.enabled = false;
     }
-    public void startAnimControll()
+    public void StartAnimControl()
     {
         animator.enabled = true;
     }
@@ -26,7 +26,7 @@ public class EnemyAnimator : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        startAnimControll();
+        StartAnimControl();
     }
 
     public void PlayIdle()

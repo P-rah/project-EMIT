@@ -1,25 +1,23 @@
 using System.Collections;
+using EMIT.Utilities;
 using UnityEngine;
 
 public class EnemyGrabbedState : EnemyState
 {
-    public EnemyGrabbedState(Enemy enemy, EnemyAnimator enemyAnim) : base(enemy, enemyAnim) { }
+    public EnemyGrabbedState(EnemyStateMachine stateMachine) : base(stateMachine) { }
 
     private Coroutine grabRoutine;
-
-    private int intensity;
 
     public override void EnterState()
     {
         enemy.canChangeState = false;
         enemy.UnrootMovement();
-        intensity = 1;
     }
 
     public override void UpdateState()
     {
         base.UpdateState();
-        if (!enemy.IsCurrentState(this) || isGrabbed())
+        if (!stateMachine.IsCurrentState(this) || isGrabbed())
         {
             return;
         }
@@ -35,9 +33,9 @@ public class EnemyGrabbedState : EnemyState
         float offsetX = (enemy.target.position.x > enemy.transform.position.x) ? -0.5f : 0.5f;
         Vector2 targetPosition = new Vector2(enemy.target.position.x + offsetX, enemy.transform.position.y);
 
-        if ((offsetX > 0f) == (enemy.isFacingLeft))
-            enemyAnim.PlayHitBack();
-        else enemyAnim.PlayHitFront();
+        if (Direction2D.IsOpposite(offsetX, enemy.FacingDir.x))
+            enemy.enemyAnim.PlayHitBack();
+        else enemy.enemyAnim.PlayHitFront();
 
         grabRoutine = enemy.StartCoroutine(GrabRoutine(targetPosition));
     }

@@ -1,9 +1,10 @@
 using System.Collections;
+using EMIT.Utilities;
 using UnityEngine;
 
 public class EnemyKnockbackState : EnemyState
 {
-    public EnemyKnockbackState(Enemy enemy, EnemyAnimator enemyAnim) : base(enemy, enemyAnim) { }
+    public EnemyKnockbackState(EnemyStateMachine stateMachine) : base(stateMachine) { }
     private Coroutine knockbackRoutine;
 
     public override void EnterState()
@@ -15,7 +16,7 @@ public class EnemyKnockbackState : EnemyState
     public override void UpdateState()
     {
         base.UpdateState();
-        if (!enemy.IsCurrentState(this) || isKnockbacking())
+        if (!stateMachine.IsCurrentState(this) || isKnockbacking())
         {
             return;
         }
@@ -30,9 +31,9 @@ public class EnemyKnockbackState : EnemyState
     {
         enemy.canChangeState = false;
         enemy.rb.AddForce(enemy.currentKnockBackForce * enemy.knockbackRate, ForceMode2D.Impulse);
-        if((enemy.currentKnockBackForce.x > 0f) ==  (enemy.isFacingLeft))
-            enemyAnim.PlayHitFront();
-        else enemyAnim.PlayHitBack();
+        if (Direction2D.IsOpposite(enemy.currentKnockBackForce, enemy.FacingDir))
+            enemy.enemyAnim.PlayHitFront();
+        else enemy.enemyAnim.PlayHitBack();
 
         knockbackRoutine = enemy.StartCoroutine(KnockbackRoutine());
     }

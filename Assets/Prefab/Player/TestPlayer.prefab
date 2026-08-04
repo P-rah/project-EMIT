@@ -1030,7 +1030,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
   knockbackPower: 10
-  localKnockbackDir: {x: 1, y: 0}
 --- !u!212 &1769512287823205419
 SpriteRenderer:
   serializedVersion: 3

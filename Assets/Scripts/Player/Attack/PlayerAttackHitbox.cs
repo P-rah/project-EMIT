@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using EMIT.Utilities;
 
 public class PlayerAttackHitbox : MonoBehaviour
 {
@@ -9,35 +10,28 @@ public class PlayerAttackHitbox : MonoBehaviour
 
     [Header("Knockback Settings")]
     public float knockbackPower = 10f;
-    public Vector2 localKnockbackDir = new Vector2(1, 0);
-    private Vector2 finalForce;
+    private Vector2 knockbackVec;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         IDamageable target = other.GetComponent<IDamageable>();
 
-        if (target != null)
+        if (target == null) return;
+
+        Vector2 hitPoint = other.ClosestPoint(transform.position);
+        OnTargetSweepHit?.Invoke(other.transform, hitPoint);
+
+        Vector2 facingDir = Direction2D.FacingDir(transform.root);
+        knockbackVec = facingDir * knockbackPower;
+
+        AttackInfo info = new AttackInfo
         {
-            Vector2 hitPoint = other.ClosestPoint(transform.position);
-            OnTargetSweepHit?.Invoke(other.transform, hitPoint);
+            baseDamage = 1,
+            power = (int)facingDir.x * AttackPower,
+            knockback = knockbackVec,
+            attackIsGrab = false
+        };
 
-            int facingDirection = transform.root.right.x > 0 ? 1 : -1;
-
-            Vector2 finalKnockbackDirection = new Vector2(
-                localKnockbackDir.x * facingDirection,
-                localKnockbackDir.y
-                ).normalized;
-            finalForce = finalKnockbackDirection * knockbackPower;
-
-            AttackInfo info = new AttackInfo
-            {
-                baseDamage = 1,
-                power = facingDirection * AttackPower,
-                knockbackForce = finalForce,
-                attackIsGrab = false
-            };
-
-            target.ReceiveAttack(info);
-        }
+        target.ReceiveAttack(info);
     }
 }
