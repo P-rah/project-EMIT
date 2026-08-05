@@ -50,6 +50,7 @@ public sealed class EnemyStateMachine
         CurrentState = nextState;
         Owner.ResetPowerOutsideHitReaction();
         CurrentState.EnterState();
+        Owner.NotifyStateEntered(CurrentState);
     }
 
     public void SetState(EnemyState nextState)

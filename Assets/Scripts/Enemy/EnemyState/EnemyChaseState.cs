@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Scripting.APIUpdating;
 
 public class EnemyChaseState : EnemyState
 {
@@ -7,7 +6,6 @@ public class EnemyChaseState : EnemyState
 
     public override void EnterState()
     {
-        enemy.enemyAnim.PlayWalk();
     }
 
     // public override void UpdateState() { }

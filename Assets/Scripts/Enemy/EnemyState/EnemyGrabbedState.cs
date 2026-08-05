@@ -1,5 +1,4 @@
 using System.Collections;
-using EMIT.Utilities;
 using UnityEngine;
 
 public class EnemyGrabbedState : EnemyState
@@ -33,10 +32,7 @@ public class EnemyGrabbedState : EnemyState
         float offsetX = (enemy.target.position.x > enemy.transform.position.x) ? -0.5f : 0.5f;
         Vector2 targetPosition = new Vector2(enemy.target.position.x + offsetX, enemy.transform.position.y);
 
-        if (Direction2D.IsOpposite(offsetX, enemy.FacingDir.x))
-            enemy.enemyAnim.PlayHitBack();
-        else enemy.enemyAnim.PlayHitFront();
-
+        enemy.NotifyGrabStarted(offsetX);
         grabRoutine = enemy.StartCoroutine(GrabRoutine(targetPosition));
     }
 

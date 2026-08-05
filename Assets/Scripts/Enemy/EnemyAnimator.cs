@@ -1,5 +1,5 @@
+using EMIT.Utilities;
 using UnityEngine;
-using System;
 
 public class EnemyAnimator : MonoBehaviour
 {
@@ -14,49 +14,121 @@ public class EnemyAnimator : MonoBehaviour
     private readonly int hashAttack = Animator.StringToHash("EnemyAttack");
     private readonly int hashAttackEnd = Animator.StringToHash("EnemyAttackEnd");
 
-    public void StopAnimControl()
-    {
-        animator.enabled = false;
-    }
-    public void StartAnimControl()
-    {
-        animator.enabled = true;
-    }
-
     private void Awake()
     {
         animator = GetComponent<Animator>();
         StartAnimControl();
     }
 
-    public void PlayIdle()
+    public void StopAnimControl()
     {
-        animator.Play(hashIdle);
+        if (animator != null)
+        {
+            animator.enabled = false;
+        }
     }
 
-    public void PlayWalk()
+    public void StartAnimControl()
     {
-         animator.Play(hashWalk);
+        if (animator != null)
+        {
+            animator.enabled = true;
+        }
     }
 
-    public void PlayHitFront()
+    internal void HandleStateEntered(Enemy owner, EnemyState state)
     {
-        animator.Play(hashHitFront);
+        if (owner == null || state == null || owner.StateMachine == null)
+        {
+            return;
+        }
+
+        EnemyStateMachine stateMachine = owner.StateMachine;
+
+        if (state == stateMachine.IdleState)
+        {
+            PlayIdle();
+        }
+        else if (state == stateMachine.ChaseState)
+        {
+            PlayWalk();
+        }
+        else if (state == stateMachine.KnockbackState)
+        {
+            if (Direction2D.IsOpposite(owner.currentKnockBackForce, owner.FacingDir))
+            {
+                PlayHitFront();
+            }
+            else
+            {
+                PlayHitBack();
+            }
+        }
     }
 
-    public void PlayHitBack()
+    internal void HandleAttackWindupStarted()
     {
-        animator.Play(hashHitBack);
+        PlayAttackStart();
     }
 
-    public void PlayAttackStart()
+    internal void HandleAttackStrikeStarted()
     {
-        animator.Play(hashAttack);
+        PlayAttackEnd();
     }
 
-    public void PlayAttackEnd()
+    internal void HandleGrabStarted(Enemy owner, float horizontalOffset)
     {
-        animator.Play(hashAttackEnd);
+        if (owner == null)
+        {
+            return;
+        }
+
+        if (Direction2D.IsOpposite(horizontalOffset, owner.FacingDir.x))
+        {
+            PlayHitBack();
+        }
+        else
+        {
+            PlayHitFront();
+        }
+    }
+
+    private void PlayIdle()
+    {
+        Play(hashIdle);
+    }
+
+    private void PlayWalk()
+    {
+        Play(hashWalk);
+    }
+
+    private void PlayHitFront()
+    {
+        Play(hashHitFront);
+    }
+
+    private void PlayHitBack()
+    {
+        Play(hashHitBack);
+    }
+
+    private void PlayAttackStart()
+    {
+        Play(hashAttack);
+    }
+
+    private void PlayAttackEnd()
+    {
+        Play(hashAttackEnd);
+    }
+
+    private void Play(int stateHash)
+    {
+        if (animator != null)
+        {
+            animator.Play(stateHash);
+        }
     }
 
     public void AnimEvent_SpawnAttackEffect()

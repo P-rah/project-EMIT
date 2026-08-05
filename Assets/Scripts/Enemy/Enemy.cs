@@ -1,6 +1,5 @@
 using System.Collections;
 using EMIT.Utilities;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -25,7 +24,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public Transform target; //플레이어의 transform
 
-    public EnemyAnimator enemyAnim;
+    private EnemyAnimator _enemyAnimator;
     public AudioSource myAudioSource;
 
     public ParticleSystem dragEffect;
@@ -33,8 +32,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
     /* INTEGRATION:
      * integration/enemy-state-merge에는 EnemyOutlineController와 기본/공격/역행 색상 필드가 추가된다.
-     * 해당 필드와 Init의 EnemyData 색상 복사는 이 영역에 가져오되, 상태 필드나 Animator를 다시 Enemy가
-     * 소유하도록 바꾸지 않는다. 외곽선 컴포넌트가 없는 테스트 프리팹도 고려해 호출 전 null 정책을 정한다.
+     * 해당 필드와 Init의 EnemyData 색상 복사는 이 영역에 가져온다. EnemyAnimator는 선택적 프레젠테이션
+     * 컴포넌트로만 보관하며 외곽선과 애니메이터가 없는 테스트 프리팹도 null-safe하게 동작해야 한다.
      */
 
     [Header("적 데이터")]
@@ -101,9 +100,8 @@ public class Enemy : MonoBehaviour, IDamageable
         Debug.Log("Enemy Awake");
         Init();
         /* INTEGRATION:
-         * State 생성자는 enemyAnim을 사용하므로 Init 이후에 StateMachine을 만든다. 순서를 바꾸면 각 State가
-         * null Animator를 캡처할 수 있다. integration 브랜치의 Init 내부 개별 new Enemy...State 코드는
-         * 모두 제거하고 이 한 줄만 상태 생성 지점으로 유지한다.
+         * integration 브랜치의 Init 내부 개별 new Enemy...State 코드는 모두 제거하고 이 한 줄만 상태 생성
+         * 지점으로 유지한다. State는 선택적 EnemyAnimator를 캡처하지 않고 Enemy mediator만 사용한다.
          */
         StateMachine = new EnemyStateMachine(this);
     }
@@ -137,7 +135,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         target = Player.InstanceTransform; //플레이어의 싱글톤 Transform 받아옴
 
-        enemyAnim = GetComponent<EnemyAnimator>();
+        _enemyAnimator = GetComponent<EnemyAnimator>();
         outlineController = GetComponent<EnemyOutlineController>();
 
         rb = GetComponent<Rigidbody2D>();
@@ -185,6 +183,36 @@ public class Enemy : MonoBehaviour, IDamageable
         canChangeState = true;
         isRooted = false;
         canChangeHitState = false;
+    }
+
+    internal void NotifyStateEntered(EnemyState state)
+    {
+        _enemyAnimator?.HandleStateEntered(this, state);
+    }
+
+    internal void NotifyAttackWindupStarted()
+    {
+        _enemyAnimator?.HandleAttackWindupStarted();
+    }
+
+    internal void NotifyAttackStrikeStarted()
+    {
+        _enemyAnimator?.HandleAttackStrikeStarted();
+    }
+
+    internal void NotifyGrabStarted(float horizontalOffset)
+    {
+        _enemyAnimator?.HandleGrabStarted(this, horizontalOffset);
+    }
+
+    internal void StopAnimationControl()
+    {
+        _enemyAnimator?.StopAnimControl();
+    }
+
+    internal void StartAnimationControl()
+    {
+        _enemyAnimator?.StartAnimControl();
     }
 
     public void ChangeState(EnemyState nextState, bool force)

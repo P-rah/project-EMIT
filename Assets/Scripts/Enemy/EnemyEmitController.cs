@@ -25,7 +25,6 @@ public class EnemyEmitController : MonoBehaviour, IEmit
     private Enemy _enemy;
     private Rigidbody2D _rb;
     private SpriteRenderer spriteRenderer;
-    private EnemyAnimator _enemyAnimator;
 
     [SerializeField] private Vector3 spawnPosition;
 
@@ -41,7 +40,6 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         _rb = _enemy.GetComponent<Rigidbody2D>();
         _rb.interpolation = RigidbodyInterpolation2D.Interpolate; // 더 부드러운 이펙트를 위해 필요함
         spriteRenderer = _enemy.GetComponent<SpriteRenderer>();
-        _enemyAnimator = _enemy.GetComponent<EnemyAnimator>();
     } 
     // 버퍼 동적할당
     private void Start()
@@ -75,14 +73,11 @@ public class EnemyEmitController : MonoBehaviour, IEmit
         /* INTEGRATION:
          * 역행 시작 시 IdleState로 강제 전환하지 않는 이유는 버퍼에 저장된 실제 상태를 SetState로 재생하기
          * 위해서다. 강제 전환은 ExitState/EnterState 부작용과 currentPower 초기화를 먼저 발생시킬 수 있다.
-         * 애니메이터 API는 이 브랜치의 StopAnimControl/StartAnimControl 이름을 유지하고 null을 허용한다.
+         * 애니메이터 제어는 Enemy mediator를 거쳐 선택적 EnemyAnimator의 존재 여부와 무관하게 동작한다.
          */
         _enemy.SetFacingDirection(Vector2.right);
         // _enemy.ChangeState(_enemy.IdleState, true);
-        if (_enemyAnimator != null)
-        {
-            _enemyAnimator.StopAnimControl();
-        }
+        _enemy.StopAnimationControl();
         _enemy.RootMovement();
         _enemy.outlineController?.setEmitOutline();
     }
@@ -110,10 +105,7 @@ public class EnemyEmitController : MonoBehaviour, IEmit
     {
         _enemy.Flip();
         spriteRenderer.flipX = false;
-        if (_enemyAnimator != null)
-        {
-            _enemyAnimator.StartAnimControl();
-        }
+        _enemy.StartAnimationControl();
         _enemy.UnrootMovement();
         _enemy.outlineController?.setDefaultOutline();
     }

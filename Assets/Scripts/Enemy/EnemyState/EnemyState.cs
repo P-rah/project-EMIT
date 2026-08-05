@@ -1,5 +1,3 @@
-using Unity.VisualScripting;
-
 public abstract class EnemyState
 {
     /// <summary>
@@ -7,13 +5,11 @@ public abstract class EnemyState
     /// </summary>
     protected EnemyStateMachine stateMachine;
     protected Enemy enemy;
-    protected EnemyAnimator enemyAnim;
 
     public EnemyState(EnemyStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
         this.enemy = stateMachine.Owner;
-        this.enemyAnim = enemy.enemyAnim;
     }
 
     public abstract void EnterState();
