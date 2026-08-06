@@ -6,6 +6,6 @@ public class BGMstarter : MonoBehaviour
 
     private void Start()
     {
-        SoundManager.instance.PlayBGM(thisSceneBgm);
+        AudioManager.Instance.PlayBGM(thisSceneBgm);
     }
 }

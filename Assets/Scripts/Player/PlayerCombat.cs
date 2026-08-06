@@ -106,7 +106,7 @@ public class PlayerCombat : MonoBehaviour
         Player.Movement.flippable = false;
         sweepAttackHitbox.OnTargetSweepHit += handleSweepHit;
         sweepAttackHitbox.gameObject.SetActive(true);
-        SoundManager.instance.PlaySFX(Player.Instance.sweepSound);
+        AudioManager.Instance.PlaySFX(Player.Instance.sweepSound);
     }
 
     public void AnimEvent_AttackSweepEnd()
@@ -186,8 +186,8 @@ public class PlayerCombat : MonoBehaviour
     {
         grabAttackHitbox.CatchClosestEnemy();
         startGrabVisual();
-        SoundManager.instance.PlaySFX(Player.Instance.grabThrowSound1);
-        SoundManager.instance.PlaySFX(Player.Instance.grabThrowSound2);
+        AudioManager.Instance.PlaySFX(Player.Instance.grabThrowSound1);
+        AudioManager.Instance.PlaySFX(Player.Instance.grabThrowSound2);
     }
 
     private void startGrabVisual()
@@ -222,7 +222,7 @@ public class PlayerCombat : MonoBehaviour
             grapEffect.StartGrabFailVisualRetract();
         }
         canAttackSweep = true;
-        SoundManager.instance.PlaySFX(Player.Instance.grabRetreiveSound);
+        AudioManager.Instance.PlaySFX(Player.Instance.grabRetreiveSound);
     }
 
     private IEnumerator AttackRecoveryRoutine()
@@ -272,7 +272,7 @@ public class PlayerCombat : MonoBehaviour
         if(EmitManager.Instance.isEmittable && !hasTriggeredEmit)
         {
             Player.OutlineController.setOutlineColorEmitable();
-            SoundManager.instance.PlaySFX(Player.Instance.canEmitSound);
+            AudioManager.Instance.PlaySFX(Player.Instance.canEmitSound);
             hasTriggeredEmit = true;
         }
     }

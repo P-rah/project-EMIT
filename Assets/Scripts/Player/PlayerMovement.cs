@@ -134,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
         rb.gravityScale = initialGravityScale;
         rb.linearVelocityY = 0f;
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        SoundManager.instance.PlaySFX(Player.Instance.jumpSound);
+        AudioManager.Instance.PlaySFX(Player.Instance.jumpSound);
     }
 
     private void ExecuteDash()
@@ -226,7 +226,7 @@ public class PlayerMovement : MonoBehaviour
     {
         canDash = false;
         state.IsDashing = true;
-        // SoundManager.instance.PlaySFX(Player.Instance.dashSound);
+        // AudioManager.Instance.PlaySFX(Player.Instance.dashSound);
 
         rb.gravityScale = 0f;
 
@@ -251,7 +251,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Animevent_playWalkSound()
     {
-        SoundManager.instance.PlaySFX(Player.Instance.walkSound, 0.2f);
+        AudioManager.Instance.PlaySFX(Player.Instance.walkSound, 0.2f);
     }
     private void OnDrawGizmosSelected()
     {

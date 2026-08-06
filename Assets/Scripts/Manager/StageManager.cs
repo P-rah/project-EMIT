@@ -42,7 +42,7 @@ public class StageManager : MonoBehaviour
         currentEnemyCount = 0;
 
         TimeManager.Instance.InstantNormalTime();
-        SoundManager.instance.StopEmitBGM();
+        AudioManager.Instance.StopEmitBGM();
         EventManager.TriggerEvent("OnEmitAborted");
         EmitManager.Instance.EmitReset();
 
