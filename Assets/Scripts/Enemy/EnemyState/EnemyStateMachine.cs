@@ -14,8 +14,8 @@ public sealed class EnemyStateMachine
     public EnemyAttackState AttackState { get; }
     public EnemyChaseState ChaseState { get; }
     public EnemyDeadState DeadState { get; }
-    public EnemyKnockbackState KnockbackState { get; }  //넉백(밀치기) 상태
-    public EnemyGrabbedState GrabbedState { get; }     //넉백이랑 당겨오는 상태랑 분리
+    public EnemyKnockbackState KnockbackState { get; }
+    public EnemyGrabbedState GrabbedState { get; }
 
     public EnemyStateMachine(Enemy owner)
     {

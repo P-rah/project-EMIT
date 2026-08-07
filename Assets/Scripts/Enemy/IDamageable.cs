@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/*
+ * 대미지를 받을 수 있는 적의 인터페이스
+ */
+
 public struct AttackInfo
 {
     public int baseDamage;

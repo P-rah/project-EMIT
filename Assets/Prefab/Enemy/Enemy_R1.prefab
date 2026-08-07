@@ -5081,13 +5081,13 @@ GameObject:
   - component: {fileID: 1118137742258961770}
   - component: {fileID: 7342205570695384537}
   - component: {fileID: 8177143400287406577}
-  - component: {fileID: 6962601109016340121}
   - component: {fileID: 2170219560991582466}
+  - component: {fileID: 6962601109016340121}
   - component: {fileID: 2361838161357326820}
   - component: {fileID: 4540375422038540408}
   - component: {fileID: 7399015839825466860}
-  - component: {fileID: 5682029497126305882}
   - component: {fileID: 1700557087533793748}
+  - component: {fileID: 5682029497126305882}
   m_Layer: 7
   m_Name: Enemy_R1
   m_TagString: Untagged
@@ -5218,6 +5218,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.6, y: 2.4}
   m_EdgeRadius: 0
+--- !u!50 &2170219560991582466
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6143233822747344136}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 5
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 0
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!114 &6962601109016340121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5230,7 +5257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788f01738f3dec146884e2b04aa8cca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  currentStateString: EnemyAttackState
   target: {fileID: 0}
   myAudioSource: {fileID: 5682029497126305882}
   dragEffect: {fileID: 577483952097044834}
@@ -5267,33 +5293,7 @@ MonoBehaviour:
   canChangeHitState: 0
   front: {x: 1, y: 0}
   isFacingLeft: 0
---- !u!50 &2170219560991582466
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6143233822747344136}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 5
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 1
-  m_SleepingMode: 0
-  m_CollisionDetection: 0
-  m_Constraints: 4
+  targetDir: {x: 0, y: 0}
 --- !u!114 &2361838161357326820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5342,6 +5342,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimator
   attackEffectObject: {fileID: 112718269233424128}
+--- !u!114 &1700557087533793748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6143233822747344136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc64ae2ee3faa248871d79b631df8a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyOutlineController
 --- !u!82 &5682029497126305882
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5439,15 +5451,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1700557087533793748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6143233822747344136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbc64ae2ee3faa248871d79b631df8a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyOutlineController

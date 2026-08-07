@@ -1,0 +1,301 @@
+fileFormatVersion: 2
+guid: 12f632b46f7e82649b72e50ebaa815d6
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7179729415171084094
+    second: Robot-2 fly_gray_0
+  - first:
+      213: -8438042291927439429
+    second: Robot-2 fly_gray_1
+  - first:
+      213: 7833850405101861412
+    second: Robot-2 fly_gray_2
+  - first:
+      213: -510774120222990107
+    second: Robot-2 fly_gray_3
+  - first:
+      213: 8811037250414168462
+    second: Robot-2 fly_gray_4
+  - first:
+      213: -3117078499485797889
+    second: Robot-2 fly_gray_5
+  - first:
+      213: 3076056585523019016
+    second: Robot-2 fly_gray_6
+  - first:
+      213: 1737335193229789919
+    second: Robot-2 fly_gray_7
+  - first:
+      213: -4719976658300256057
+    second: Robot-2 fly_gray_8
+  - first:
+      213: -207355059404299874
+    second: Robot-2 fly_gray_9
+  - first:
+      213: 9179829367631429822
+    second: Robot-2 fly_gray_10
+  - first:
+      213: -257023108606452507
+    second: Robot-2 fly_gray_11
+  - first:
+      213: 2695607807102111810
+    second: Robot-2 fly_gray_12
+  - first:
+      213: 7188688549589678509
+    second: Robot-2 fly_gray_13
+  - first:
+      213: -1444765543831823193
+    second: Robot-2 fly_gray_14
+  - first:
+      213: 8899785686851397846
+    second: Robot-2 fly_gray_15
+  - first:
+      213: 3314683075222211184
+    second: Robot-2 fly_gray_16
+  - first:
+      213: -2804473552802741897
+    second: Robot-2 fly_gray_17
+  - first:
+      213: -5726106303467713285
+    second: Robot-2 fly_gray_18
+  - first:
+      213: 1774086512229999787
+    second: Robot-2 fly_gray_19
+  - first:
+      213: 1755802192878198480
+    second: Robot-2 fly_gray_20
+  - first:
+      213: -6498614324783354696
+    second: Robot-2 fly_gray_21
+  - first:
+      213: 6799948544282637572
+    second: Robot-2 fly_gray_22
+  - first:
+      213: -8651473108375305222
+    second: Robot-2 fly_gray_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Robot-2 fly_gray_0
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 59
+        width: 180
+        height: 165
+      alignment: 9
+      pivot: {x: 0.70842403, y: 0.44384193}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f002370208bb424abcbcf328f97dcb7
+      internalID: -7179729415171084094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Robot-2 fly_gray_1
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 57
+        width: 237
+        height: 167
+      alignment: 9
+      pivot: {x: 0.52659845, y: 0.45526215}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0549e3923209e174a869ff95d0f5931d
+      internalID: -8438042291927439429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Robot-2 fly_gray_2
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 48
+        width: 168
+        height: 123
+      alignment: 9
+      pivot: {x: 0.5122408, y: 0.6994304}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da76d82611a871e4397309afb8b644b0
+      internalID: 7833850405101861412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Robot-2 fly_gray_3
+      rect:
+        serializedVersion: 2
+        x: 646
+        y: 12
+        width: 162
+        height: 168
+      alignment: 9
+      pivot: {x: 0.46582407, y: 0.7292219}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cceda459bb25e64694e57403fb57a62
+      internalID: -510774120222990107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 9045e27dd6aef9e439992ae6adba02c6
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Robot-2 fly_gray_0: -7179729415171084094
+      Robot-2 fly_gray_1: -8438042291927439429
+      Robot-2 fly_gray_10: 9179829367631429822
+      Robot-2 fly_gray_11: -257023108606452507
+      Robot-2 fly_gray_12: 2695607807102111810
+      Robot-2 fly_gray_13: 7188688549589678509
+      Robot-2 fly_gray_14: -1444765543831823193
+      Robot-2 fly_gray_15: 8899785686851397846
+      Robot-2 fly_gray_16: 3314683075222211184
+      Robot-2 fly_gray_17: -2804473552802741897
+      Robot-2 fly_gray_18: -5726106303467713285
+      Robot-2 fly_gray_19: 1774086512229999787
+      Robot-2 fly_gray_2: 7833850405101861412
+      Robot-2 fly_gray_20: 1755802192878198480
+      Robot-2 fly_gray_21: -6498614324783354696
+      Robot-2 fly_gray_22: 6799948544282637572
+      Robot-2 fly_gray_23: -8651473108375305222
+      Robot-2 fly_gray_3: -510774120222990107
+      Robot-2 fly_gray_4: 8811037250414168462
+      Robot-2 fly_gray_5: -3117078499485797889
+      Robot-2 fly_gray_6: 3076056585523019016
+      Robot-2 fly_gray_7: 1737335193229789919
+      Robot-2 fly_gray_8: -4719976658300256057
+      Robot-2 fly_gray_9: -207355059404299874
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
