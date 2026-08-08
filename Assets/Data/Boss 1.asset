@@ -22,7 +22,7 @@ MonoBehaviour:
   attackRange: 5
   startAttackRange: 2
   startUpTime: 0.5
-  recoveryTime: 1.5
+  recoveryTime: 1
   knockbackRate: 4
   knockbackTime: 0.2
   grabForce: 50

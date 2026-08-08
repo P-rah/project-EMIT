@@ -54,10 +54,10 @@ public class PlayerGrapHitbox : MonoBehaviour
         }
     }
 
-    private int GetFacingDirection()
-    {
-        return transform.root.right.x >= 0f ? 1 : -1;
-    }
+    //private int GetFacingDirection()
+    //{
+    //    return transform.root.right.x >= 0f ? 1 : -1;
+    //}
 
     private void OnDrawGizmosSelected()
     {

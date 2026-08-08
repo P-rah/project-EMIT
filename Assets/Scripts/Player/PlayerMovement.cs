@@ -187,7 +187,6 @@ public class PlayerMovement : MonoBehaviour
         {
             return hit.normal; 
         }
-        
         return Vector2.up;
     }
 

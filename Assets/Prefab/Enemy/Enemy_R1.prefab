@@ -5087,6 +5087,7 @@ GameObject:
   - component: {fileID: 4540375422038540408}
   - component: {fileID: 7399015839825466860}
   - component: {fileID: 1700557087533793748}
+  - component: {fileID: 2829612419554026525}
   - component: {fileID: 5682029497126305882}
   m_Layer: 7
   m_Name: Enemy_R1
@@ -5226,7 +5227,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6143233822747344136}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -5257,12 +5258,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788f01738f3dec146884e2b04aa8cca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  target: {fileID: 0}
   myAudioSource: {fileID: 5682029497126305882}
   dragEffect: {fileID: 577483952097044834}
   outlineController: {fileID: 0}
   data: {fileID: 11400000, guid: 5bc9bf452556c354a9c53f347f4205d7, type: 2}
-  rb: {fileID: 2170219560991582466}
   maxHealth: 10
   baseAttack: 2
   baseSpeed: 3
@@ -5272,25 +5271,15 @@ MonoBehaviour:
   startAttackRange: 2
   startUpTime: 0.5
   recoveryTime: 1
-  knockbackRate: 4
-  knockbackTime: 0.2
-  grabForce: 50
-  HitRecoveryTime: 0.2
-  defaultOutlineColor: {r: 0, g: 0.009709722, b: 0.39215687, a: 0}
-  attackOutlineColor: {r: 0.39215687, g: 0, b: 0, a: 0}
-  emitOutlineColor: {r: 1, g: 1, b: 0, a: 0}
   walkSound: {fileID: 8300000, guid: dff74eaf3cf96e948a0ffc77128191d0, type: 3}
   attackReadySound: {fileID: 8300000, guid: 066f1955da67a3c48a0390eb610db9ab, type: 3}
   attackSound: {fileID: 8300000, guid: 37207ed13e7e7844a9c59dc59d875952, type: 3}
   sweepHitSound: {fileID: 8300000, guid: bd023842f8777b04c9047827cd78db44, type: 3}
   grabHitSound: {fileID: 8300000, guid: b862d6d4f7fe34a4389becebfef2bbd2, type: 3}
   deathSound: {fileID: 8300000, guid: 6c28ed22dcc349c4cbb90c09b36c98f1, type: 3}
-  canChangeState: 0
   currentHealth: 10
   isRooted: 1
-  currentKnockBackForce: {x: 0, y: 0}
   isCurrentHitGrab: 0
-  canChangeHitState: 0
   front: {x: 1, y: 0}
   isFacingLeft: 0
   targetDir: {x: 0, y: 0}
@@ -5354,6 +5343,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc64ae2ee3faa248871d79b631df8a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyOutlineController
+  defaultColor: {r: 0, g: 0, b: 0.78431374, a: 1}
+  attackColor: {r: 0.78431374, g: 0, b: 0, a: 1}
+  emitColor: {r: 1, g: 1, b: 0, a: 1}
+--- !u!114 &2829612419554026525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6143233822747344136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4c818d8e28770344afd73d9fc3f2ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStateMachine
+  enemy: {fileID: 0}
 --- !u!82 &5682029497126305882
 AudioSource:
   m_ObjectHideFlags: 0
