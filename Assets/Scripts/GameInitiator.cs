@@ -2,15 +2,13 @@ using UnityEngine;
 
 public class GameInitiator : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private async void Start()
     {
-        
+        DoSomething();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void DoSomething()
     {
-        
+        return;
     }
 }
