@@ -5083,6 +5083,7 @@ GameObject:
   - component: {fileID: 8177143400287406577}
   - component: {fileID: 2170219560991582466}
   - component: {fileID: 6962601109016340121}
+  - component: {fileID: 619726166237361685}
   - component: {fileID: 4540375422038540408}
   - component: {fileID: 7399015839825466860}
   - component: {fileID: 1700557087533793748}
@@ -5282,6 +5283,18 @@ MonoBehaviour:
   front: {x: 1, y: 0}
   isFacingLeft: 0
   targetDir: {x: 0, y: 0}
+--- !u!114 &619726166237361685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6143233822747344136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92148e664833b854eb995b25acb99b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyBaseEmitController
 --- !u!95 &4540375422038540408
 Animator:
   serializedVersion: 7

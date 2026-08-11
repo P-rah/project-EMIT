@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 547775919676202106}
   - component: {fileID: 4790368003228941055}
   - component: {fileID: 2462663075659916000}
-  - component: {fileID: 1599460330711556297}
+  - component: {fileID: 8682375067351139508}
   - component: {fileID: 3908767568701397708}
   - component: {fileID: 5059119055628616807}
   - component: {fileID: 3394195916083072333}
@@ -214,13 +214,6 @@ MonoBehaviour:
   myAudioSource: {fileID: 0}
   dragEffect: {fileID: 3015220302974345871}
   outlineController: {fileID: 0}
-  laserAttack: {fileID: 0}
-  hoverPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   data: {fileID: 11400000, guid: 558a94fc71d9cb4408aa245e6c44a2d6, type: 2}
   maxHealth: 0
   baseAttack: 0
@@ -243,6 +236,13 @@ MonoBehaviour:
   front: {x: 0, y: 0}
   isFacingLeft: 0
   targetDir: {x: 0, y: 0}
+  laserAttack: {fileID: 0}
+  hoverPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &2462663075659916000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossStateMachine
   boss: {fileID: 0}
---- !u!114 &1599460330711556297
+--- !u!114 &8682375067351139508
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -265,10 +265,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6880536783117691652}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58ddfa50345a67449a1bbc495352f1ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 07de661097b7dc9429c8478602da15cc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BossEmitController
-  canEmit: 0
+  m_EditorClassIdentifier: Assembly-CSharp::BoseBaseEmitController
 --- !u!114 &3908767568701397708
 MonoBehaviour:
   m_ObjectHideFlags: 0

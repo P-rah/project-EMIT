@@ -27357,6 +27357,42 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1178739064216388299, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1178739064216388299, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3c28093d627331f4c8f9b4bc57ea1f2a, type: 2}
+    - target: {fileID: 1178739064216388299, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Parameters.colorGradient.ctime0
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1178739064216388299, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Parameters.colorGradient.ctime1
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 1178739064216388299, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1178739064216388299, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1178739064216388299, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1178739064216388299, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
+      value: 0.50286484
+      objectReference: {fileID: 0}
+    - target: {fileID: 1178739064216388299, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.10278535
+      objectReference: {fileID: 0}
     - target: {fileID: 1873399945288288519, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -27397,10 +27433,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3008829354362996246, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Size.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3008829354362996246, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Offset.x
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 3350538998615800503, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
       propertyPath: m_SortingOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3350538998615800503, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 60a56628968468b4ab062a4968a57d2d, type: 2}
     - target: {fileID: 4790368003228941055, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
       propertyPath: 'hoverPoints.Array.data[0]'
       value: 
@@ -27425,11 +27473,32 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1599460330711556297, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6880536783117691652, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      insertIndex: 7
+      addedObject: {fileID: 4487941269595552530}
   m_SourcePrefab: {fileID: 100100000, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+--- !u!1 &4487941269595552529 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6880536783117691652, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+  m_PrefabInstance: {fileID: 4487941269595552528}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4487941269595552530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4487941269595552529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92148e664833b854eb995b25acb99b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyBaseEmitController
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

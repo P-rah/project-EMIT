@@ -10,8 +10,8 @@ public interface IEmitableTarget
     Vector2 FacingDir { get; }
 
     void SetFacingDirection(Vector2 dir);
-    void RootMovement();
     void SetPower(int power);
     void Flip();
+    void RootMovement();
     void UnrootMovement();
 }

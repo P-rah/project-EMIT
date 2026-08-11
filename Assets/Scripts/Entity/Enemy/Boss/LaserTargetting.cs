@@ -34,7 +34,6 @@ public class LaserTargetting : MonoBehaviour
     {
         if (targetingCoroutine != null)
         {
-            Debug.Log("취소됨");
             StopCoroutine(targetingCoroutine);
         }
         targetingCoroutine = StartCoroutine(TargetingRoutine());

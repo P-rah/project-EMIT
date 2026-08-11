@@ -13,7 +13,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         public Vector2 facingDir;
     }
     private EmitBuffer<KeyframeStatus> buffer;
-    private T emitableTarget;
+    protected T emitableTarget;
     private Rigidbody2D _rb;
     private SpriteRenderer spriteRenderer;
 
@@ -47,20 +47,20 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         return frame;
     }
 
-    void IEmit.RecordFrame()
+    public virtual void RecordFrame()
     {
         KeyframeStatus keyframe = GetKeyFrame();
         buffer.Insert(keyframe);
     }
 
-    void IEmit.BeginEmit()
+    public virtual void BeginEmit()
     {
         emitableTarget.SetFacingDirection(Vector2.right);
         emitableTarget.RootMovement();
         if (_animator != null) _animator.enabled = false;
     }
 
-    void IEmit.EmitFrame()
+    public virtual void EmitFrame()
     {
         if (buffer.Pop(out KeyframeStatus frame))
         {
@@ -73,7 +73,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         }
     }
 
-    void IEmit.EndEmit()
+    public virtual void EndEmit()
     {
         emitableTarget.Flip();
         spriteRenderer.flipX = false;
@@ -81,7 +81,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         if (_animator != null) _animator.enabled = true;
     }
 
-    void IEmit.ResetFrame()
+    public virtual void ResetFrame()
     {
         buffer.Clear();
     }
