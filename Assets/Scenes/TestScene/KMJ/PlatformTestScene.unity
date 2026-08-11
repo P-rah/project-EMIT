@@ -999,7 +999,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 1
-  orthographic size: 5.625
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -27700,9 +27700,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788f01738f3dec146884e2b04aa8cca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  currentStateString: 
   target: {fileID: 0}
+  myAudioSource: {fileID: 0}
   dragEffect: {fileID: 1898318668}
+  outlineController: {fileID: 0}
   data: {fileID: 11400000, guid: 5bc9bf452556c354a9c53f347f4205d7, type: 2}
   rb: {fileID: 963427682}
   maxHealth: 0
@@ -27718,6 +27719,15 @@ MonoBehaviour:
   knockbackTime: 0
   grabForce: 0
   HitRecoveryTime: 0
+  defaultOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  attackOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  emitOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  walkSound: {fileID: 0}
+  attackReadySound: {fileID: 0}
+  attackSound: {fileID: 0}
+  sweepHitSound: {fileID: 0}
+  grabHitSound: {fileID: 0}
+  deathSound: {fileID: 0}
   canChangeState: 0
   currentHealth: 0
   isRooted: 0
@@ -27726,6 +27736,7 @@ MonoBehaviour:
   canChangeHitState: 0
   front: {x: 0, y: 0}
   isFacingLeft: 0
+  targetDir: {x: 0, y: 0}
 --- !u!114 &963427684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27884,9 +27895,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788f01738f3dec146884e2b04aa8cca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  currentStateString: 
   target: {fileID: 0}
+  myAudioSource: {fileID: 0}
   dragEffect: {fileID: 1704330839}
+  outlineController: {fileID: 0}
   data: {fileID: 11400000, guid: 5bc9bf452556c354a9c53f347f4205d7, type: 2}
   rb: {fileID: 973550114}
   maxHealth: 0
@@ -27902,6 +27914,15 @@ MonoBehaviour:
   knockbackTime: 0
   grabForce: 0
   HitRecoveryTime: 0
+  defaultOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  attackOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  emitOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  walkSound: {fileID: 0}
+  attackReadySound: {fileID: 0}
+  attackSound: {fileID: 0}
+  sweepHitSound: {fileID: 0}
+  grabHitSound: {fileID: 0}
+  deathSound: {fileID: 0}
   canChangeState: 0
   currentHealth: 0
   isRooted: 0
@@ -27910,6 +27931,7 @@ MonoBehaviour:
   canChangeHitState: 0
   front: {x: 0, y: 0}
   isFacingLeft: 0
+  targetDir: {x: 0, y: 0}
 --- !u!61 &973550116
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -29773,6 +29795,7 @@ GameObject:
   - component: {fileID: 1616797792}
   - component: {fileID: 1616797794}
   - component: {fileID: 1616797795}
+  - component: {fileID: 1616797798}
   m_Layer: 3
   m_Name: TestPlayer
   m_TagString: Player
@@ -29992,6 +30015,11 @@ MonoBehaviour:
   sweepAttackHitbox: {fileID: 2078460881}
   grabAttackHitbox: {fileID: 1742584628}
   attackCoolTime: 0.05
+  attackRecoveryTime: 1
+  maxAttackCount: 2
+  currentAttackCount: 0
+  emitRecoveryCount: 5
+  currentEmitRecoveryCount: 0
 --- !u!114 &1616797791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30033,6 +30061,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b08e81de29fb9d4e8c9e7d9090fa323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
+  walkSound: {fileID: 0}
+  jumpSound: {fileID: 0}
+  landSound: {fileID: 0}
+  dashSound: {fileID: 0}
+  sweepSound: {fileID: 0}
+  grabThrowSound1: {fileID: 0}
+  grabThrowSound2: {fileID: 0}
+  grabRetreiveSound: {fileID: 0}
+  canEmitSound: {fileID: 0}
 --- !u!114 &1616797794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30128,6 +30165,52 @@ MonoBehaviour:
   dropSpeed: 2
   _standingPlatform: {fileID: 0}
   IsDropping: 0
+--- !u!61 &1616797798
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616797779}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.90625}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 0.625, y: 1.8125}
+    newSize: {x: 0.34, y: 0.63}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.625, y: 1.8125}
+  m_EdgeRadius: 0
 --- !u!1001 &1704330838
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31072,9 +31155,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788f01738f3dec146884e2b04aa8cca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  currentStateString: 
   target: {fileID: 0}
+  myAudioSource: {fileID: 0}
   dragEffect: {fileID: 855773077}
+  outlineController: {fileID: 0}
   data: {fileID: 11400000, guid: 5bc9bf452556c354a9c53f347f4205d7, type: 2}
   rb: {fileID: 1860686021}
   maxHealth: 0
@@ -31090,6 +31174,15 @@ MonoBehaviour:
   knockbackTime: 0
   grabForce: 0
   HitRecoveryTime: 0
+  defaultOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  attackOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  emitOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  walkSound: {fileID: 0}
+  attackReadySound: {fileID: 0}
+  attackSound: {fileID: 0}
+  sweepHitSound: {fileID: 0}
+  grabHitSound: {fileID: 0}
+  deathSound: {fileID: 0}
   canChangeState: 0
   currentHealth: 0
   isRooted: 0
@@ -31098,6 +31191,7 @@ MonoBehaviour:
   canChangeHitState: 0
   front: {x: 0, y: 0}
   isFacingLeft: 0
+  targetDir: {x: 0, y: 0}
 --- !u!61 &1860686023
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -31680,7 +31774,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
   knockbackPower: 10
-  localKnockbackDir: {x: 1, y: 0}
 --- !u!95 &2078460882
 Animator:
   serializedVersion: 7
@@ -31862,11 +31955,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EmitManager
   emitPreparationTime: 1
   emitDurationTime: 5
-  emitCooldownTime: 3
   emitBufferFrames: 0
   emittedFrames: 0
   isEmitting: 0
   isEmittable: 1
+  emitStartSound1: {fileID: 0}
+  emitStartSound2: {fileID: 0}
+  emitEndSound: {fileID: 0}
+  emitClockSound1: {fileID: 0}
+  emitClockSound2: {fileID: 0}
 --- !u!4 &2115546574
 Transform:
   m_ObjectHideFlags: 0

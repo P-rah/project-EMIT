@@ -29,7 +29,7 @@ public class PlayerState : MonoBehaviour
     public bool IsDashing { get; set; }
     public bool IsAttackingSweep { get; set; }
     public bool IsAttackingGrab { get; set; }
-    public bool isDeath { get; set; }
+    public bool IsDead { get; set; }
 
     private bool isFalling; //공중에 있다가 착지 감지용
 
@@ -67,7 +67,7 @@ public class PlayerState : MonoBehaviour
     {
         State newState = CurrentState;
 
-        if (isDeath) newState = State.Death;
+        if (IsDead) newState = State.Death;
         else if (IsAttackingSweep) newState = State.AttackingSweep;
         else if (IsAttackingGrab) newState = State.AttackingGrab;
         else if (IsDashing) newState = State.Dashing;

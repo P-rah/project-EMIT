@@ -39,8 +39,8 @@ public class PlayerHealth : MonoBehaviour
 
     private void PlayerDead()
     {
-        Player.State.isDeath = true;
-        Player.Movement.stopMove();
+        Player.State.IsDead = true;
+        Player.Movement.StopMove();
         Debug.Log("Player Dead");
     }
 

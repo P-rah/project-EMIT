@@ -13,22 +13,36 @@ public class PlayerMovement : MonoBehaviour
     private DashEffectController dashEffectController;
     private PlayerDropDownPlatform playerDropDownPlatform;
 
+    [Header("Movement Status&Flags")]
+    [SerializeField] private bool isOnGround;
+    [SerializeField] private bool canJump;
+    [SerializeField] private bool isMovingUpwards;
+    [SerializeField] private bool isMovingDownwards;
+    [SerializeField] private bool isOnSlope;
+    [SerializeField] private bool isExitingSlope;
+    [SerializeField] private bool isDroppingDownFromPlatform;
+    [SerializeField] private bool isDashing;
+
+
+    [Header("FixedUpdate Method")]
+    [SerializeField] private bool usePrevious = true;
+
     [Header("Movement Settings")]
     public float moveSpeed = 15f;
     public float moveSpeedWhileAttack = 0f;
+
     
     [Header("Jump Movement")]
     [SerializeField] private float jumpForce = 15f;
+    [SerializeField] private BoxCollider2D edgeGuard;
+    [SerializeField] private float jumpCoyoteTime = 0f; 
 
     [Header("Slope Movement")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheckPos;
     [SerializeField] private float groundCheckRayLength;
-    [SerializeField] private bool isOnSlope;
-    [SerializeField] private bool isExitingSlope;
 
     [Header("Platform Movement")]
-    [SerializeField] private bool isDroppingDown;
 
     [Header("Dash Settings")]
     public float dashPower = 40f;
@@ -45,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
         rb = Player.Instance.Rb;
         input = GetComponent<PlayerInputHandler>();
         playerDropDownPlatform = GetComponent<PlayerDropDownPlatform>();
+        edgeGuard = GetComponent<BoxCollider2D>();
         state = Player.State;
         dashEffectController = Player.DashEffect;
 
@@ -53,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (Player.State.isDeath) return;
+        if (Player.State.IsDead) return;
         HandleInputs();
         FlipPlayer();
     }
@@ -76,22 +91,32 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Player.State.isDeath) return;
-        if (playerDropDownPlatform.IsDropping)
-    {
-        SetGravityScale(initialGravityScale);
-        // 탈출 즉시 이동을 멈추면서 아래로 떨어질 때 앞으로 튀어나가지 않도록 세팅
-        if (Mathf.Abs(input.MoveInput.x) < 0.01f)
+        if (usePrevious)
         {
-            rb.linearVelocityX = 0f;
+            PreviousFixedUpdate();
+            return;
         }
-        // 경사면 이동 처리에서 속도를 다시 투영하거나 y를 0으로 만들지 않도록 종료
-        return;
     }
+
+    private void PreviousFixedUpdate()
+    {
+        if (Player.State.IsDead) return;
+        if (playerDropDownPlatform.IsDropping)
+        {
+            SetGravityScale(initialGravityScale);
+            // 탈출 즉시 이동을 멈추면서 아래로 떨어질 때 앞으로 튀어나가지 않도록 세팅
+            if (Mathf.Abs(input.MoveInput.x) < 0.01f)
+            {
+                rb.linearVelocityX = 0f;
+            }
+            // 경사면 이동 처리에서 속도를 다시 투영하거나 y를 0으로 만들지 않도록 종료
+            return;
+        }
 
         // 경사면으로 대시하면 콜라이더 뚫음. 물리 업데이트를 안하니까.
         if (state.IsDashing) return;
 
+        // 
         if (isExitingSlope && rb.linearVelocityY <= 0.1f && IsGrounded())
         {
             isExitingSlope = false;
@@ -243,10 +268,24 @@ public class PlayerMovement : MonoBehaviour
         canDash = true;
     }
 
-    public void stopMove()
+    public void StopMove()
     {
         rb.linearVelocity = Vector2.zero;
         rb.gravityScale = initialGravityScale;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Edge Guard Enabled");
+        edgeGuard.enabled = true;
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        Debug.Log("Edge Guard Disabled");
+        edgeGuard.enabled = false;
+
     }
 
     public void Animevent_playWalkSound()
