@@ -49,7 +49,7 @@ public class GameInitiator : MonoBehaviour
 
     private async UniTask DoSomething()
     {
-        await UniTask.Delay(2000);
+        await UniTask.Delay(1000);
     }
 
     private void PrepareGame()
