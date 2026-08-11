@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Collider2D))]
-public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable
+public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable, IEmitableTarget
 {
     public EnemyStateMachine StateMachine { get; private set; }
     public StateBase<EnemyStateMachine> CurrentState => StateMachine?.currentState;
@@ -170,10 +170,9 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable
         StateMachine.ChangeState(nextState, force);
     }
     
-    public void SetState(StateBase<EnemyStateMachine> nextState, int replayPower)
+    public void SetPower(int Power)
     {
-        StateMachine.SetState(nextState);
-        currentPower = IsHitReactionState(nextState) ? replayPower : 0;
+        currentPower = Power;
     }
 
     private void OnDrawGizmos()
@@ -201,11 +200,13 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable
         {
             myAudioSource.PlayOneShot(hitSound);
         }
+        if (StateMachine.currentState.CanBeCancelled()) ReceiveKnockback(attackInfo, true);
 
         ReceiveDamage(attackInfo);
         HitEffectBasedOnDamageType(dmgType);
 
-        if (StateMachine.currentState.CanBeCancelled()) ReceiveKnockback(attackInfo, true);
+        currentPower = IsHitReactionState(CurrentState) ? attackInfo.power : 0;
+
 
         if (EmitManager.Instance.isEmitting)
         {
@@ -229,12 +230,7 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable
 
     public void ReceiveDamage(AttackInfo attackInfo)
     {
-        int incomingPower = GetEffectivePower(attackInfo.power);
-        currentPower = IsHitReactionState(CurrentState)
-            ? incomingPower
-            : 0;
-
-        int damage = DamageCalculation.Calculate(attackInfo, this);
+        int damage = DamageCalculation<Enemy>.Calculate(attackInfo, this);
         
         currentHealth -= damage;
         Debug.Log($"Enemy가 데미지를 {damage} 입음");
@@ -263,11 +259,6 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable
         }
     }
 
-    private int GetEffectivePower(int power)
-    {
-        return EmitManager.Instance.isEmitting ? -power : power;
-    }
-
     private bool IsHitReactionState(StateBase<EnemyStateMachine> state)
     {
         return state == StateMachine.KnockbackState || state == StateMachine.GrabbedState;
@@ -283,11 +274,8 @@ public class Enemy : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable
 
     public void ReceiveKnockback(AttackInfo attackInfo, bool force)
     {
-        int incomingPower = GetEffectivePower(attackInfo.power);
         currentKnockBackForce = attackInfo.knockback;
         isCurrentHitGrab = attackInfo.attackIsGrab;
-
-        currentPower = IsHitReactionState(CurrentState) ? incomingPower : 0;
 
         bool shouldForceChange = force || canChangeHitState;
 

@@ -6,8 +6,8 @@ public class BossAttackState : StateBase<BossStateMachine>
     private Boss1 boss;
 
     private const int LaserCount = 5;
-    private const float LaserSpawnInterval = 1f;
-    private const float AttackDuration = 4f;
+    private const float attackInterval = 2f;
+    private const float AttackDuration = 2f;
 
     private Coroutine attackCoroutine;
 
@@ -35,11 +35,11 @@ public class BossAttackState : StateBase<BossStateMachine>
     {
         for (int i = 0; i < LaserCount; i++)
         {
-            boss.FireLaser();
-
+            boss.laserAttack?.StartTargetingAttack();
+            
             if (i < LaserCount - 1)
             {
-                yield return new WaitForSeconds(LaserSpawnInterval);
+                yield return new WaitForSeconds(attackInterval);
             }
         }
 

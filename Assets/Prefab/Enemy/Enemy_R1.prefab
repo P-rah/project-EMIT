@@ -5083,7 +5083,6 @@ GameObject:
   - component: {fileID: 8177143400287406577}
   - component: {fileID: 2170219560991582466}
   - component: {fileID: 6962601109016340121}
-  - component: {fileID: 2361838161357326820}
   - component: {fileID: 4540375422038540408}
   - component: {fileID: 7399015839825466860}
   - component: {fileID: 1700557087533793748}
@@ -5283,19 +5282,6 @@ MonoBehaviour:
   front: {x: 1, y: 0}
   isFacingLeft: 0
   targetDir: {x: 0, y: 0}
---- !u!114 &2361838161357326820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6143233822747344136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6a8cb04c61dfc648940206d302ded15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyEmitController
-  spawnPosition: {x: 0, y: 0, z: 0}
 --- !u!95 &4540375422038540408
 Animator:
   serializedVersion: 7
@@ -5343,7 +5329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc64ae2ee3faa248871d79b631df8a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyOutlineController
-  defaultColor: {r: 0, g: 0, b: 0.78431374, a: 1}
+  defaultColor: {r: 0.22761662, g: 0.22761661, b: 0.31132078, a: 1}
   attackColor: {r: 0.78431374, g: 0, b: 0, a: 1}
   emitColor: {r: 1, g: 1, b: 0, a: 1}
 --- !u!114 &2829612419554026525

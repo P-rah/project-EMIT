@@ -12,7 +12,7 @@ public class PlayerGrapHitbox : MonoBehaviour
      * 밀기/당기기의 물리 방향을 power 부호로 표현하는 설계로 바꿀 경우 이 값만 음수화하지 말고
      * PlayerAttackHitbox, DamageCalculation, Boss1의 해석을 동시에 변경하고 연계 피해를 재검증한다.
      */
-    private const int AttackPower = 1;
+    private const int AttackPower = -1;
 
     public event Action<Transform, Vector2> OnTargetGrapHit;
 

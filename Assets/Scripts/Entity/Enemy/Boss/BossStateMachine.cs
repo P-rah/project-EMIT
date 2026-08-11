@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BossStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackableContext
@@ -57,6 +56,7 @@ public class BossStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackable
         CurrentState?.ExitState();
         CurrentState = nextState;
         CurrentState.EnterState();
+        boss.NotifyStateEntered(CurrentState);
     }
 
     public void SetState(StateBase<BossStateMachine> nextState)

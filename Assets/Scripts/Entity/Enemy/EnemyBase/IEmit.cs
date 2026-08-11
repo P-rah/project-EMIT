@@ -1,7 +1,7 @@
 public interface IEmit
 
     /*
-     * 역행 가능한 오브젝트의 인터페이스
+     * EmitManager 인터페이스
      */
 {
     public void RecordFrame();

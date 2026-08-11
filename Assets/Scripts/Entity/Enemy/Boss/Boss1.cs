@@ -10,22 +10,18 @@ public class Boss1 : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable
     public BossStateMachine StateMachine { get; private set; }
     public StateBase<BossStateMachine> CurrentState => StateMachine?.CurrentState;
 
-    //private SpriteRenderer spriteRenderer;
-    //private BossEmitController emitController;
-    //private Collider2D[] bossColliders;
-    //private readonly List<Collider2D> ignoredPlatformColliders = new List<Collider2D>();
-
     public Transform target { get; set; }
     public Rigidbody2D rb { get; set; }
 
-    private EnemyAnimator _enemyAnimator;
+    private BossAnimator _bossAnimator;
     public AudioSource myAudioSource;
 
     public ParticleSystem dragEffect;
     public OutlineController outlineController;
 
+    public LaserTargetting laserAttack;
+
     [Header("Boss 설정")]
-    [SerializeField] private Laser laserPrefab;
     [SerializeField] private List<Transform> hoverPoints;
     [SerializeField] private EnemyData data;
 
@@ -75,13 +71,14 @@ public class Boss1 : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable
     {
         Debug.Log("Enemy Awake");
         Init();
+        laserAttack = GetComponent<LaserTargetting>();
     }
 
     public virtual void Init()
     {
         target = Player.InstanceTransform;
 
-        _enemyAnimator = GetComponent<EnemyAnimator>();
+        _bossAnimator = GetComponent<BossAnimator>();
         outlineController = GetComponent<OutlineController>();
         StateMachine = GetComponent<BossStateMachine>();
 
@@ -197,7 +194,7 @@ public class Boss1 : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable
             ? incomingPower
             : 0;
 
-        int damage = DamageCalculation.Calculate(attackInfo, this);
+        int damage = DamageCalculation<Boss1>.Calculate(attackInfo, this);
 
         currentHealth -= damage;
         Debug.Log($"Enemy가 데미지를 {damage} 입음");
@@ -289,17 +286,6 @@ public class Boss1 : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable
         rb.linearVelocity = Vector2.zero;
     }
 
-    public void FireLaser()
-    {
-        if (laserPrefab == null)
-        {
-            Debug.LogError("Boss1에 Laser Prefab이 연결되지 않았습니다.", this);
-            return;
-        }
-
-        Instantiate(laserPrefab, rb.position, Quaternion.identity);
-    }
-
     public void EnterGroggy()
     {
         Debug.Log("그로기");
@@ -352,6 +338,11 @@ public class Boss1 : MonoBehaviour, IDamageable, IGrabbable, IKnockbackable
         myAudioSource.pitch = 1.0f + Random.Range(-0.2f, 0.2f);
         myAudioSource.PlayOneShot(walkSound);
         myAudioSource.pitch = 1.0f;
+    }
+
+    internal void NotifyStateEntered(StateBase<BossStateMachine> state)
+    {
+        _bossAnimator?.HandleStateEntered(this, state);
     }
 
     public void UnrootMovement()

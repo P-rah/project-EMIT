@@ -12,7 +12,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnEnable()
     {
-
         EventManager.StartListening("OnPlayerHit", decreasePlayerHealth);
     }
     private void OnDisable()
@@ -29,7 +28,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void decreasePlayerHealth()
     {
-        this.currentPlayerHealth -= 1;
+        currentPlayerHealth -= 1;
         Player.UIController.UpdateHealthBar();
         if (currentPlayerHealth <= 0)
         {

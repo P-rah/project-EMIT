@@ -12,7 +12,6 @@ public class EmitManager : MonoBehaviour
     [Header("EMIT 관련 설정")]
     [SerializeField] private float emitPreparationTime; // 선딜(역행하는 오브젝트가 잠시 가만히 멈춰있을 시간)
     [SerializeField] private float emitDurationTime; // EMIT 지속시간
-    //[SerializeField] private float emitCooldownTime; // 쿨타임
     [SerializeField] public int emitBufferFrames; // EMIT 지속시간동안 역재생할 프레임 수
     [SerializeField] public int emittedFrames;
 
