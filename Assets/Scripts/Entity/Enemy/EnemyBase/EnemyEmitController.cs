@@ -55,6 +55,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
 
     public virtual void BeginEmit()
     {
+        spriteRenderer.material.SetFloat("_OutlineThick", 1f);
         emitableTarget.SetFacingDirection(Vector2.right);
         emitableTarget.RootMovement();
         if (_animator != null) _animator.enabled = false;
@@ -75,6 +76,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
 
     public virtual void EndEmit()
     {
+        spriteRenderer.material.SetFloat("_OutlineThick", 0f);
         emitableTarget.Flip();
         spriteRenderer.flipX = false;
         emitableTarget.UnrootMovement();

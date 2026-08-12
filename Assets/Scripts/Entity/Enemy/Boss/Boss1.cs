@@ -12,6 +12,8 @@ public class Boss1 : EnemyBase
     [Header("Boss 전용 설정")]
     [SerializeField] private List<Transform> hoverPoints;
     private float groggyGravityScale = 5f;
+    public AudioClip hoverSound;
+    public AudioClip groggySound;
 
     public override void Awake()
     {
@@ -30,12 +32,14 @@ public class Boss1 : EnemyBase
     {
         StageManager.Instance?.AddEnemy();
         StateMachine.ChangeState(StateMachine.MoveState);
-        outlineController.SetDefaultOutline();
     }
 
     private void Update()
     {
-        if (EmitManager.Instance.isEmitting) return;
+        if (EmitManager.Instance.isEmitting)
+        {
+            return;
+        }
 
         StateMachine.UpdateState();
         UpdateTargetDirection();
@@ -75,16 +79,39 @@ public class Boss1 : EnemyBase
         rb.linearVelocity = Vector2.zero;
     }
 
+    public void EnterGroggySound()  //최초 그로기 한번만 수행
+    {
+        myAudioSource.PlayOneShot(groggySound);
+    }
+
+    public void ExitGroggySound()  //그로기 -> move 상태로 전환되는 경우만 수행
+    {
+        myAudioSource.PlayOneShot(hoverSound);
+    }
+
+    public void StartTargetting()
+    {
+        laserAttack?.StartTargetingAttack();
+        myAudioSource.PlayOneShot(attackReadySound);
+    }
+
+    public void StartAttack()
+    {
+        myAudioSource.PlayOneShot(attackSound);
+    }
+
     public void EnterGroggy()
     {
         ResetPower();
         rb.gravityScale = groggyGravityScale;
+        canChangeState = false;
     }
 
     public void ExitGroggy()
     {
         ResetPower();
         PrepareHovering();
+        canChangeState = true;
     }
 
     // ==========================================
@@ -135,7 +162,7 @@ public class Boss1 : EnemyBase
     {
         if (CurrentState is SharedGrabbedState<BossStateMachine> grabState) grabState.Grab();
     }
-    private bool IsHitReactionState(StateBase<BossStateMachine> state) 
+    public bool IsHitReactionState(StateBase<BossStateMachine> state) 
         => state == StateMachine.KnockbackState || state == StateMachine.GrabbedState || state == StateMachine.GroggyState;
 
     private void ResetPower()

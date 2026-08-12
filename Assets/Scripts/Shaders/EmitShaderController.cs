@@ -9,6 +9,7 @@ public class EmitShaderController : MonoBehaviour
         EventManager.StartListening("OnEmitAborted", AbortEffect);
         EventManager.StartListening("OnEmitFinished", EndEffect);
         EventManager.StartListening("OnPlayerHit", startHitVinette);
+        EventManager.StartListening<int>("OnEmitRecoveryCount", setEmitUI);
     }
     private void OnDisable()
     {
@@ -16,6 +17,7 @@ public class EmitShaderController : MonoBehaviour
         EventManager.StopListening("OnEmitAborted", AbortEffect);
         EventManager.StopListening("OnEmitFinished", EndEffect);
         EventManager.StopListening("OnPlayerHit", startHitVinette);
+        EventManager.StopListening<int>("OnEmitRecoveryCount", setEmitUI);
     }
 
     [SerializeField]
@@ -30,6 +32,7 @@ public class EmitShaderController : MonoBehaviour
     private float maxVinetteIntense = 0.2f;
     private float vinetteTime = 1f;
 
+    private static int _emitableAlpha = Shader.PropertyToID("_EmitableAlpha");
 
     private void Awake()
     {
@@ -102,4 +105,9 @@ public class EmitShaderController : MonoBehaviour
         _material.SetFloat(_vinettingIntensity, 0f);
     }
 
+    private void setEmitUI(int rate)
+    {
+        if(rate >= 5) _material.SetFloat(_emitableAlpha, 1f);
+        else _material.SetFloat(_emitableAlpha, rate * 0.1f);
+    }
 }

@@ -15,7 +15,6 @@ public class BossRecoilState : StateBase<BossStateMachine>
 
     public override void EnterState()
     {
-        Debug.Log("취약");
         boss.PrepareHovering();
         moveTime = Time.time + RecoilDuration;
     }

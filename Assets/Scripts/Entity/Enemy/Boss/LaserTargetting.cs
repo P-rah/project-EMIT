@@ -59,6 +59,7 @@ public class LaserTargetting : MonoBehaviour
             yield return null;
         }
 
+
         yield return new WaitForSeconds(lockDelay);
 
         laserPointer.enabled = false;
@@ -78,16 +79,16 @@ public class LaserTargetting : MonoBehaviour
         ObjectPoolManager.Instance?.SpawnFromPool(attackPoolTag, spawnPos, rotation);
     }
 
-    //public void CancelTargeting()
-    //{
-    //    if (targetingCoroutine != null)
-    //    {
-    //        StopCoroutine(targetingCoroutine);
-    //        targetingCoroutine = null;
-    //    }
-    //    if (laserPointer != null)
-    //    {
-    //        laserPointer.enabled = false;
-    //    }
-    //}
+    public void CancelTargeting()
+    {
+        if (targetingCoroutine != null)
+        {
+            StopCoroutine(targetingCoroutine);
+            targetingCoroutine = null;
+        }
+        if (laserPointer != null)
+        {
+            laserPointer.enabled = false;
+        }
+    }
 }

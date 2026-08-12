@@ -29,14 +29,14 @@ public class BossAttackState : StateBase<BossStateMachine>
             boss.StopCoroutine(attackCoroutine);
             attackCoroutine = null;
         }
+        boss.laserAttack?.CancelTargeting();
     }
 
     private IEnumerator AttackRoutine()
     {
         for (int i = 0; i < LaserCount; i++)
         {
-            boss.laserAttack?.StartTargetingAttack();
-            
+            boss.StartTargetting();
             if (i < LaserCount - 1)
             {
                 yield return new WaitForSeconds(attackInterval);

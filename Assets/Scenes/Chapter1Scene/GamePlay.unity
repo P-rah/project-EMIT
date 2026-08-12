@@ -66105,20 +66105,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1543856071110203862, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
-      propertyPath: myHDRColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1543856071110203862, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: myHDRColor.r
       value: 2.8284273
-      objectReference: {fileID: 0}
-    - target: {fileID: 2927929950996235874, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2927929950996235874, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
-      propertyPath: m_Color.r
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2927929950996235874, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_FillMethod
@@ -66168,10 +66156,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
-    - target: {fileID: 4175455924587587842, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
-      propertyPath: m_SortingLayerID
-      value: -840063207
-      objectReference: {fileID: 0}
     - target: {fileID: 6071649747952069075, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_Name
       value: TestPlayer
@@ -66192,29 +66176,13 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 1.95
       objectReference: {fileID: 0}
-    - target: {fileID: 7372069371144419303, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7372069371144419303, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 6842625837229213186, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: emitShaderController
+      value: 
+      objectReference: {fileID: 1320504999}
     - target: {fileID: 7816414912715763272, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 2.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8408923645684875485, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9089321209318650909, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
-      propertyPath: m_SortingLayer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9089321209318650909, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
-      propertyPath: m_SortingLayerID
-      value: -840063207
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

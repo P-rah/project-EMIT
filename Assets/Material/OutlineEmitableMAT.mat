@@ -58,9 +58,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _OutlineThick: 1
+    - _GlowIntensity: 0.1
+    - _OutlineThick: 0
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0.5254902, a: 1}
+    - _OutlineColor: {r: 8, g: 8, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -22,7 +22,6 @@ public class Player : MonoBehaviour
     public static DashEffectController DashEffect { get; private set; }
     public static GrapEffect GrapEffect { get; private set; }
     public static PlayerHealth PlayerHealth { get; private set; }
-    public static PlayerOutlineController OutlineController { get; private set; }
     public static PlayerUIController UIController { get; private set; }
 
     public AudioClip walkSound;
@@ -54,7 +53,6 @@ public class Player : MonoBehaviour
         DashEffect = GetComponent<DashEffectController>();
         GrapEffect = GetComponent<GrapEffect>();
         PlayerHealth = GetComponent<PlayerHealth>();
-        OutlineController = GetComponent<PlayerOutlineController>();
         UIController = GetComponent<PlayerUIController>();
     }
 }

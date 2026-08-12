@@ -23,7 +23,6 @@ public class EnemyAttackHitbox : MonoBehaviour
     public void AnimEvent_DisableEffect()
     {
         gameObject.SetActive(false);
-        enemy?.outlineController?.SetDefaultOutline();
         enemy?.EnableCancel();
     }
 }

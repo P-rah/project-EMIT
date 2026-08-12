@@ -57,6 +57,7 @@ public class BossStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackable
         CurrentState = nextState;
         CurrentState.EnterState();
         boss.NotifyStateEntered(CurrentState);
+        //Debug.Log(CurrentState);
     }
 
     public void SetState(StateBase<BossStateMachine> nextState)
@@ -80,10 +81,6 @@ public class BossStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackable
         if (groggyState != null && groggyState.IsGroggyActive)
         {
             ChangeState(GroggyState);
-        }
-        else
-        {
-            ChangeState(MoveState);
         }
     }
 }

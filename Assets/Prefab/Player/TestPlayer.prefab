@@ -373,7 +373,6 @@ GameObject:
   - component: {fileID: 2530944369016729353}
   - component: {fileID: 626280721452529102}
   - component: {fileID: 2727191825000046870}
-  - component: {fileID: 8408923645684875485}
   - component: {fileID: 8113229768929654293}
   - component: {fileID: 4512678456294159734}
   - component: {fileID: 8309587812459812937}
@@ -678,6 +677,7 @@ MonoBehaviour:
   currentAttackCount: 0
   emitRecoveryCount: 5
   currentEmitRecoveryCount: 0
+  emitShaderController: {fileID: 0}
 --- !u!114 &2160909343489536948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -739,18 +739,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   playerHealthMax: 3
   currentPlayerHealth: 0
---- !u!114 &8408923645684875485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6071649747952069075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf6dc6d89d09e714fb28f45304621e55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerOutlineController
 --- !u!114 &8113229768929654293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -830,7 +818,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.03, y: 2}
+  m_AnchoredPosition: {x: -0.03, y: 2.1}
   m_SizeDelta: {x: 0.9, y: 0.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1844841061358208817
@@ -1307,8 +1295,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.5, y: 1}
-  m_SizeDelta: {x: 0.1, y: 1}
+  m_AnchoredPosition: {x: -0.03, y: 1.95}
+  m_SizeDelta: {x: 0.9, y: 0.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5198117682511130068
 CanvasRenderer:
@@ -1342,7 +1330,7 @@ MonoBehaviour:
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 1
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -1362,4 +1350,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UISetting
   targetUIImage: {fileID: 2927929950996235874}
   hdrMaterialPrefab: {fileID: 2100000, guid: 61f1ca496e62b2746b2878d13639579d, type: 2}
-  myHDRColor: {r: 0, g: 0, b: 2.1185477, a: 0}
+  myHDRColor: {r: 2.8284273, g: 0, b: 0, a: 0}

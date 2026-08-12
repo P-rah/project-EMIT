@@ -15,7 +15,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public Rigidbody2D rb { get; set; }
     public AudioSource myAudioSource;
     public ParticleSystem dragEffect;
-    public OutlineController outlineController;
 
     [SerializeField] protected EnemyData data;
 
@@ -68,7 +67,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     {
         target = Player.InstanceTransform;
         rb = GetComponent<Rigidbody2D>();
-        outlineController = GetComponent<OutlineController>();
 
         if (rb != null) rb.freezeRotation = true;
 
@@ -91,13 +89,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
             knockbackTime = data.knockbackTime;
             grabForce = data.grabForce;
             HitRecoveryTime = data.HitRecoveryTime;
-
-            walkSound = data.walkSound;
-            attackReadySound = data.attackReadySound;
-            attackSound = data.attackSound;
-            sweepHitSound = data.sweepHitSound;
-            grabHitSound = data.grabHitSound;
-            deathSound = data.deathSound;
         }
 
         canChangeState = true;

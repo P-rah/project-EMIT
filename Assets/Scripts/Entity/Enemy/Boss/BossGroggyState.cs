@@ -16,9 +16,10 @@ public class BossGroggyState : StateBase<BossStateMachine>
     public override void EnterState()
     {
         boss.EnterGroggy();
-        groggyTimer += 0.5f;
+        groggyTimer += 0.5f;    // 넉백&그랩 시 타이머 보정
         if (!IsGroggyActive)
         {
+            boss.EnterGroggySound();
             groggyTimer = 0f;
             IsGroggyActive = true;
         }
@@ -32,12 +33,13 @@ public class BossGroggyState : StateBase<BossStateMachine>
         {
             IsGroggyActive = false;
             owner.ChangeState(owner.MoveState);
+            boss.ExitGroggySound();
+            boss.ExitGroggy();
         }
     }
 
     public override void ExitState()
     {
-        
     }
 
     public override bool CanBeCancelled()

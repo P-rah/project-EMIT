@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     private PlayerInputHandler input;
-
     private PlayerState state;
     private GrapEffect grapEffect;
 
@@ -232,8 +231,8 @@ public class PlayerCombat : MonoBehaviour
             StopAttackRecoveryRoutine();
 
         currentEmitRecoveryCount = 0;
+        setEmitableUI(currentEmitRecoveryCount);
         hasTriggeredEmit = false;
-        Player.OutlineController.setOutlineColorOrg();
     }
 
     private void addEmitCount()
@@ -244,8 +243,8 @@ public class PlayerCombat : MonoBehaviour
         }
         else
         {
+            setEmitableUI(currentEmitRecoveryCount);
             currentEmitRecoveryCount++;
-            Player.OutlineController.setOutlineColor(new Color(1f, 1f, (7 - currentEmitRecoveryCount) / 7f, 1f), 1f);
         }
     }
 
@@ -255,9 +254,14 @@ public class PlayerCombat : MonoBehaviour
         //역행 가능상태가 되었을 시 한번만 동작
         if(EmitManager.Instance.isEmittable && !hasTriggeredEmit)
         {
-            Player.OutlineController.setOutlineColorEmitable();
+            setEmitableUI(currentEmitRecoveryCount);
             SoundManager.instance.PlaySFX(Player.Instance.canEmitSound);
             hasTriggeredEmit = true;
         }
+    }
+
+    private void setEmitableUI(int count)
+    {
+        EventManager.TriggerEvent<int>("OnEmitRecoveryCount", count);
     }
 }
