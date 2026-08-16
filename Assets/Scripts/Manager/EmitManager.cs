@@ -18,6 +18,7 @@ public class EmitManager : MonoBehaviour
     [Header("현재 EMIT 상태")]
     [SerializeField] public bool isEmitting;
     public bool isEmittable = true;
+    private float currentEmitableTime;
 
     [Header("EMIT 효과음")]
     public AudioClip emitStartSound1;
@@ -25,6 +26,9 @@ public class EmitManager : MonoBehaviour
     public AudioClip emitEndSound;
     public AudioClip emitClockSound1;
     public AudioClip emitClockSound2;
+
+    [Header("UI 컨트롤러")]
+    [SerializeField] private UIGaugeBarController UIController;
 
     private void Awake()
     {
@@ -36,24 +40,23 @@ public class EmitManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        //emitBufferFrames = (int)(emitDurationTime * (1 / Time.deltaTime));    이거 로딩할때 deltaTime변해서 fixed로 해야할듯
         emitBufferFrames = (int)(emitDurationTime * (1 / Time.fixedDeltaTime));
         emittedFrames = 0;
         emitObjects = new List<IEmit>(emitBufferFrames);
+
+        currentEmitableTime = emitDurationTime;
     }
 
     private void OnEnable() {
         // Event 구독
         EventManager.StartListening("OnEmitPressed", OnEmitPressed);
-        EventManager.StartListening("OnEmitAborted", OnEmitAborted);
-        //EventManager.StartListening("OnEmitUlted", OnEmitAborted);
+        //EventManager.StartListening("OnEmitAborted", OnEmitAborted);
     }
 
     private void OnDisable()
     {
         EventManager.StopListening("OnEmitPressed", OnEmitPressed);
-        EventManager.StopListening("OnEmitAborted", OnEmitAborted);
-        //EventManager.StopListening("OnEmitUlted", OnEmitAborted);
+        //EventManager.StopListening("OnEmitAborted", OnEmitAborted);
     }
 
     private void FixedUpdate()
@@ -71,7 +74,7 @@ public class EmitManager : MonoBehaviour
             }
             else
             {
-                OnEmitFinished();
+                //OnEmitFinished();
             }
         }
         else
@@ -96,6 +99,7 @@ public class EmitManager : MonoBehaviour
             obj.BeginEmit();
         }
         isEmitting = true;
+        StartCoroutine(startEmitTimer());
         TimeManager.Instance.StartSlowMotion();
         SoundManager.instance.PlaySFX(emitStartSound1);
         SoundManager.instance.PlaySFX(emitStartSound2);
@@ -112,6 +116,7 @@ public class EmitManager : MonoBehaviour
         }
         emittedFrames = 0;
         isEmitting = false;
+        StartCoroutine (emitCooldown());
         TimeManager.Instance.StopSlowMotion();
         SoundManager.instance.PlaySFX(emitEndSound);
         SoundManager.instance.StopEmitBGM();
@@ -119,20 +124,20 @@ public class EmitManager : MonoBehaviour
         //StartCoroutine(emitCoolDownRoutine());
     }
 
-    private void OnEmitAborted()
-    {
-        Debug.Log("Emit Aborted");
-        // 공격에 의해 Emit이 종료된 상황
-        foreach (IEmit obj in emitObjects)
-        {
-            obj.EndEmit();
-        }
-        emittedFrames = 0;
-        isEmitting = false;
-        TimeManager.Instance.InstantNormalTime();
-        SoundManager.instance.StopEmitBGM();
-        //StartCoroutine(emitCoolDownRoutine());
-    }
+    //private void OnEmitAborted()
+    //{
+    //    Debug.Log("Emit Aborted");
+    //    // 공격에 의해 Emit이 종료된 상황
+    //    foreach (IEmit obj in emitObjects)
+    //    {
+    //        obj.EndEmit();
+    //    }
+    //    emittedFrames = 0;
+    //    isEmitting = false;
+    //    TimeManager.Instance.InstantNormalTime();
+    //    SoundManager.instance.StopEmitBGM();
+    //    //StartCoroutine(emitCoolDownRoutine());
+    //}
 
     public void EmitReset()
     {
@@ -149,23 +154,53 @@ public class EmitManager : MonoBehaviour
         TimeManager.Instance.InstantNormalTime();
     }
 
+    public void AddEmitTime(float time)
+    {
+        if (currentEmitableTime < emitDurationTime)
+        {
+            currentEmitableTime += time;
+            updateEmitUI();
+        }
+    }
+
+    private void updateEmitUI()
+    {
+        UIController.UpdateBar(currentEmitableTime, emitDurationTime);
+    }
+
+    private IEnumerator startEmitTimer()
+    {
+        while (currentEmitableTime >= 0)
+        {
+            currentEmitableTime -= Time.deltaTime;
+            updateEmitUI();
+            yield return null;
+        }
+        OnEmitFinished();
+    }
+
+    private IEnumerator emitCooldown()
+    {
+        float timer = 0f;
+        while(timer < emitDurationTime)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        isEmittable = true;
+    }
+
     private IEnumerator emitClockSound()
     {
         while (isEmitting)
         {
             SoundManager.instance.PlaySFX(emitClockSound1);
 
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(1f);
 
             SoundManager.instance.PlaySFX(emitClockSound2);
 
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(1f);
         }
     }
-
-    //private IEnumerator emitCoolDownRoutine()
-    //{
-    //    yield return new WaitForSeconds(emitCooldownTime);
-    //    isEmittable = true;
-    //}
 }

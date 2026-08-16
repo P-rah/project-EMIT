@@ -21,14 +21,17 @@ public class Enemy : EnemyBase
     {
         StageManager.Instance?.AddEnemy();
         ChangeState(IdleState, false);
+        emitManager = EmitManager.Instance;
     }
 
     public virtual void Update()
     {
-        if (EmitManager.Instance.isEmitting) return;
+        if (emitManager.isEmitting) return;
 
         StateMachine.UpdateState();
         UpdateTargetDirection();
+        CheckDie();
+        CalculatePowerTimer();
     }
 
     public virtual void FixedUpdate()
@@ -81,22 +84,14 @@ public class Enemy : EnemyBase
         ReceiveDamage(attackInfo);
         HitEffectBasedOnDamageType(dmgType);
 
-        currentPower = IsHitReactionState(CurrentState) ? attackInfo.power : 0;
-
-        if (EmitManager.Instance.isEmitting) EventManager.TriggerEvent("OnEmitAborted");
-
-        if (currentHealth <= 0)
-        {
-            if (SoundManager.instance != null && deathSound != null) SoundManager.instance.PlaySFX(deathSound);
-            StageManager.Instance?.EnemyDied();
-            ChangeState(DeadState, true);
-            gameObject.SetActive(false);
-        }
+        ResetPowerTImer();
+        CalculatePower(attackInfo);
     }
 
     public override void ReceiveDamage(AttackInfo attackInfo)
     {
         int damage = DamageCalculation<Enemy>.Calculate(attackInfo, this);
+        if (dmgType == 2) ResetPower();
         currentHealth -= damage;
     }
 
@@ -115,10 +110,14 @@ public class Enemy : EnemyBase
         if (CurrentState is SharedGrabbedState<EnemyStateMachine> grabState) grabState.Grab();
     }
 
-    private bool IsHitReactionState(StateBase<EnemyStateMachine> state) => state == StateMachine.KnockbackState || state == StateMachine.GrabbedState;
-
-    public void ResetPowerOutsideHitReaction()
+    private void CheckDie()
     {
-        if (!IsHitReactionState(CurrentState)) currentPower = 0;
+        if (currentHealth <= 0 && !emitManager.isEmitting)
+        {
+            if (SoundManager.instance != null && deathSound != null) SoundManager.instance.PlaySFX(deathSound);
+            StageManager.Instance?.EnemyDied();
+            ChangeState(DeadState, true);
+            gameObject.SetActive(false);
+        }
     }
 }

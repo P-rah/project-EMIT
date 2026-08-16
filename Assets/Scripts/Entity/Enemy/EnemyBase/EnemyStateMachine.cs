@@ -54,7 +54,7 @@ public class EnemyStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackabl
 
         currentState?.ExitState();
         currentState = nextState;
-        enemy.ResetPowerOutsideHitReaction();
+        //enemy.ResetPowerOutsideHitReaction();
         currentState.EnterState();
         enemy.NotifyStateEntered(currentState);
     }

@@ -27,4 +27,6 @@ public class EnemyData : ScriptableObject
     public float knockbackTime;
     public float grabForce;
     public float HitRecoveryTime;
+
+    public float powerResetTime;
 }

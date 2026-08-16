@@ -55,17 +55,18 @@ public class EnemyAttackState : EnemyState
 
     IEnumerator AttackRoutine()
     {
-        isCancellable = false;
+        isCancellable = true;
         enemy.NotifyAttackWindupStarted();
-        if (enemy.myAudioSource != null && enemy.attackReadySound != null)
-        {
-            enemy.myAudioSource.PlayOneShot(enemy.attackReadySound);
-        }
+        //if (enemy.myAudioSource != null && enemy.attackReadySound != null)
+        //{
+        //    enemy.myAudioSource.PlayOneShot(enemy.attackReadySound);
+        //}
 
         yield return new WaitForSeconds(enemy.startUpTime);
 
         // 본공격
         enemy.NotifyAttackStrikeStarted();
+        isCancellable = false;
         CameraShake.Instance.ShakeCamera(10f,0.2f);
         if (enemy.myAudioSource != null && enemy.attackSound != null)
         {

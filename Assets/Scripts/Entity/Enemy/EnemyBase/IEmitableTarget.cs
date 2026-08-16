@@ -8,9 +8,11 @@ public interface IEmitableTarget
 {
     int currentPower { get; }
     Vector2 FacingDir { get; }
+    EmitManager emitManager { get; set; }
 
     void SetFacingDirection(Vector2 dir);
     void SetPower(int power);
+    void ResetPower();
     void Flip();
     void RootMovement();
     void UnrootMovement();

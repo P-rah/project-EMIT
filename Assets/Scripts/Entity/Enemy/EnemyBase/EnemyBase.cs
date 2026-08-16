@@ -15,6 +15,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public Rigidbody2D rb { get; set; }
     public AudioSource myAudioSource;
     public ParticleSystem dragEffect;
+    public EmitManager emitManager { get; set; }
+    private PowerStackUIController powerStackUIController { get; set; }
 
     [SerializeField] protected EnemyData data;
 
@@ -33,6 +35,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public float knockbackTime { get; set; }
     public float grabForce { get; set; }
     public float HitRecoveryTime { get; set; }
+    public float powerResetTime;
 
     [Header("Audio Clips")]
     public AudioClip walkSound;
@@ -50,6 +53,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public int currentHealth;
     public bool isRooted;
     public int currentPower { get; protected set; }
+    private float powerTimer;
     public bool isCurrentHitGrab;
     public int dmgType { get; set; }
 
@@ -67,6 +71,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     {
         target = Player.InstanceTransform;
         rb = GetComponent<Rigidbody2D>();
+        powerStackUIController = GetComponentInChildren<PowerStackUIController>();
 
         if (rb != null) rb.freezeRotation = true;
 
@@ -89,6 +94,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
             knockbackTime = data.knockbackTime;
             grabForce = data.grabForce;
             HitRecoveryTime = data.HitRecoveryTime;
+            powerResetTime = data.powerResetTime;
         }
 
         canChangeState = true;
@@ -123,6 +129,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
         FacingDir = nextFacingDir;
         isFacingLeft = FacingDir == Vector2.left;
         transform.rotation = Quaternion.Euler(0f, isFacingLeft ? 180f : 0f, 0f);
+        powerStackUIController.setPowerStackFlip(isFacingLeft);
     }
 
     // ==========================================
@@ -130,7 +137,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     // ==========================================
     protected void HitEffectBasedOnDamageType(int type)
     {
-        Debug.Log(type);
         switch (type)
         {
             case 1:
@@ -166,7 +172,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     // ==========================================
     // 이동 제어
     // ==========================================
-    public void SetPower(int power) => currentPower = power;
 
     public void RootMovement()
     {
@@ -180,6 +185,38 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
         rb.bodyType = RigidbodyType2D.Dynamic;
         isRooted = false;
     }
+
+    // ==========================================
+    // powerStack 제어
+    // ==========================================
+
+    public void SetPower(int power)
+    {
+        currentPower = power;
+        powerStackUIController.SetStack(currentPower);
+    }
+
+    public void CalculatePower(AttackInfo attckInfo)
+    {
+        if (currentPower < 5 && currentPower > -5 && currentPower * attckInfo.power >= 0)
+        {
+            SetPower(currentPower + attckInfo.power);
+        }
+    }
+
+    public void ResetPower()
+    {
+        SetPower(0);
+    }
+
+    public void CalculatePowerTimer()
+    {
+        powerTimer += Time.deltaTime;
+        if(powerTimer > powerResetTime)
+            ResetPower();
+    }
+
+    public void ResetPowerTImer(){ powerTimer = 0; }
 
     // 추상 매서드
     public abstract void ReceiveAttack(AttackInfo attackInfo);

@@ -85,8 +85,8 @@ Material:
     - _CenterStrength: 0.97
     - _DistanceFromCenter: -0.1
     - _EmitShaderActive: 0
-    - _EmitableAlpha: 1
-    - _EmitableThicc: 0.01
+    - _EmitableAlpha: 0
+    - _EmitableThicc: 0
     - _EnableExternalAlpha: 0
     - _FilterColorExposure: 5
     - _FilterOriginalColorRate: 0.5
@@ -119,7 +119,7 @@ Material:
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmitableColor: {r: 1, g: 0.89235044, b: 0, a: 1}
+    - _EmitableColor: {r: 0, g: 0, b: 0, a: 1}
     - _FilterTargetColor: {r: 1, g: 1, b: 0, a: 1}
     - _OutlineColor: {r: 0.78431374, g: 0.78431374, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

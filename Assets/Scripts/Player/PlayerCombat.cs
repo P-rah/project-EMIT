@@ -8,6 +8,7 @@ public class PlayerCombat : MonoBehaviour
     private PlayerInputHandler input;
     private PlayerState state;
     private GrapEffect grapEffect;
+    private EmitManager emitManager;
 
     [Header("Hitbox Colliders")]
     public PlayerAttackHitbox sweepAttackHitbox;
@@ -21,8 +22,7 @@ public class PlayerCombat : MonoBehaviour
     private Coroutine attackRecoveryRoutine;
 
     [Header("Emit Settings")]
-    public int emitRecoveryCount = 5;
-    public int currentEmitRecoveryCount = 0;
+    const float emitRecoveryAmountWhenAttackHit = 0.5f;
     private bool hasTriggeredEmit;
 
     private bool canAttackSweep = true;
@@ -40,7 +40,11 @@ public class PlayerCombat : MonoBehaviour
         grapEffect = Player.GrapEffect;
 
         currentAttackCount = maxAttackCount;
-        currentEmitRecoveryCount = emitRecoveryCount;
+    }
+
+    private void Start()
+    {
+        emitManager = EmitManager.Instance;
     }
 
     private void OnEnable()
@@ -122,11 +126,11 @@ public class PlayerCombat : MonoBehaviour
 
     private void handleSweepHit(Transform target, Vector2 hitPoint)
     {
-        if (!hasTriggeredHitEffect)
+        if (!hasTriggeredHitEffect && !emitManager.isEmitting)
         {
             //공격이 적중했을 떄
             hasTriggeredHitEffect = true;
-            addEmitCount();
+            emitManager.AddEmitTime(emitRecoveryAmountWhenAttackHit);
         }
     }
 
@@ -155,11 +159,11 @@ public class PlayerCombat : MonoBehaviour
         if(currentGrabTarget !=null)
         {
             currentTargetTransform = target;
-            if (!hasTriggeredHitEffect)
+            if (!hasTriggeredHitEffect && !emitManager.isEmitting)
             {
                 //공격이 적중했을 때
                 hasTriggeredHitEffect = true;
-                addEmitCount();
+                emitManager.AddEmitTime(emitRecoveryAmountWhenAttackHit);
             }
         }
     }
@@ -230,38 +234,16 @@ public class PlayerCombat : MonoBehaviour
         if (currentAttackCount == maxAttackCount && attackRecoveryRoutine != null)
             StopAttackRecoveryRoutine();
 
-        currentEmitRecoveryCount = 0;
-        setEmitableUI(currentEmitRecoveryCount);
         hasTriggeredEmit = false;
     }
 
-    private void addEmitCount()
-    {
-        if (currentEmitRecoveryCount >= emitRecoveryCount)
-        {
-            EmitManager.Instance.isEmittable = true;
-        }
-        else
-        {
-            setEmitableUI(currentEmitRecoveryCount);
-            currentEmitRecoveryCount++;
-        }
-    }
-
-    //역행 카운트 계산 및 검사
     private void CheckEmitable()
     {
         //역행 가능상태가 되었을 시 한번만 동작
-        if(EmitManager.Instance.isEmittable && !hasTriggeredEmit)
+        if(emitManager.isEmittable && !hasTriggeredEmit)
         {
-            setEmitableUI(currentEmitRecoveryCount);
             SoundManager.instance.PlaySFX(Player.Instance.canEmitSound);
             hasTriggeredEmit = true;
         }
-    }
-
-    private void setEmitableUI(int count)
-    {
-        EventManager.TriggerEvent<int>("OnEmitRecoveryCount", count);
     }
 }

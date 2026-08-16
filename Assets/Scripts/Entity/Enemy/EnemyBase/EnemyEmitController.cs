@@ -65,10 +65,9 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
     {
         if (buffer.Pop(out KeyframeStatus frame))
         {
-            emitableTarget.SetPower(-frame.power);
             _rb.MovePosition(frame.position);
             _rb.MoveRotation(frame.rotation);
-            
+            emitableTarget.SetPower(-frame.power);
             spriteRenderer.sprite = frame.sprite;
             spriteRenderer.flipX = Direction2D.IsOpposite(frame.facingDir, Vector2.right);
         }
@@ -81,6 +80,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         spriteRenderer.flipX = false;
         emitableTarget.UnrootMovement();
         if (_animator != null) _animator.enabled = true;
+        emitableTarget.ResetPower();
     }
 
     public virtual void ResetFrame()

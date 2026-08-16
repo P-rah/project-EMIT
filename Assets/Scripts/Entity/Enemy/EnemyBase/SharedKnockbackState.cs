@@ -14,7 +14,6 @@ public class SharedKnockbackState<T> : StateBase<T> where T : IKnockbackableCont
 
     public override void EnterState()
     {
-        Debug.Log("넉백됨");
         entity.UnrootMovement();
         Knockback();
     }
