@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 /*
- * 플레이어 공격, 역행 관리용 클래스
+ * 플레이어 공격, 역행 관리용 클래스 
  */
 public class PlayerCombat : MonoBehaviour
 {
