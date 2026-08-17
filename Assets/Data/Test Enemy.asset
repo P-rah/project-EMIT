@@ -27,9 +27,3 @@ MonoBehaviour:
   knockbackTime: 0.2
   grabForce: 50
   HitRecoveryTime: 0.2
-  walkSound: {fileID: 8300000, guid: dff74eaf3cf96e948a0ffc77128191d0, type: 3}
-  attackReadySound: {fileID: 8300000, guid: 066f1955da67a3c48a0390eb610db9ab, type: 3}
-  attackSound: {fileID: 8300000, guid: 37207ed13e7e7844a9c59dc59d875952, type: 3}
-  sweepHitSound: {fileID: 8300000, guid: bd023842f8777b04c9047827cd78db44, type: 3}
-  grabHitSound: {fileID: 8300000, guid: b862d6d4f7fe34a4389becebfef2bbd2, type: 3}
-  deathSound: {fileID: 8300000, guid: 6c28ed22dcc349c4cbb90c09b36c98f1, type: 3}

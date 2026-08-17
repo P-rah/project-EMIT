@@ -19,6 +19,12 @@ public class PlayerInputHandler : MonoBehaviour
     public bool AttackSweepInput { get; private set; }
     public bool AttackGrabInput { get; private set; }
 
+    public int JumpPressedFrame { get; private set; } = -1;
+    public int DownPressedFrame { get; private set; } = -1;
+    public int DashPressedFrame { get; private set; } = -1;
+    public int AttackSweepPressedFrame { get; private set; } = -1;
+    public int AttackGrabPressedFrame { get; private set; } = -1;
+
     /*
         ===============================================
         LAYER 2: Send Messages가 인식할 Input을 받아오는 함수들
@@ -32,26 +38,26 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
-        if (value.isPressed)
-        {
-            JumpInput = true;
-        }
+        if (!value.isPressed) return;
+
+        JumpInput = true;
+        JumpPressedFrame = Time.frameCount;
     }
 
     public void OnDown(InputValue value)
     {
-        if (value.isPressed)
-        {
-            DownInput = true;
-        }
+        if (!value.isPressed) return;
+
+        DownInput = true;
+        DownPressedFrame = Time.frameCount;
     }
 
     public void OnDash(InputValue value)
     {
-        if (value.isPressed)
-        {
-            DashInput = true;
-        }
+        if (!value.isPressed) return;
+
+        DashInput = true;
+        DashPressedFrame = Time.frameCount;
     }
 
     public void OnEmit(InputValue value)
@@ -65,18 +71,18 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnAttackSweep(InputValue value)
     {
-        if (value.isPressed)
-        {
-            AttackSweepInput = true;
-        }
+        if (!value.isPressed) return;
+
+        AttackSweepInput = true;
+        AttackSweepPressedFrame = Time.frameCount;
     }
 
     public void OnAttackGrab(InputValue value)
     {
-        if (value.isPressed)
-        {
-            AttackGrabInput = true;
-        }
+        if (!value.isPressed) return;
+
+        AttackGrabInput = true;
+        AttackGrabPressedFrame = Time.frameCount;
     }
     
     /*
@@ -85,6 +91,9 @@ public class PlayerInputHandler : MonoBehaviour
         ===============================================
     */
 
+    /// <summary>
+    /// 점프 인풋을 받았다면 true를 리턴하며, 인풋 bool은 false로 설정한다.
+    /// </summary>
     public bool ConsumeJump()
     {
         bool result = JumpInput;

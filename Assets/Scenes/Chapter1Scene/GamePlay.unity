@@ -66100,6 +66100,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 525887890152529778, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: knockbackPower
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1543856071110203862, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: myHDRColor.b
       value: 0

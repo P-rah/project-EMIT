@@ -52,7 +52,7 @@ public class SharedGrabbedState<T> : StateBase<T> where T : IGrabbableContext
             Vector2 nextPosition = Vector2.MoveTowards(
                 entity.rb.position,
                 targetPosition,
-                entity.grabForce * Time.fixedDeltaTime
+                entity.grabForce * 0.3f * Time.fixedDeltaTime
             );
 
             entity.rb.MovePosition(nextPosition);

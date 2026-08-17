@@ -28,7 +28,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void decreasePlayerHealth()
     {
-        currentPlayerHealth -= 1;
+        currentPlayerHealth -= 0;
         Player.UIController.UpdateHealthBar();
         if (currentPlayerHealth <= 0)
         {

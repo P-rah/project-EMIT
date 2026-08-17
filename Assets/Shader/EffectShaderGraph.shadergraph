@@ -3993,7 +3993,7 @@
     "m_Title": "Highlight Particular Color Filter",
     "m_Position": {
         "x": 11.0,
-        "y": -965.000244140625
+        "y": -965.0
     }
 }
 
@@ -4710,8 +4710,8 @@
     "m_ObjectId": "54d401ef758749058b43d3df50e9b20f",
     "m_Title": "Black and White Filter",
     "m_Position": {
-        "x": 63.500003814697269,
-        "y": -1293.000244140625
+        "x": 63.5,
+        "y": -1293.0
     }
 }
 

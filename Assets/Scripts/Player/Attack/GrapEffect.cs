@@ -107,7 +107,7 @@ public class GrapEffect : MonoBehaviour
                 endPos = startPoint.position;
             }
 
-            currentWeaponPos = Vector2.MoveTowards(currentWeaponPos, endPos, WeaponSpeed * Time.deltaTime);
+            currentWeaponPos = Vector2.MoveTowards(currentWeaponPos, endPos, WeaponSpeed * 2f * Time.deltaTime);
 
             Vector2 chainStart = startPoint.position;
             Vector2 direction = currentWeaponPos - chainStart;
