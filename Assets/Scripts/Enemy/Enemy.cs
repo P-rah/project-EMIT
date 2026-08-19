@@ -287,12 +287,14 @@ public class Enemy : MonoBehaviour, IDamageable
             Debug.Log("Enemy is Dead!");
             /* INTEGRATION:
              * integration 브랜치의 deathSound와 StageManager.EnemyDied 호출은 이 위치에 복구한다. 비활성화
-             * 전에 AudioManager를 통해 재생해야 AudioSource 종료로 소리가 잘리지 않는다. 풀링/중복 피격으로
+             * 전에 SoundManager를 통해 재생해야 AudioSource 종료로 소리가 잘리지 않는다. 풀링/중복 피격으로
              * EnemyDied가 두 번 집계되지 않도록 사망 상태 진입 또는 별도 플래그로 한 번만 호출되게 한다.
              */
-            if (AudioManager.Instance != null && deathSound != null)
+            // if (AudioManager.Instance != null && deathSound != null)
+            if (SoundManager.instance != null && deathSound != null)
             {
-                AudioManager.Instance.PlaySFX(deathSound);  //비활성화되면 소리 안나니까 얘만 매니저에서 재생
+                // AudioManager.Instance.PlaySFX(deathSound);  //비활성화되면 소리 안나니까 얘만 매니저에서 재생
+                SoundManager.instance.PlaySFX(deathSound);  //비활성화되면 소리 안나니까 얘만 매니저에서 재생
             }
             StageManager.Instance?.EnemyDied();
 

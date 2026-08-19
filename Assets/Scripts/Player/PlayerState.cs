@@ -59,6 +59,7 @@ public class PlayerState : MonoBehaviour
         else if(isFalling)
         {
             // AudioManager.Instance.PlaySFX(Player.Instance.landSound);
+            // SoundManager.instance.PlaySFX(Player.Instance.landSound);
             isFalling = false;
         }
     }

@@ -98,10 +98,13 @@ public class EmitManager : MonoBehaviour
         }
         isEmitting = true;
         TimeManager.Instance.StartSlowMotion();
-        AudioManager.Instance.PlaySFX(emitStartSound1);
-        AudioManager.Instance.PlaySFX(emitStartSound2);
+        // AudioManager.Instance.PlaySFX(emitStartSound1);
+        SoundManager.instance.PlaySFX(emitStartSound1);
+        // AudioManager.Instance.PlaySFX(emitStartSound2);
+        SoundManager.instance.PlaySFX(emitStartSound2);
         StartCoroutine(emitClockSound());
-        AudioManager.Instance.StartEmitBGM();
+        // AudioManager.Instance.StartEmitBGM();
+        SoundManager.instance.StartEmitBGM();
     }
 
     private void OnEmitFinished()
@@ -114,8 +117,10 @@ public class EmitManager : MonoBehaviour
         emittedFrames = 0;
         isEmitting = false;
         TimeManager.Instance.StopSlowMotion();
-        AudioManager.Instance.PlaySFX(emitEndSound);
-        AudioManager.Instance.StopEmitBGM();
+        // AudioManager.Instance.PlaySFX(emitEndSound);
+        SoundManager.instance.PlaySFX(emitEndSound);
+        // AudioManager.Instance.StopEmitBGM();
+        SoundManager.instance.StopEmitBGM();
         EventManager.TriggerEvent("OnEmitFinished");
         //StartCoroutine(emitCoolDownRoutine());
     }
@@ -131,7 +136,8 @@ public class EmitManager : MonoBehaviour
         emittedFrames = 0;
         isEmitting = false;
         TimeManager.Instance.InstantNormalTime();
-        AudioManager.Instance.StopEmitBGM();
+        // AudioManager.Instance.StopEmitBGM();
+        SoundManager.instance.StopEmitBGM();
         //StartCoroutine(emitCoolDownRoutine());
     }
 
@@ -154,11 +160,13 @@ public class EmitManager : MonoBehaviour
     {
         while (isEmitting)
         {
-            AudioManager.Instance.PlaySFX(emitClockSound1);
+            // AudioManager.Instance.PlaySFX(emitClockSound1);
+            SoundManager.instance.PlaySFX(emitClockSound1);
 
             yield return new WaitForSeconds(0.3f);
 
-            AudioManager.Instance.PlaySFX(emitClockSound2);
+            // AudioManager.Instance.PlaySFX(emitClockSound2);
+            SoundManager.instance.PlaySFX(emitClockSound2);
 
             yield return new WaitForSeconds(0.3f);
         }

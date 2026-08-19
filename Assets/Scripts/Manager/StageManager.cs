@@ -4,6 +4,16 @@ using System.Collections;
 
 public class StageManager : MonoBehaviour
 {
+    public enum SceneIndex
+    {
+        TitleScene, 
+        Ch1_1, 
+        Ch1_2, 
+        Ch1_3, 
+        Ch1_4, 
+        Ch1_Boss
+    }
+
     public static StageManager Instance { get; private set; }
 
     [Header("스테이지 정보")]
@@ -37,17 +47,24 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    public void ReloadCurrentScene()
+    public void RestartStage()
     {
         currentEnemyCount = 0;
 
         TimeManager.Instance.InstantNormalTime();
-        AudioManager.Instance.StopEmitBGM();
+        // AudioManager.Instance.StopEmitBGM();
+        SoundManager.instance.StopEmitBGM();
         EventManager.TriggerEvent("OnEmitAborted");
         EmitManager.Instance.EmitReset();
 
-        Scene currentScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentScene.buildIndex);
+        // Scene currentScene = SceneManager.GetActiveScene();
+        // SceneManager.LoadScene(currentScene.buildIndex);
+        SceneControlManager.Instance.ReloadStage();
+    }
+
+    public void EndStage()
+    {
+        
     }
 
     private IEnumerator StageClearRoutine()
@@ -59,7 +76,8 @@ public class StageManager : MonoBehaviour
         currentEnemyCount = 0;
         EmitManager.Instance.EmitReset();
 
-        Scene currentScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentScene.buildIndex + 1);
+        // Scene currentScene = SceneManager.GetActiveScene();
+        // SceneManager.LoadScene(currentScene.buildIndex + 1);
+        SceneControlManager.Instance.LoadNextStage();
     }
 }

@@ -200,7 +200,8 @@ public class PlayerMovement : MonoBehaviour
         rb.gravityScale = initialGravityScale;
         rb.linearVelocityY = 0f;
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        AudioManager.Instance.PlaySFX(Player.Instance.jumpSound);
+        // AudioManager.Instance.PlaySFX(Player.Instance.jumpSound);
+        SoundManager.instance.PlaySFX(Player.Instance.jumpSound);
     }
 
     private void RefactoredFixedUpdate()
@@ -379,7 +380,8 @@ public class PlayerMovement : MonoBehaviour
         SetCurrentGround(null);
         UpdateVerticalMovementFlags();
 
-        AudioManager.Instance.PlaySFX(Player.Instance.jumpSound);
+        // AudioManager.Instance.PlaySFX(Player.Instance.jumpSound);
+        SoundManager.instance.PlaySFX(Player.Instance.jumpSound);
     }
 
     private Vector2 GetCurrentGroundDeltaPosition()
@@ -777,6 +779,7 @@ public class PlayerMovement : MonoBehaviour
         canDash = false;
         state.IsDashing = true;
         // AudioManager.Instance.PlaySFX(Player.Instance.dashSound);
+        // SoundManager.instance.PlaySFX(Player.Instance.dashSound);
 
         rb.gravityScale = 0f;
 
@@ -832,7 +835,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void Animevent_playWalkSound()
     {
-        AudioManager.Instance.PlaySFX(Player.Instance.walkSound, 0.2f);
+        // AudioManager.Instance.PlaySFX(Player.Instance.walkSound, 0.2f);
+        SoundManager.instance.PlaySFX(Player.Instance.walkSound, 0.2f);
     }
     private void OnDrawGizmosSelected()
     {
