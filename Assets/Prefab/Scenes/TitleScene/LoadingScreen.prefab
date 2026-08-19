@@ -157,7 +157,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2618295593777421532
 RectTransform:
   m_ObjectHideFlags: 0
@@ -256,6 +256,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadingScreen
   _loadingText: {fileID: 0}
+  fadeInTime: 0
+  fadeOutTime: 1
 --- !u!225 &7365330036233719074
 CanvasGroup:
   m_ObjectHideFlags: 0
