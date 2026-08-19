@@ -51,6 +51,6 @@ public class PlayerHealth : MonoBehaviour
 
     public void AnimEvent_SceneReset()
     {
-        StageManager.Instance.ReloadCurrentScene();
+        StageManager.Instance.RestartStage();
     }
 }
