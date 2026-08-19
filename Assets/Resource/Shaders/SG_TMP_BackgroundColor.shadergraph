@@ -38,6 +38,9 @@
         },
         {
             "m_Id": "1cabea442a5442c0a4dabdcd6bbc2bc2"
+        },
+        {
+            "m_Id": "319ba4f21dad4d94a7b2e2b5fad5fc8e"
         }
     ],
     "m_Keywords": [],
@@ -1307,7 +1310,7 @@
     "m_PerRendererData": false,
     "m_customAttributes": [],
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":717411602083613391,\"guid\":\"46d30e52b8116f54a8b623a3f07aa8df\",\"type\":2}}",
+        "m_SerializedTexture": "{\"texture\":{\"fileID\":-6808780560278916443,\"guid\":\"1cdd844524c360f4d9782348a4006501\",\"type\":2}}",
         "m_Guid": ""
     },
     "isMainTexture": false,
@@ -1726,6 +1729,51 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     }
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "319ba4f21dad4d94a7b2e2b5fad5fc8e",
+    "m_Guid": {
+        "m_GuidSerialized": "7b3c2235-8bde-4a03-8d63-b053234e59eb"
+    },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
+    "m_Name": "_CullMode",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "_CullMode",
+    "m_DefaultReferenceName": "_CullMode",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "hideConnector": false,
+    "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
+    "m_Value": 0.0,
+    "m_FloatType": 0,
+    "m_LiteralFloatMode": false,
+    "m_RangeValues": {
+        "x": 0.0,
+        "y": 1.0
+    },
+    "m_SliderType": 0,
+    "m_SliderPower": 3.0,
+    "m_EnumType": 0,
+    "m_CSharpEnumString": "",
+    "m_EnumNames": [
+        "Default"
+    ],
+    "m_EnumValues": [
+        0
+    ]
 }
 
 {
@@ -5320,6 +5368,9 @@
         },
         {
             "m_Id": "1cabea442a5442c0a4dabdcd6bbc2bc2"
+        },
+        {
+            "m_Id": "319ba4f21dad4d94a7b2e2b5fad5fc8e"
         }
     ]
 }

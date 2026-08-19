@@ -3,8 +3,8 @@ guid: 74c19d087d456bf408b7b9e6c3a513b6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2154871140112607823
-    second: "Title_3(\u1109\u1175\u1100\u1168\u110C\u116E\u11BC\u1109\u1175\u11B7)_0"
+      213: 6335194164142611099
+    second: L3_ClockCenter_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Title_3(\u1109\u1175\u1100\u1168\u110C\u116E\u11BC\u1109\u1175\u11B7)_0"
+      name: L3_ClockCenter_0
       rect:
         serializedVersion: 2
         x: 243
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1b5d8d47d1c5812e0800000000000000
-      internalID: -2154871140112607823
+      spriteID: b9a19d8e6812be750800000000000000
+      internalID: 6335194164142611099
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "Title_3(\u1109\u1175\u1100\u1168\u110C\u116E\u11BC\u1109\u1175\u11B7)_0": -2154871140112607823
+      L3_ClockCenter_0: 6335194164142611099
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
