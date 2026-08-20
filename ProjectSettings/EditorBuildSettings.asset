@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/TestScene/KMJ/InitiatingScene.unity
+    guid: 7d35c2315e30e3c4799856f902713207
+  - enabled: 1
+    path: Assets/Scenes/TestScene/KMJ/TitleScene.unity
+    guid: 9a08f47f1c0fb944eb9ba332b5ce7dcc
+  - enabled: 1
     path: Assets/_Temp/MainTemp.unity
     guid: 06400e6d965343e42bc80e49b7406c97
   - enabled: 1
@@ -18,4 +24,5 @@ EditorBuildSettings:
     path: Assets/_Temp/ClearSceneTemp.unity
     guid: 990ea104f6fe10041a95a407473fd0bf
   m_configObjects:
+    com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: cd60e5fe2301887439e7ab382f36715a, type: 3}

@@ -5,7 +5,8 @@ public class ExitBTN : MonoBehaviour
 {
     private void OnEnable()
     {
-        if(SoundManager.instance != null ) SoundManager.instance.StopBGM();
+        // if (AudioManager.Instance != null) AudioManager.Instance.StopBGM();
+        if (SoundManager.instance != null) SoundManager.instance.StopBGM();
     }
 
     public void StartGame()

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerState))]
-[RequireComponent(typeof(PlayerMovement))]
+// [RequireComponent(typeof(PlayerMovement))]
 [RequireComponent(typeof(PlayerInputHandler))]
 [RequireComponent(typeof(PlayerCombat))]
 [RequireComponent(typeof(PlayerAnimation))]
