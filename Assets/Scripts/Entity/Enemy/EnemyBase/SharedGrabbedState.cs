@@ -1,31 +1,28 @@
 using System.Collections;
 using UnityEngine;
 
-public class SharedGrabbedState<T> : StateBase<T> where T : IGrabbableContext
+public class SharedGrabbedState<T> : StateBase<T> where T  : IStateMachine
 {
-    private IGrabbable entity;
+    private EnemyBase enemy;
 
-    public SharedGrabbedState(T owner) : base(owner)
+    public SharedGrabbedState(T owner, EnemyBase enemy) : base(owner)
     {
-        this.entity = owner.GrabbableEntity;
+        this.enemy = enemy;
     }
 
     private Coroutine grabRoutine;
 
     public override void EnterState()
     {
-        Debug.Log("그랩됨");
-        entity.canChangeState = false;
-        entity.UnrootMovement();
+        Debug.Log("그랩 상태 돌입");
+        enemy.canChangeState = false;
+        enemy.UnrootMovement();
     }
 
     public override void UpdateState()
     {
         base.UpdateState();
-        if (!owner.IsCurrentState(this) || isGrabbed())
-        {
-            return;
-        }
+        if (!owner.IsCurrentState(this) || isGrabbed()) return;
     }
 
     public override void ExitState()
@@ -35,40 +32,38 @@ public class SharedGrabbedState<T> : StateBase<T> where T : IGrabbableContext
 
     public void Grab()
     {
-        float offsetX = (entity.target.position.x > entity.transform.position.x) ? -0.5f : 0.5f;
-        Vector2 targetPosition = new Vector2(entity.target.position.x + offsetX, entity.transform.position.y);
+        float offsetX = (enemy.target.position.x > enemy.transform.position.x) ? -0.5f : 0.5f;
+        Vector2 targetPosition = new Vector2(enemy.target.position.x + offsetX, enemy.transform.position.y);
 
-        //entity.NotifyGrabStarted(offsetX);
-        grabRoutine = entity.StartCoroutine(GrabRoutine(targetPosition));
+        grabRoutine = enemy.StartCoroutine(GrabRoutine(targetPosition));
     }
 
     IEnumerator GrabRoutine(Vector2 targetPosition)
     {
-        entity.startDragEffect();
-        entity.rb.linearVelocity = Vector2.zero;
+        enemy.startDragEffect();
+        enemy.rb.linearVelocity = Vector2.zero;
 
-        while (Vector2.Distance(entity.rb.position, targetPosition) > 0.1f)
+        while (Vector2.Distance(enemy.rb.position, targetPosition) > 0.1f)
         {
             Vector2 nextPosition = Vector2.MoveTowards(
-                entity.rb.position,
+                enemy.rb.position,
                 targetPosition,
-                entity.grabForce * Time.fixedDeltaTime
+                enemy.grabForce * Time.fixedDeltaTime
             );
 
-            entity.rb.MovePosition(nextPosition);
-
+            enemy.rb.MovePosition(nextPosition);
             yield return new WaitForFixedUpdate();
         }
 
-        entity.endDragEffect();
-        entity.rb.MovePosition(targetPosition);
-        entity.rb.linearVelocity = Vector2.zero;
-        entity.canChangeHitState = true;
+        enemy.endDragEffect();
+        enemy.rb.MovePosition(targetPosition);
+        enemy.rb.linearVelocity = Vector2.zero;
+        enemy.canChangeHitState = true;
 
-        yield return new WaitForSeconds(entity.HitRecoveryTime);
+        yield return new WaitForSeconds(enemy.HitRecoveryTime);
 
-        entity.canChangeHitState = false;
-        entity.canChangeState = true;
+        enemy.canChangeHitState = false;
+        enemy.canChangeState = true;
         grabRoutine = null;
 
         owner.ChangeToDefaultState();
@@ -78,15 +73,12 @@ public class SharedGrabbedState<T> : StateBase<T> where T : IGrabbableContext
     {
         if (grabRoutine != null)
         {
-            entity.canChangeHitState = false;
-            entity.canChangeState = true;
-            entity.StopCoroutine(grabRoutine);
+            enemy.canChangeHitState = false;
+            enemy.canChangeState = true;
+            enemy.StopCoroutine(grabRoutine);
             grabRoutine = null;
         }
     }
 
-    public bool isGrabbed()
-    {
-        return grabRoutine != null;
-    }
+    public bool isGrabbed() => grabRoutine != null;
 }

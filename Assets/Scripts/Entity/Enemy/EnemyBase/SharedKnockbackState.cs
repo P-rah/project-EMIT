@@ -1,20 +1,20 @@
 using System.Collections;
 using UnityEngine;
 
-public class SharedKnockbackState<T> : StateBase<T> where T : IKnockbackableContext
+public class SharedKnockbackState<T> : StateBase<T> where T : IStateMachine
 {
-    private IKnockbackable entity;
+    private EnemyBase enemy;
 
-    public SharedKnockbackState(T owner) : base(owner)
+    public SharedKnockbackState(T owner, EnemyBase enemy) : base(owner)
     {
-        this.entity = owner.KnockbackableEntity;
+        this.enemy = enemy;
     }
 
     private Coroutine knockbackRoutine;
 
     public override void EnterState()
     {
-        entity.UnrootMovement();
+        enemy.UnrootMovement();
         Knockback();
     }
 
@@ -34,24 +34,34 @@ public class SharedKnockbackState<T> : StateBase<T> where T : IKnockbackableCont
 
     public void Knockback()
     {
-        entity.canChangeState = false;
-        entity.rb.AddForce(entity.currentKnockBackForce * entity.knockbackRate, ForceMode2D.Impulse);
-        knockbackRoutine = entity.StartCoroutine(KnockbackRoutine());
+        enemy.canChangeState = false;
+        if (enemy.transitFlipPower)
+        {
+            enemy.rb.AddForce(enemy.currentKnockBackForce * enemy.strongKnockbackRate, ForceMode2D.Impulse);
+            enemy.StartOverlapDetect();
+        }
+        else
+        {
+            enemy.rb.AddForce(enemy.currentKnockBackForce * enemy.knockbackRate, ForceMode2D.Impulse);
+        }
+
+        knockbackRoutine = enemy.StartCoroutine(KnockbackRoutine());
     }
 
     IEnumerator KnockbackRoutine()
     {
-        entity.startDragEffect();
-        yield return new WaitForSeconds(entity.knockbackTime);
+        enemy.startDragEffect();
+        yield return new WaitForSeconds(enemy.knockbackTime);
 
-        entity.endDragEffect();
-        entity.canChangeHitState = true;
-        entity.rb.linearVelocity = Vector2.zero;
+        enemy.endDragEffect();
+        enemy.canChangeHitState = true;
+        enemy.rb.linearVelocity = Vector2.zero;
+        enemy.StopOverlapDetect();
 
-        yield return new WaitForSeconds(entity.HitRecoveryTime);
+        yield return new WaitForSeconds(enemy.HitRecoveryTime);
 
-        entity.canChangeHitState = false;
-        entity.canChangeState = true;
+        enemy.canChangeHitState = false;
+        enemy.canChangeState = true;
         knockbackRoutine = null;
 
         owner.ChangeToDefaultState();
@@ -61,10 +71,9 @@ public class SharedKnockbackState<T> : StateBase<T> where T : IKnockbackableCont
     {
         if (knockbackRoutine != null)
         {
-            entity.canChangeHitState = false;
-            entity.canChangeState = true;
-
-            entity.StopCoroutine(knockbackRoutine);
+            enemy.canChangeHitState = false;
+            enemy.canChangeState = true;
+            enemy.StopCoroutine(knockbackRoutine);
             knockbackRoutine = null;
         }
     }

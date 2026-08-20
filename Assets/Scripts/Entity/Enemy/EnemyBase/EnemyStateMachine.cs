@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class EnemyStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackableContext
+public class EnemyStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackableContext, IStateMachine
 {
     /// <summary>
     /// 책임 및 기능: Enemy State가 관리되는 규칙
@@ -31,8 +31,8 @@ public class EnemyStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackabl
         AttackState = new EnemyAttackState(this);
         ChaseState = new EnemyChaseState(this);
         DeadState = new EnemyDeadState(this);
-        KnockbackState = new SharedKnockbackState<EnemyStateMachine>(this);
-        GrabbedState = new SharedGrabbedState<EnemyStateMachine>(this);
+        KnockbackState = new SharedKnockbackState<EnemyStateMachine>(this, enemy);
+        GrabbedState = new SharedGrabbedState<EnemyStateMachine>(this, enemy);
     }
 
     public bool IsCurrentState(object state)

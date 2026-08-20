@@ -32,6 +32,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public float recoveryTime;
 
     public float knockbackRate { get; set; }
+    public float strongKnockbackRate { get; set; }
     public float knockbackTime { get; set; }
     public float grabForce { get; set; }
     public float HitRecoveryTime { get; set; }
@@ -56,11 +57,19 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     private float powerTimer;
     public bool isCurrentHitGrab;
     public int dmgType { get; set; }
+    public bool transitFlipPower { get; set; }
+    public bool canHit;
 
     public Vector2 front;
     public bool isFacingLeft = false;
     public Vector2 targetDir;
     public Vector2 FacingDir { get; private set; } = Vector2.right;
+
+    [Header("Invincibility")]
+    public float invincibilityDuration;
+    protected float invincibilityTimer = 0f;
+
+    public bool IsInvincible => invincibilityTimer > 0f;
 
     public virtual void Awake()
     {
@@ -91,10 +100,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
             startUpTime = data.startUpTime;
             recoveryTime = data.recoveryTime;
             knockbackRate = data.knockbackRate;
+            strongKnockbackRate = data.strongKnockbackRate;
             knockbackTime = data.knockbackTime;
             grabForce = data.grabForce;
             HitRecoveryTime = data.HitRecoveryTime;
             powerResetTime = data.powerResetTime;
+            invincibilityDuration = data.invincibilityDuration;
         }
 
         canChangeState = true;
@@ -187,6 +198,23 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     }
 
     // ==========================================
+    // 무적 타이머
+    // ==========================================
+
+    protected void UpdateInvincibilityTimer()
+    {
+        if (invincibilityTimer > 0f)
+        {
+            invincibilityTimer -= Time.deltaTime;
+        }
+    }
+
+    public void ResetInvincibility()
+    {
+        invincibilityTimer = 0f;
+    }
+
+    // ==========================================
     // powerStack 제어
     // ==========================================
 
@@ -196,17 +224,23 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
         powerStackUIController.SetStack(currentPower);
     }
 
-    public void CalculatePower(AttackInfo attckInfo)
+    public void CalculatePower(AttackInfo attack)
     {
-        if (currentPower < 5 && currentPower > -5 && currentPower * attckInfo.power >= 0)
+        if (currentPower < 5 && currentPower > -5 && currentPower * attack.power >= 0 && !attack.attackIsGrab)
         {
-            SetPower(currentPower + attckInfo.power);
+            SetPower(currentPower + attack.power);
         }
     }
 
     public void ResetPower()
     {
         SetPower(0);
+    }
+
+    public void FlipPower(float knockBackForce)
+    {
+        if(knockBackForce * currentPower < 0)
+            SetPower(-currentPower);
     }
 
     public void CalculatePowerTimer()
@@ -217,10 +251,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     }
 
     public void ResetPowerTImer(){ powerTimer = 0; }
-
     // 추상 매서드
     public abstract void ReceiveAttack(AttackInfo attackInfo);
     public abstract void ReceiveDamage(AttackInfo attackInfo);
     public abstract void ReceiveKnockback(AttackInfo attackInfo, bool force);
     public abstract void ReceiveGrab();
+
+    public virtual void StartOverlapDetect() { }
+    public virtual void StopOverlapDetect() { }
 }

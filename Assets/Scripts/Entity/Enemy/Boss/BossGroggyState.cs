@@ -50,10 +50,12 @@ public class BossGroggyState : StateBase<BossStateMachine>
     public override void OnReceiveKnockback()
     {
         owner.ChangeState(owner.KnockbackState, true);
+        Debug.Log("넉백 진입");
     }
 
     public override void OnReceiveGrab()
     {
         owner.ChangeState(owner.GrabbedState, true);
+        Debug.Log("그랩 진입");
     }
 }

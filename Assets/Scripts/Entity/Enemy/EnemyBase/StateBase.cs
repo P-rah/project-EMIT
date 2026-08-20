@@ -1,4 +1,4 @@
-public abstract class StateBase<T>
+public abstract class StateBase<T> where T : IStateMachine
 {
     /// <summary>
     /// 책임 및 기능: 상속 구조의 상태 관리 추상 클래스

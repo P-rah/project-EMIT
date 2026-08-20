@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: "\uD6C8\uB828\uC6A9 \uBD07"
   enemyInfo: "\uD6C8\uB828\uC6A9 \uBD07\uC784"
-  baseHealth: 1000
+  baseHealth: 20
   baseAttack: 2
   baseSpeed: 3
   jumpHeight: 1
@@ -24,7 +24,9 @@ MonoBehaviour:
   startUpTime: 0.4
   recoveryTime: 1
   knockbackRate: 1
+  strongKnockbackRate: 4
   knockbackTime: 0.2
   grabForce: 50
   HitRecoveryTime: 0.2
-  powerResetTime: 1
+  powerResetTime: 1.5
+  invincibilityDuration: 0.2

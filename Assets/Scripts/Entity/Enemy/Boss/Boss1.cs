@@ -36,6 +36,7 @@ public class Boss1 : EnemyBase
 
     private void Update()
     {
+        UpdateInvincibilityTimer();
         if (EmitManager.Instance.isEmitting)
         {
             return;
@@ -43,6 +44,7 @@ public class Boss1 : EnemyBase
 
         StateMachine.UpdateState();
         UpdateTargetDirection();
+        CalculatePowerTimer();
     }
 
     private void FixedUpdate()
@@ -102,14 +104,12 @@ public class Boss1 : EnemyBase
 
     public void EnterGroggy()
     {
-        ResetPower();
         rb.gravityScale = groggyGravityScale;
         canChangeState = false;
     }
 
     public void ExitGroggy()
     {
-        ResetPower();
         PrepareHovering();
         canChangeState = true;
     }
@@ -119,20 +119,26 @@ public class Boss1 : EnemyBase
     // ==========================================
     public override void ReceiveAttack(AttackInfo attackInfo)
     {
+        if (IsInvincible) return;
+        invincibilityTimer = invincibilityDuration;
+
         AudioClip hitSound = isCurrentHitGrab ? grabHitSound : sweepHitSound;
         if (myAudioSource != null && hitSound != null) myAudioSource.PlayOneShot(hitSound);
 
         if (StateMachine.CurrentState == StateMachine.RecoilState)
             StateMachine.ChangeState(StateMachine.GroggyState);
 
+        if (StateMachine.CurrentState.CanBeCancelled()) ReceiveKnockback(attackInfo, true);
+
+        if (transitFlipPower) FlipPower(attackInfo.knockback.x);
+
         ReceiveDamage(attackInfo);
         HitEffectBasedOnDamageType(dmgType);
 
-        currentPower = IsHitReactionState(CurrentState) ? attackInfo.power : 0;
+        ResetPowerTImer();
+        CalculatePower(attackInfo);
 
-        if (StateMachine.CurrentState.CanBeCancelled()) ReceiveKnockback(attackInfo, true);
-
-        if (EmitManager.Instance.isEmitting) EventManager.TriggerEvent("OnEmitAborted");
+        transitFlipPower = false;
 
         if (currentHealth <= 0)
         {
@@ -145,6 +151,7 @@ public class Boss1 : EnemyBase
     public override void ReceiveDamage(AttackInfo attackInfo)
     {
         int damage = DamageCalculation<Boss1>.Calculate(attackInfo, this);
+        if (dmgType == 2) ResetPower();
         currentHealth -= damage;
     }
 
@@ -154,7 +161,12 @@ public class Boss1 : EnemyBase
         isCurrentHitGrab = attackInfo.attackIsGrab;
         bool shouldForceChange = force || canChangeHitState;
 
-        if (!isCurrentHitGrab) StateMachine.ChangeState(StateMachine.KnockbackState, force);
+        if (!isCurrentHitGrab)
+        {
+            if(StateMachine.CurrentState == StateMachine.GrabbedState)
+                transitFlipPower = true;
+            StateMachine.ChangeState(StateMachine.KnockbackState, force);
+        }
         else StateMachine.ChangeState(StateMachine.GrabbedState, force);
     }
 
@@ -162,11 +174,6 @@ public class Boss1 : EnemyBase
     {
         if (CurrentState is SharedGrabbedState<BossStateMachine> grabState) grabState.Grab();
     }
-    public bool IsHitReactionState(StateBase<BossStateMachine> state) 
+    public bool IsHitReactionState(StateBase<BossStateMachine> state)
         => state == StateMachine.KnockbackState || state == StateMachine.GrabbedState || state == StateMachine.GroggyState;
-
-    private void ResetPower()
-    {
-        currentPower = 0;
-    }
 }

@@ -108,9 +108,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: -840063207
+  m_SortingLayer: 2
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -7778618987715515399, guid: bf408713f64b4b54ba45fdf4ae72cb6e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -335,9 +335,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -840063207
+  m_SortingLayer: 2
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -5702964227861037169, guid: bf408713f64b4b54ba45fdf4ae72cb6e, type: 3}
   m_Color: {r: 0.18823531, g: 0.20784315, b: 0.21568629, a: 1}
@@ -580,7 +580,7 @@ MonoBehaviour:
   jumpForce: 15
   groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 4160
   groundCheckPos: {fileID: 5592442233098618430}
   groundCheckRayLength: 0.2
   isOnSlope: 0
@@ -626,7 +626,7 @@ MonoBehaviour:
   checkRadius: 0.3
   groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 4160
 --- !u!114 &8809643580667599123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -672,12 +672,9 @@ MonoBehaviour:
   sweepAttackHitbox: {fileID: 525887890152529778}
   grabAttackHitbox: {fileID: 645576893945181915}
   attackCoolTime: 0.05
-  attackRecoveryTime: 1
+  attackRecoveryTime: 0.1
   maxAttackCount: 2
   currentAttackCount: 0
-  emitRecoveryCount: 5
-  currentEmitRecoveryCount: 0
-  emitShaderController: {fileID: 0}
 --- !u!114 &2160909343489536948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -993,7 +990,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.4, y: 0.14}
+  m_Offset: {x: 0.2, y: 0.14}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1003,7 +1000,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.3, y: 1}
+  m_Size: {x: 1.6, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &525887890152529778
 MonoBehaviour:
@@ -1063,12 +1060,12 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingLayerID: -840063207
+  m_SortingLayer: 2
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6415094, g: 0.9308589, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1245,9 +1242,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingLayerID: -840063207
+  m_SortingLayer: 2
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 584853788, guid: bf408713f64b4b54ba45fdf4ae72cb6e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

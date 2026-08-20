@@ -13,7 +13,7 @@ public static class DamageCalculation<T> where T : IDamageable
     {
         int baseDamage = 1;
 
-        if(target.currentPower * attack.power < 0)     //반대방향이면
+        if(target.currentPower * attack.power < 0 && !attack.attackIsGrab)     //반대방향이면
         {
             if(EmitManager.Instance.isEmitting) target.dmgType = 3;
             else target.dmgType = 2;

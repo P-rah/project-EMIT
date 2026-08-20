@@ -1,25 +1,13 @@
 using UnityEngine;
-using System.Collections;
 
 // 당기기 인터페이스
 public interface IGrabbable
 {
-    Transform transform { get; }
-    Transform target { get; set; }
-    Rigidbody2D rb { get; set; }
-
+    int currentPower { get; }
     float grabForce { get; set; }
-    float HitRecoveryTime { get; set; }
-    bool canChangeState { get; set; }
-    bool canChangeHitState { get; set; }
 
-    void UnrootMovement();
-    void startDragEffect();
-    void endDragEffect();
+    bool transitFlipPower { get; set; }
     void ReceiveGrab();
-
-    Coroutine StartCoroutine(IEnumerator routine);
-    void StopCoroutine(Coroutine routine);
 }
 
 public interface IGrabbableContext
@@ -33,21 +21,18 @@ public interface IGrabbableContext
 // 밀치기 인터페이스
 public interface IKnockbackable
 {
-    Rigidbody2D rb { get; set; }
     Vector2 currentKnockBackForce { get; set; }
 
+    int currentPower { get; }
     float knockbackRate { get; set; }
+    float strongKnockbackRate { get; set; }
     float knockbackTime { get; set; }
     float HitRecoveryTime { get; set; }
-    bool canChangeState { get; set; }
-    bool canChangeHitState { get; set; }
 
-    void UnrootMovement();
-    void startDragEffect();
-    void endDragEffect();
+    bool transitFlipPower { get; set; }
 
-    Coroutine StartCoroutine(IEnumerator routine);
-    void StopCoroutine(Coroutine routine);
+    void StartOverlapDetect();
+    void StopOverlapDetect();
 }
 
 public interface IKnockbackableContext
@@ -55,5 +40,11 @@ public interface IKnockbackableContext
     IKnockbackable KnockbackableEntity { get; }
     bool IsCurrentState(object state);
 
+    void ChangeToDefaultState();
+}
+
+public interface IStateMachine
+{
+    bool IsCurrentState(object state);
     void ChangeToDefaultState();
 }

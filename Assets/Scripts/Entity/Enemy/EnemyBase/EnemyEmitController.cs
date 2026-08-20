@@ -59,6 +59,12 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         emitableTarget.SetFacingDirection(Vector2.right);
         emitableTarget.RootMovement();
         if (_animator != null) _animator.enabled = false;
+        //emitableTarget.SetPower(-emitableTarget.currentPower);
+
+        if (emitableTarget is EnemyBase enemyBase)
+        {
+            enemyBase.ResetInvincibility();
+        }
     }
 
     public virtual void EmitFrame()

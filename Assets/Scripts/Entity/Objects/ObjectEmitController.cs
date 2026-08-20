@@ -1,33 +1,31 @@
 using UnityEngine;
 
-public class ObjectEmitController : MonoBehaviour, IEmit
+public class ObjectEmitController<T> : MonoBehaviour, IEmit where T : MonoBehaviour, IEmitableTarget
 {
     public struct KeyframeStatus
     {
         public Vector2 position;
         public float rotation;
+        public int power;
     }
     private EmitBuffer<KeyframeStatus> buffer;
     private Rigidbody2D _rb;
-    [SerializeField] private Vector3 spawnPosition;
-    [SerializeField] private bool isRooted;
+    private SpriteRenderer spriteRenderer;
+
+    protected T emitableTarget;
 
     private void Awake()
     {
-        /*
-        if (spawnPosition == null)
-        {
-            spawnPosition = transform.position;
-        }
-        */
-        _rb = GetComponent<Rigidbody2D>();
-        _rb.interpolation = RigidbodyInterpolation2D.Interpolate; // 더 부드러운 이펙트를 위해 필요함
+        emitableTarget = GetComponent<T>();
+        _rb = emitableTarget.GetComponent<Rigidbody2D>();
+        _rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        spriteRenderer = emitableTarget.GetComponent <SpriteRenderer>();
     } 
-    // 버퍼 동적할당
+    
     private void Start()
     {
         buffer = new EmitBuffer<KeyframeStatus>(EmitManager.Instance.emitBufferFrames);
-        // EmitManager의 IEmit 배열에 자기 자신을 등록 
+        
         EmitManager.Instance.emitObjects.Add(this);
     }
 
@@ -36,6 +34,7 @@ public class ObjectEmitController : MonoBehaviour, IEmit
         KeyframeStatus frame;
         frame.position = _rb.position;
         frame.rotation = _rb.rotation;
+        frame.power = emitableTarget.currentPower;
         return frame;
     }
 
@@ -47,7 +46,8 @@ public class ObjectEmitController : MonoBehaviour, IEmit
 
     void IEmit.BeginEmit()
     {
-        RootMovement();
+        spriteRenderer.material.SetFloat("_OutlineThick", 1f);
+        emitableTarget.RootMovement();
     }
 
     void IEmit.EmitFrame()
@@ -56,33 +56,20 @@ public class ObjectEmitController : MonoBehaviour, IEmit
         {
             _rb.MovePosition(frame.position);
             _rb.MoveRotation(frame.rotation);
+            emitableTarget.SetPower(-frame.power);
             // _rb.MoveRotation(frame.transform.rotation);
-        }
-        else
-        {
-            
         }
     }
 
     void IEmit.EndEmit()
     {
-        UnrootMovement();
+        spriteRenderer.material.SetFloat("_OutlineThick", 0f);
+        emitableTarget.UnrootMovement();
+        emitableTarget.ResetPower();
     }
 
     void IEmit.ResetFrame()
     {
         buffer.Clear();
-    }
-
-    public void RootMovement()
-    {
-        _rb.linearVelocity = Vector2.zero;
-        _rb.bodyType = RigidbodyType2D.Kinematic;
-        isRooted = true;
-    }
-    public void UnrootMovement()
-    {
-        _rb.bodyType = RigidbodyType2D.Dynamic;
-        isRooted = false;
     }
 }

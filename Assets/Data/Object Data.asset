@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1991ef7ecf84d8b4a92ef4175fdccd5e, type: 3}
+  m_Name: Object Data
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectData
+  enemyName: "\uBC15\uC2A4"
+  enemyInfo: "\uB109\uBC31 \uB85C\uC9C1\uB9CC \uAC00\uC9C4 \uC624\uBE0C\uC81D\uD2B8"
+  knockbackRate: 1
+  strongKnockbackRate: 4
+  knockbackTime: 0.2
+  HitRecoveryTime: 0.3
+  powerResetTime: 1.5
+  powerStackWeight: 5
+  sweepHitSound: {fileID: 8300000, guid: bd023842f8777b04c9047827cd78db44, type: 3}
+  grabHitSound: {fileID: 8300000, guid: b862d6d4f7fe34a4389becebfef2bbd2, type: 3}

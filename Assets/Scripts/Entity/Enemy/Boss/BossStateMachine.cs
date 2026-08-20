@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class BossStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackableContext
+public class BossStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackableContext, IStateMachine
 {
     /// <summary>
     /// 책임 및 기능: Boss1 State가 관리되는 규칙
@@ -32,8 +32,8 @@ public class BossStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackable
         AttackState = new BossAttackState(this);
         RecoilState = new BossRecoilState(this);
         GroggyState = new BossGroggyState(this);
-        KnockbackState = new SharedKnockbackState<BossStateMachine>(this);
-        GrabbedState = new SharedGrabbedState<BossStateMachine>(this);
+        KnockbackState = new SharedKnockbackState<BossStateMachine>(this, boss);
+        GrabbedState = new SharedGrabbedState<BossStateMachine>(this, boss);
     }
 
     public bool IsCurrentState(object state)

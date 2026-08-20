@@ -138,9 +138,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -840063207
+  m_SortingLayer: 2
+  m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5200,6 +5200,7 @@ GameObject:
   - component: {fileID: 7399015839825466860}
   - component: {fileID: 2829612419554026525}
   - component: {fileID: 5682029497126305882}
+  - component: {fileID: 3427099147803895179}
   m_Layer: 7
   m_Name: Enemy_R1
   m_TagString: Untagged
@@ -5382,6 +5383,7 @@ MonoBehaviour:
   startAttackRange: 2
   startUpTime: 0.5
   recoveryTime: 1
+  powerResetTime: 0
   walkSound: {fileID: 8300000, guid: dff74eaf3cf96e948a0ffc77128191d0, type: 3}
   attackReadySound: {fileID: 8300000, guid: 066f1955da67a3c48a0390eb610db9ab, type: 3}
   attackSound: {fileID: 8300000, guid: 37207ed13e7e7844a9c59dc59d875952, type: 3}
@@ -5391,9 +5393,12 @@ MonoBehaviour:
   currentHealth: 10
   isRooted: 1
   isCurrentHitGrab: 0
+  canHit: 0
   front: {x: 1, y: 0}
   isFacingLeft: 0
   targetDir: {x: 0, y: 0}
+  invincibilityDuration: 0.2
+  enemyCollisionDetector: {fileID: 0}
 --- !u!114 &619726166237361685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5551,3 +5556,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3427099147803895179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6143233822747344136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0612313096c6734d9ea9a36038e539c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyCollisionDetector
+  detectRadius: 1.5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128

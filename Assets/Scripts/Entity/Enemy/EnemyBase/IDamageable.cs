@@ -14,4 +14,5 @@ public interface IDamageable
     int currentPower { get; }
     int dmgType { get; set; }
     void ReceiveAttack(AttackInfo Info);
+    public void SetPower(int power);
 }

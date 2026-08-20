@@ -24,9 +24,11 @@ public class EnemyData : ScriptableObject
 
     [Header("피격 관련")]
     public float knockbackRate;
+    public float strongKnockbackRate;
     public float knockbackTime;
     public float grabForce;
     public float HitRecoveryTime;
 
     public float powerResetTime;
+    public float invincibilityDuration;
 }
