@@ -580,7 +580,7 @@ MonoBehaviour:
   jumpForce: 15
   groundLayer:
     serializedVersion: 2
-    m_Bits: 4160
+    m_Bits: 64
   groundCheckPos: {fileID: 5592442233098618430}
   groundCheckRayLength: 0.2
   isOnSlope: 0
@@ -605,7 +605,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDropDownPlatform
   playerCollider: {fileID: 0}
   feetCollider: {fileID: 0}
-  ignoreDuration: 0.5
   dropSpeed: 2
   _standingPlatform: {fileID: 0}
   IsDropping: 0
@@ -626,7 +625,7 @@ MonoBehaviour:
   checkRadius: 0.3
   groundLayer:
     serializedVersion: 2
-    m_Bits: 4160
+    m_Bits: 64
 --- !u!114 &8809643580667599123
 MonoBehaviour:
   m_ObjectHideFlags: 0

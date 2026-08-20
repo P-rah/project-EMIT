@@ -59,7 +59,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
-        if (Player.State.isDeath) return;
+        if (state.IsDead) return;
         CheckInputs();
         CheckEmitable();
         if (currentAttackCount < maxAttackCount && attackRecoveryRoutine == null)
