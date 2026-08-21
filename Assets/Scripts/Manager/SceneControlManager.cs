@@ -1,5 +1,4 @@
 using UnityEngine;
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
@@ -14,7 +13,7 @@ public class SceneControlManager : MonoBehaviour
 
     private void Awake()
     {
-        if ( Instance != null && Instance != this )
+        if (Instance != null && Instance != this)
         {
             Destroy(this);
             return;
@@ -23,8 +22,8 @@ public class SceneControlManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-    #endregion 
-    
+    #endregion
+
     // protection level 추후에 수정 필요!
     public LoadingScreen LoadingScreen;
 
@@ -96,12 +95,12 @@ public class SceneControlManager : MonoBehaviour
             yield return UnloadSceneRoutine(slotKey);
         }
         // 참조가 끊긴 에셋을 메모리에서 정리
-        if (plan.CleanupUnusedAssets) 
+        if (plan.CleanupUnusedAssets)
         {
             yield return CleanupUnusedAssetsRoutine();
         }
         // 씬 슬롯에 이미 올려진 씬을 언로드, (참고) kvp: key-value pair
-        foreach(var kvp in plan.ScenesToLoad)
+        foreach (var kvp in plan.ScenesToLoad)
         {
             if (loadedSceneBySlot.ContainsKey(kvp.Key))
             {
@@ -122,7 +121,7 @@ public class SceneControlManager : MonoBehaviour
     /// </summary>
     private IEnumerator LoadAdditiveRoutine(string slotKey, string sceneName, bool setActive)
     {
-        AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);   
+        AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         loadOp.allowSceneActivation = false;
         while (loadOp.progress < 0.9f)
         {
@@ -133,15 +132,21 @@ public class SceneControlManager : MonoBehaviour
         {
             yield return null;
         }
+
+        Scene newScene = SceneManager.GetSceneByPath(sceneName);
+        if (!newScene.IsValid())
+        {
+            newScene = SceneManager.GetSceneByName(sceneName);
+        }
+
         if (setActive)
         {
-            Scene newScene = SceneManager.GetSceneByName(sceneName);
             if (newScene.IsValid() && newScene.isLoaded)
             {
                 SceneManager.SetActiveScene(newScene);
             }
         }
-        loadedSceneBySlot[slotKey] = sceneName;
+        loadedSceneBySlot[slotKey] = newScene.IsValid() ? newScene.name : sceneName;
     }
 
     /// <summary>
@@ -150,12 +155,12 @@ public class SceneControlManager : MonoBehaviour
     private IEnumerator UnloadSceneRoutine(string slotKey)
     {
         // 로드된 씬이 아니라면 리턴
-        if(!loadedSceneBySlot.TryGetValue(slotKey, out string sceneName)) yield break;
+        if (!loadedSceneBySlot.TryGetValue(slotKey, out string sceneName)) yield break;
         // 씬 이름이 비어있다면 리턴
         if (string.IsNullOrEmpty(sceneName)) yield break;
-        
+
         AsyncOperation unloadOperation = SceneManager.UnloadSceneAsync(sceneName);
-        
+
         if (unloadOperation != null)
         {
             while (!unloadOperation.isDone)
@@ -163,7 +168,7 @@ public class SceneControlManager : MonoBehaviour
                 yield return null;
             }
         }
-        
+
         loadedSceneBySlot.Remove(slotKey);
     }
 
@@ -189,7 +194,7 @@ public class SceneControlManager : MonoBehaviour
         public string ActiveSceneName { get; private set; }
         public bool CleanupUnusedAssets { get; private set; } = false;
         public bool Overlay { get; private set; } = false;
-        
+
         /// <summary>
         /// 로드할 씬을 추가한다. 
         /// SetActive = true로 특정 씬을 Active Scene으로 만들 수 있다.
@@ -198,7 +203,7 @@ public class SceneControlManager : MonoBehaviour
         {
             ScenesToLoad[slotKey] = sceneName;
             if (SetActive) ActiveSceneName = sceneName;
-            return this; 
+            return this;
         }
 
         /// <summary>
@@ -273,9 +278,32 @@ public class SceneControlManager : MonoBehaviour
 
     private void LoadStage(LoadIndex loadIndex, bool unloadSettings = false)
     {
-        string currentStage = loadedSceneBySlot[SceneDatabase.Slots.Stage];
-        int nextSceneBuildIndex = SceneManager.GetSceneByName(currentStage).buildIndex + (int) loadIndex;
-        string nextStage = SceneManager.GetSceneByBuildIndex(nextSceneBuildIndex).name;
+        if (!loadedSceneBySlot.TryGetValue(SceneDatabase.Slots.Stage, out string currentStage))
+        {
+            Debug.LogError("Cannot load stage: no scene is loaded in the Stage slot.");
+            return;
+        }
+
+        Scene currentScene = SceneManager.GetSceneByName(currentStage);
+        if (!currentScene.IsValid() || !currentScene.isLoaded || currentScene.buildIndex < 0)
+        {
+            Debug.LogError($"Cannot load stage: current scene '{currentStage}' is not a loaded Build Profile scene.");
+            return;
+        }
+
+        int nextSceneBuildIndex = currentScene.buildIndex + (int)loadIndex;
+        if (nextSceneBuildIndex < 0 || nextSceneBuildIndex >= SceneManager.sceneCountInBuildSettings)
+        {
+            Debug.LogWarning($"Cannot load stage: build index {nextSceneBuildIndex} is outside the Build Profile scene list.");
+            return;
+        }
+
+        string nextStage = SceneUtility.GetScenePathByBuildIndex(nextSceneBuildIndex);
+        if (string.IsNullOrEmpty(nextStage))
+        {
+            Debug.LogError($"Cannot load stage: no scene path was found for build index {nextSceneBuildIndex}.");
+            return;
+        }
 
         SceneTransitionPlan transition = NewTransition();
         if (unloadSettings) transition.Unload(SceneDatabase.Slots.Settings);

@@ -21,7 +21,6 @@ public class PlayerInputHandler : MonoBehaviour
     public bool EmitInput { get; private set; }
     public bool AttackSweepInput { get; private set; }
     public bool AttackGrabInput { get; private set; }
-
     /*
         ===============================================
         LAYER 2: Send Messages가 인식할 Input을 받아오는 함수들

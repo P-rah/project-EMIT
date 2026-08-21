@@ -40,6 +40,7 @@ public class PlayerHealth : MonoBehaviour
     {
         Player.State.IsDead = true;
         Player.Movement.StopMove();
+        EventManager.TriggerEvent("StopEmit");
         Debug.Log("Player Dead");
     }
 

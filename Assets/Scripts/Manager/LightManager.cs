@@ -7,7 +7,7 @@ public class LightManager : MonoBehaviour
     public static LightManager Instance;
 
     [Header("조명 설정")]
-    public Light2D globalLight;
+    private Light2D globalLight;
 
     private void Awake()
     {
@@ -18,6 +18,12 @@ public class LightManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void RegisterLight(Light2D newLight)
+    {
+        globalLight = newLight;
+        Debug.Log("글로벌 라이트 연결성공");
     }
 
     public void SetLightInstantly(float intensity)

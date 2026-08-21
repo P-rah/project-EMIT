@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager Instance { get; private set; }
-    public TextMeshProUGUI enemyCount;
+    //public TextMeshProUGUI enemyCount;
     public TextMeshProUGUI dialogueText;
 
     int previousCount;
@@ -14,12 +14,15 @@ public class TutorialManager : MonoBehaviour
 
     string[] tutorialText = 
         {
-        "ÀÌµ¿: A,S \nÁ¡ÇÁ: Space \n´ë½¬: Shift \n¹ĞÄ¡±â: ÁÂÅ¬¸¯ \n´ç±â±â: ¿ìÅ¬¸¯",
-        "¹ĞÄ¡±â/´ç±â±â »óÅÂÀÇ ÀûÀº \n¹İ´ë ¹æÇâÀÇ °ø°İ¿¡ \nÃß°¡ ÇÇÇØ¸¦ ÀÔ½À´Ï´Ù",
-        "E¸¦ ´­·¯ ½Ã°£À» ¿ªÇàÇÒ ¼ö ÀÖ½À´Ï´Ù.\n¿ªÇà »óÅÂ¿¡¼­´Â ÀûÀÇ ÀÌµ¿ ¹× ÀÌÀü¿¡ °¡ÇÑ ³Ë¹éÀÌ\n°Å²Ù·Î Àû¿ëµË´Ï´Ù.",
-        "ÇÑ¹ø ¿ªÇàÀ» ÇÑ ÈÄ¿¡´Â ÀûÀ» ¾²·¯¶ß¸®±â Àü±îÁö\n´Ù½Ã ¿ªÇàÇÒ ¼ö ¾ø½À´Ï´Ù.",
-        "¿ªÇà »óÅÂ¿¡¼­ÀÇ \nÀûÀÇ ³Ë¹é ¹İ´ë ¹æÇâÀÇ °ø°İÀº \n´õ¿í Å« ÇÇÇØ¸¦ ÀÔÈü´Ï´Ù.",
-        "¿ªÇà »óÅÂ¿¡¼­ ÀûÀÇ ÇöÀç ³Ë¹é ¹æÇâ°ú \n°°Àº ¹æÇâÀÇ °ø°İ ÈÄ ¹İ´ë ¹æÇâÀ¸·Î °ø°İÇÏ¸é \nÀûÀº Áï»çÇÕ´Ï´Ù"
+        "ì´ë™: A,S \nì í”„: Space \nëŒ€ì‰¬: Shift \në°€ì¹˜ê¸°: ì¢Œí´ë¦­ \në‹¹ê¸°ê¸°: ìš°í´ë¦­",
+        "ê°™ì€ ë°©í–¥ìœ¼ë¡œ ë°€ì¹˜ê¸° ê³µê²©ì´ ì ì¤‘í•˜ë©´ \n 'ëª°ì•„ì¹˜ê¸°' ìŠ¤íƒì´ ìŒ“ì…ë‹ˆë‹¤.",
+        "í˜„ì¬ ëª°ì•„ì¹˜ê¸°ì˜ ë°˜ëŒ€ ë°©í–¥ìœ¼ë¡œ ë°€ì¹˜ê¸° ê³µê²©í•˜ë©´ ìŠ¤íƒì„ ì†Œëª¨í•´ ë” í° í”¼í•´ë¥¼ ì…í™ë‹ˆë‹¤.",
+        "ë‹¹ê¸°ê¸° ê³µê²©ì€ ì „ë°©ì˜ ì ì„ ë‹¹ê²¨ì˜µë‹ˆë‹¤.\n í•´ë‹¹ ê³µê²©ì€ ëª°ì•„ì¹˜ê¸°ë¥¼ ìŒ“ì§€ë„, ì†Œë¹„í•˜ì§€ë„ ì•ŠìŠµë‹ˆë‹¤.",
+        "ë‹¹ê¸°ê¸° ê³µê²© ì§í›„ì˜ ë°€ì¹˜ê¸° ê³µê²©ì€ ë°©í–¥ì— ë”°ë¼ ì ì„ ë”ìš± í¬ê²Œ ë°€ì¹©ë‹ˆë‹¤. ë˜í•œ ëª°ì•„ì¹˜ê¸°ì˜ ë°©í–¥ì´ ë°€ì¹˜ê¸° ê³µê²©ì˜ ë°©í–¥ìœ¼ë¡œ ë³€ê²½ë©ë‹ˆë‹¤.",
+        "í•´ë‹¹ ê³µê²©ìœ¼ë¡œ ë°€ì³ì§€ëŠ” ì ì—ê²Œ ë‹¤ë¥¸ ì ì´ ë§ì•˜ë‹¤ë©´, í•´ë‹¹ ì ì´ ê°€ì§„ ëª°ì•„ì¹˜ê¸° ìŠ¤íƒì´ ì „ì´ë©ë‹ˆë‹¤.",
+        "Eë¥¼ ëˆŒëŸ¬ ìì‹ ì„ ì œì™¸í•œ ì£¼ë³€ ë¬¼ì²´ì˜ ì‹œê°„ì„ ì—­í–‰í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤. ì—­í–‰ë˜ëŠ” ì ì€ ì²´ë ¥ì„ ì œì™¸í•œ ëª¨ë“  ìƒíƒœê°€ ë˜ê°ì•„ì§‘ë‹ˆë‹¤.",
+        "ì—­í–‰ ìƒíƒœì—ì„œëŠ” ëª°ì•„ì¹˜ê¸°ì˜ ë°©í–¥ì´ ë°˜ëŒ€ê°€ ë©ë‹ˆë‹¤. ë˜í•œ ëª°ì•„ì¹˜ê¸°ê°€ ì†Œëª¨ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.",
+        "ì—­í–‰ì€ "
         };
 
     private void Awake()
@@ -31,23 +34,22 @@ public class TutorialManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     private void Update()
     {
-        ShowCount();
+        //ShowCount();
         UpdateDialoque();
     }
 
-    public void ShowCount()
-    {
-        if(SceneManager.GetActiveScene().buildIndex != 3)
-        {
-            count = StageManager.Instance.currentEnemyCount;
-            enemyCount.text = $"³²Àº Àû : {count}";
-        }
-        else enemyCount.text = "";
-    }
+    //public void ShowCount()
+    //{
+    //    if(SceneManager.GetActiveScene().buildIndex != 3)
+    //    {
+    //        count = StageManager.Instance.currentEnemyCount;
+    //        enemyCount.text = $"ë‚¨ì€ ì  : {count}";
+    //    }
+    //    else enemyCount.text = "";
+    //}
 
     private void ChangeDialogue(string message)
     {

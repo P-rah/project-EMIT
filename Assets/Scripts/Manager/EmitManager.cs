@@ -50,13 +50,13 @@ public class EmitManager : MonoBehaviour
     private void OnEnable() {
         // Event 구독
         EventManager.StartListening("OnEmitPressed", OnEmitPressed);
-        //EventManager.StartListening("OnEmitAborted", OnEmitAborted);
+        EventManager.StartListening("StopEmit", OnEmitCanceled);
     }
 
     private void OnDisable()
     {
         EventManager.StopListening("OnEmitPressed", OnEmitPressed);
-        //EventManager.StopListening("OnEmitAborted", OnEmitAborted);
+        EventManager.StopListening("StopEmit", OnEmitCanceled);
     }
 
     private void FixedUpdate()
@@ -124,20 +124,18 @@ public class EmitManager : MonoBehaviour
         //StartCoroutine(emitCoolDownRoutine());
     }
 
-    //private void OnEmitAborted()
-    //{
-    //    Debug.Log("Emit Aborted");
-    //    // 공격에 의해 Emit이 종료된 상황
-    //    foreach (IEmit obj in emitObjects)
-    //    {
-    //        obj.EndEmit();
-    //    }
-    //    emittedFrames = 0;
-    //    isEmitting = false;
-    //    TimeManager.Instance.InstantNormalTime();
-    //    SoundManager.instance.StopEmitBGM();
-    //    //StartCoroutine(emitCoolDownRoutine());
-    //}
+    private void OnEmitCanceled()
+    {
+        foreach (IEmit obj in emitObjects)
+        {
+            obj.EndEmit();
+        }
+        emittedFrames = 0;
+        isEmitting = false;
+        TimeManager.Instance.InstantNormalTime();
+        SoundManager.instance.StopEmitBGM();
+        //StartCoroutine(emitCoolDownRoutine());
+    }
 
     public void EmitReset()
     {

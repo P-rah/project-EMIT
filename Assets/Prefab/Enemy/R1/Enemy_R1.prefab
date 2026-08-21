@@ -5150,7 +5150,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -840063207
   m_SortingLayer: 2
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 8314803266065007146, guid: 363c23451e1905949b85d41145fb96d0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5273,7 +5273,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -840063207
   m_SortingLayer: 2
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: 8371833876175714458, guid: 9c04e91559a72f347a557691d0290886, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5399,6 +5399,7 @@ MonoBehaviour:
   targetDir: {x: 0, y: 0}
   invincibilityDuration: 0.2
   enemyCollisionDetector: {fileID: 0}
+  canAttack: 1
 --- !u!114 &619726166237361685
 MonoBehaviour:
   m_ObjectHideFlags: 0

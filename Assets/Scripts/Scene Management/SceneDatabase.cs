@@ -35,22 +35,21 @@ public static class SceneDatabase
             잊지 말고 빌드 설정에 있는 Scene List에도 씬을 추가해주면 됨. 
         */
         public const string MainMenu = "TitleScene";
-        public const string Ch1_1 = "GamePlayBase";
-        public const string Ch1_2 = "GamePlayScene2";
-        public const string Ch1_3 = "GamePlayScene3";
-        public const string Ch1_4 = "GamePlayScene4";
-        public const string Ch1_Boss = "BossScene1";
-        public const string CutSceneStage = "GamePlayScene2";
+        public const string Ch1_1 = "Ch1_T1";
+        public const string Ch1_2 = "Ch1_G1";
+        public const string Ch1_Boss = "Ch1_B1";
+        public const string Clear = "ClearScene";
+        //public const string Ch1_3 = "GamePlayScene3";
+        //public const string Ch1_4 = "GamePlayScene4";
+        //public const string CutSceneStage = "GamePlayScene2";
         public const string SettingsScene = "SettingsScene";
     }
     
     public static readonly Dictionary<string, string> NextStages = new()
     {
         [Scenes.Ch1_1] = Scenes.Ch1_2,
-        [Scenes.Ch1_2] = Scenes.Ch1_3,
-        [Scenes.Ch1_3] = Scenes.Ch1_4,
-        [Scenes.Ch1_4] = Scenes.Ch1_Boss,
-        [Scenes.Ch1_Boss] = Scenes.MainMenu
+        [Scenes.Ch1_2] = Scenes.Ch1_Boss,
+        [Scenes.Ch1_Boss] = Scenes.Clear
     };
 
     public static int GetBuildIndex(string sceneName)

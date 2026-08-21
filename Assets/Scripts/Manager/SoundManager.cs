@@ -23,12 +23,18 @@ public class SoundManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void PlayBGM(AudioClip bgmClip)
+    public void PlayBGM(AudioClip bgmClip, bool reverse = false)
     {
-        if (bgmClip == null) return;
+        if (bgmClip == null)
+        {
+            bgmPlayer.Stop();
+            return;
+        }
         if (bgmPlayer.clip == bgmClip) return;
 
-        bgmPlayer.clip = bgmClip;
+        if (reverse) StartEmitBGM();
+        else StopEmitBGM();
+            bgmPlayer.clip = bgmClip;
         bgmPlayer.loop = true;
         bgmPlayer.Play();
     }

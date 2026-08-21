@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e277a04efb5f0f246aeeb8ffde26a4df, type: 3}
+  m_Name: TutBot1
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  enemyName: "\uD6C8\uB828\uC6A9 \uBD07"
+  enemyInfo: "\uD6C8\uB828\uC6A9 \uBD07\uC784"
+  baseHealth: 10
+  baseAttack: 0
+  baseSpeed: 0
+  jumpHeight: 1
+  visionRange: 0
+  attackRange: -1
+  startAttackRange: -1
+  startUpTime: 1000
+  recoveryTime: 1
+  knockbackRate: 1
+  strongKnockbackRate: 4
+  knockbackTime: 0.2
+  grabForce: 50
+  HitRecoveryTime: 0.2
+  powerResetTime: 1.5
+  invincibilityDuration: 0.2

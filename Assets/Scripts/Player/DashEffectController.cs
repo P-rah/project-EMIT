@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class DashEffectController : MonoBehaviour
@@ -18,6 +16,9 @@ public class DashEffectController : MonoBehaviour
     private bool isDashing = false;
     private Vector2 lastSpawnPosition;
 
+    // 💡 하이어라키 창을 정리할 빈 폴더 변수
+    private GameObject ghostContainer;
+
     void Start()
     {
         InitializePool();
@@ -25,10 +26,29 @@ public class DashEffectController : MonoBehaviour
 
     private void InitializePool()
     {
-        ghostPool = new Queue<GameObject>();
+        // 1. 기존 풀이 있으면 깨끗하게 비웁니다.
+        if (ghostPool == null)
+            ghostPool = new Queue<GameObject>();
+        else
+            ghostPool.Clear();
+
+        // 2. 씬이 다시 로드될 때 남아있던 예전 폴더(찌꺼기)가 있다면 찾아서 지워줍니다.
+        GameObject existingContainer = GameObject.Find("DashGhosts_Pool");
+        if (existingContainer != null)
+        {
+            Destroy(existingContainer);
+        }
+
+        // 3. 새 폴더를 만듭니다.
+        ghostContainer = new GameObject("DashGhosts_Pool");
+
         for (int i = 0; i < poolSize; i++)
         {
             GameObject ghost = Instantiate(ghostPrefab);
+
+            // 💡 생성된 잔상을 폴더(Container)의 자식으로 쏙 집어넣습니다!
+            ghost.transform.SetParent(ghostContainer.transform);
+
             ghost.SetActive(false);
             ghostPool.Enqueue(ghost);
         }
@@ -79,6 +99,28 @@ public class DashEffectController : MonoBehaviour
         if (ghostScript != null)
         {
             ghostScript.Setup(transform, ghostColor, fadeSpeed);
+        }
+    }
+
+    private void OnDisable()
+    {
+        isDashing = false;
+        if (ghostPool == null) return;
+
+        foreach (GameObject ghost in ghostPool)
+        {
+            if (ghost != null)
+            {
+                ghost.SetActive(false);
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (ghostContainer != null)
+        {
+            Destroy(ghostContainer);
         }
     }
 }

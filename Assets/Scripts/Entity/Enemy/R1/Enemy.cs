@@ -10,6 +10,8 @@ public class Enemy : EnemyBase
     private EnemyAnimator _enemyAnimator;
     public EnemyCollisionDetector enemyCollisionDetector;
 
+    [SerializeField] private bool canAttack = true;
+
     public override void Init()
     {
         base.Init();
@@ -64,7 +66,12 @@ public class Enemy : EnemyBase
     }
 
     public bool isPlayerInVision() => Physics2D.CircleCast(transform.position, visionRange, Vector2.right, 0, LayerMask.GetMask("Player"));
-    public bool isPlayerInAttackRange() => Physics2D.Raycast(transform.position, targetDir, startAttackRange, LayerMask.GetMask("Player"));
+    public bool isPlayerInAttackRange()
+    {
+        if (canAttack)
+            return Physics2D.Raycast(transform.position, targetDir, startAttackRange, LayerMask.GetMask("Player"));
+        else return false;
+    }
     public bool isMovingLeft() => rb.linearVelocityX * Vector2.left.magnitude > 0f;
     public bool IsCurrentState(StateBase<EnemyStateMachine> state) => StateMachine.IsCurrentState(state);
 
