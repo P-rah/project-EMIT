@@ -271,13 +271,16 @@ public class SceneControlManager : MonoBehaviour
         .Build();
     }
 
-    private void LoadStage(LoadIndex loadIndex)
+    private void LoadStage(LoadIndex loadIndex, bool unloadSettings = false)
     {
         string currentStage = loadedSceneBySlot[SceneDatabase.Slots.Stage];
         int nextSceneBuildIndex = SceneManager.GetSceneByName(currentStage).buildIndex + (int) loadIndex;
         string nextStage = SceneManager.GetSceneByBuildIndex(nextSceneBuildIndex).name;
 
-        NewTransition()
+        SceneTransitionPlan transition = NewTransition();
+        if (unloadSettings) transition.Unload(SceneDatabase.Slots.Settings);
+
+        transition
         .Load(SceneDatabase.Slots.Stage, nextStage, true)
         .WithOverlay()
         .WithCleanupUnusedAssets()
@@ -296,7 +299,7 @@ public class SceneControlManager : MonoBehaviour
 
     public void ReloadStage()
     {
-        LoadStage(LoadIndex.Current);
+        LoadStage(LoadIndex.Current, true);
     }
     public enum LoadIndex
     {

@@ -69,7 +69,7 @@ public class SettingsMenuController : MonoBehaviour
 
     private void RestartStage()
     {
-        SceneControlManager.Instance.ReloadStage();
+        StageManager.Instance.RestartStage();
     }   
 
     private void ReturnToTitle()
