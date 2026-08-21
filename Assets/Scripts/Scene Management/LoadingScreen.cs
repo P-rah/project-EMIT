@@ -23,6 +23,7 @@ public class LoadingScreen : MonoBehaviour
         
         _loadingText.alpha = 1f;
         canvasGroup.DOFade(1f, fadeInTime)
+        .SetUpdate(true)
         .SetEase(Ease.OutQuad)
         .OnComplete(() =>
         {
@@ -36,6 +37,7 @@ public class LoadingScreen : MonoBehaviour
     {
         _loadingText.alpha = 0f;
         canvasGroup.DOFade(0f, fadeOutTime)
+        .SetUpdate(true)
         .SetEase(Ease.OutQuad)
         .OnComplete(() =>
         {

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 /*
@@ -5,6 +6,8 @@ using UnityEngine.InputSystem;
  */
 public class PlayerInputHandler : MonoBehaviour
 {
+    public static event Action SettingsToggleRequested;
+
     /*
         ===============================================
         LAYER 1: 인풋을 이용하는 스크립트들이 참조할 input flag들
@@ -76,6 +79,14 @@ public class PlayerInputHandler : MonoBehaviour
         if (value.isPressed)
         {
             AttackGrabInput = true;
+        }
+    }
+
+    public void OnEscape(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            SettingsToggleRequested?.Invoke();
         }
     }
     
