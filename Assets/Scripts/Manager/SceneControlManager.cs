@@ -31,6 +31,39 @@ public class SceneControlManager : MonoBehaviour
     private Dictionary<string, string> loadedSceneBySlot = new();
     private bool isBusy = false;
 
+    private void OnEnable()
+    {
+        PlayerInputHandler.SettingsToggleRequested += ToggleSettingsScene;
+    }
+
+    private void OnDisable()
+    {
+        PlayerInputHandler.SettingsToggleRequested -= ToggleSettingsScene;
+    }
+
+    private void ToggleSettingsScene()
+    {
+        if (isBusy || !IsActiveSceneInSlot(SceneDatabase.Slots.Stage))
+        {
+            return;
+        }
+
+        if (loadedSceneBySlot.ContainsKey(SceneDatabase.Slots.Settings))
+        {
+            UnloadSettings();
+        }
+        else
+        {
+            LoadSettings();
+        }
+    }
+
+    private bool IsActiveSceneInSlot(string slotKey)
+    {
+        return loadedSceneBySlot.TryGetValue(slotKey, out string sceneName) &&
+            SceneManager.GetActiveScene().name == sceneName;
+    }
+
     public SceneTransitionPlan NewTransition()
     {
         return new SceneTransitionPlan();
@@ -197,9 +230,34 @@ public class SceneControlManager : MonoBehaviour
 
     public void LoadTitle()
     {
+        if (TutorialManager.Instance != null)
+        {
+            Destroy(TutorialManager.Instance.gameObject);
+        }
+        if (EmitManager.Instance != null) Destroy(EmitManager.Instance.gameObject);
+
         NewTransition()
+        .Unload(SceneDatabase.Slots.Settings)
+        .Unload(SceneDatabase.Slots.Stage)
+        .Unload(SceneDatabase.Slots.CutSceneStage)
+        .Unload(SceneDatabase.Slots.StageContent)
         .Load(SceneDatabase.Slots.Title, SceneDatabase.Scenes.MainMenu, true)
         .WithOverlay()
+        .WithCleanupUnusedAssets()
+        .Build();
+    }
+
+    public void LoadSettings()
+    {
+        NewTransition()
+        .Load(SceneDatabase.Slots.Settings, SceneDatabase.Scenes.SettingsScene)
+        .Build();
+    }
+
+    public void UnloadSettings()
+    {
+        NewTransition()
+        .Unload(SceneDatabase.Slots.Settings)
         .Build();
     }
 

@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TitleMenuController : MonoBehaviour
@@ -17,7 +19,10 @@ public class TitleMenuController : MonoBehaviour
 
     private void OnEnable() 
     {
+        quitButton.interactable = SceneManager.GetActiveScene().name != SceneDatabase.Scenes.MainMenu;
+
         newGameButton.onClick.AddListener(SceneControlManager.Instance.LoadFirstStage);
-        quitButton.onClick.AddListener(GameManager.Instance.QuitGame);    
+        settingsButton.onClick.AddListener(SceneControlManager.Instance.LoadSettings);
+        quitButton.onClick.AddListener(GameManager.Instance.QuitGame);   
     }
 }

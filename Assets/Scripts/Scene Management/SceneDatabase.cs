@@ -15,6 +15,7 @@ public static class SceneDatabase
         public const string Stage = "Stage";
         public const string CutSceneStage = "CutSceneStage";
         public const string StageContent = "StageContent";
+        public const string Settings = "Settings";
     }
 
     public class Scenes
@@ -34,12 +35,13 @@ public static class SceneDatabase
             잊지 말고 빌드 설정에 있는 Scene List에도 씬을 추가해주면 됨. 
         */
         public const string MainMenu = "TitleScene";
-        public const string Ch1_1 = "GamePlayScene1";
+        public const string Ch1_1 = "GamePlayBase";
         public const string Ch1_2 = "GamePlayScene2";
         public const string Ch1_3 = "GamePlayScene3";
         public const string Ch1_4 = "GamePlayScene4";
         public const string Ch1_Boss = "BossScene1";
         public const string CutSceneStage = "GamePlayScene2";
+        public const string SettingsScene = "SettingsScene";
     }
     
     public static readonly Dictionary<string, string> NextStages = new()
