@@ -4,21 +4,21 @@ using UnityEngine.UI;
 public class UISetting : MonoBehaviour
 {
     public Image targetUIImage;
-    public Material hdrMaterialPrefab;
+    //public Material hdrMaterialPrefab;
 
-    [ColorUsage(true, true)]
-    public Color myHDRColor;
+    //[ColorUsage(true, true)]
+    //public Color myHDRColor;
 
-    private static readonly int _hdrColorID = Shader.PropertyToID("_HDRColor");
+    //private static readonly int _hdrColorID = Shader.PropertyToID("_HDRColor");
 
     private Material instancedMaterial;
 
     private void Start()
     {
-        instancedMaterial = new Material(hdrMaterialPrefab);
+        //instancedMaterial = new Material(hdrMaterialPrefab);
         targetUIImage.material = instancedMaterial;
 
-        instancedMaterial.SetColor(_hdrColorID, myHDRColor);
+        //instancedMaterial.SetColor(_hdrColorID, myHDRColor);
     }
 
     public void ChangeToNeonRed()

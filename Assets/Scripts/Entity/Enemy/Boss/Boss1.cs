@@ -8,6 +8,7 @@ public class Boss1 : EnemyBase
 
     private BossAnimator _bossAnimator;
     public LaserTargetting laserAttack;
+    private UIGaugeBarController _uiBarController;
 
     [Header("Boss 전용 설정")]
     [SerializeField] private List<Transform> hoverPoints;
@@ -26,12 +27,15 @@ public class Boss1 : EnemyBase
         base.Init();
         _bossAnimator = GetComponent<BossAnimator>();
         StateMachine = GetComponent<BossStateMachine>();
+        _uiBarController = GetComponent<UIGaugeBarController>();
     }
 
     private void Start()
     {
         StageManager.Instance?.AddEnemy();
         StateMachine.ChangeState(StateMachine.MoveState);
+        _uiBarController.SetMaxAmount(maxHealth);
+        _uiBarController.UpdateBar(currentHealth);
     }
 
     private void Update()
@@ -153,6 +157,7 @@ public class Boss1 : EnemyBase
         int damage = DamageCalculation<Boss1>.Calculate(attackInfo, this);
         if (dmgType == 2) ResetPower();
         currentHealth -= damage;
+        _uiBarController.UpdateBar(currentHealth);
     }
 
     public override void ReceiveKnockback(AttackInfo attackInfo, bool force)

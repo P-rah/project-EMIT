@@ -1,40 +1,40 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class UIGaugeBarController : MonoBehaviour
 {
     [Header("UI 연결")]
-    [SerializeField] private Image fillImage;
+    public Image frontHealthBar;    //실제 체력
+    public Image ghostHealthBar;    //가상 체력
 
-    [Header("옵션 설정")]
-    [SerializeField] private bool useSmoothDrain = false;
-    [SerializeField] private float drainSpeed = 10f;
+    [Header("연출 세팅")]
+    public float ghostDelay = 0.3f;
+    public float ghostDuration = 0.5f;
 
-    private float targetFillAmount = 1f;
+    private float maxAmount;
+    private float currentAmount;
 
-    void Update()
+    public void SetMaxAmount(float maxValue)
     {
-        if (useSmoothDrain && fillImage.fillAmount != targetFillAmount)
-        {
-            fillImage.fillAmount = Mathf.Lerp(
-                fillImage.fillAmount,
-                targetFillAmount,
-                Time.deltaTime * drainSpeed
-            );
-        }
+        this.maxAmount = maxValue;
+        currentAmount = maxAmount;
+
+        frontHealthBar.fillAmount = 1f;
+        ghostHealthBar.fillAmount = 1f;
     }
 
-    public void UpdateBar(float currentRate, float maxAmount)
+    public void UpdateBar(float amount)
     {
-        float fillRatio = currentRate / maxAmount;
+        currentAmount = Mathf.Clamp(amount, 0, maxAmount);
 
-        if (useSmoothDrain)
-        {
-            targetFillAmount = fillRatio;
-        }
-        else
-        {
-            fillImage.fillAmount = fillRatio;
-        }
+        float targetRatio = currentAmount / maxAmount;
+
+        frontHealthBar.fillAmount = targetRatio;
+
+        ghostHealthBar.DOKill();
+        ghostHealthBar.DOFillAmount(targetRatio, ghostDuration)
+                      .SetDelay(ghostDelay)
+                      .SetEase(Ease.OutCubic);
     }
 }

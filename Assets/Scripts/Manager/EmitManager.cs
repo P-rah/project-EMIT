@@ -27,8 +27,8 @@ public class EmitManager : MonoBehaviour
     public AudioClip emitClockSound1;
     public AudioClip emitClockSound2;
 
-    [Header("UI 컨트롤러")]
-    [SerializeField] private UIGaugeBarController UIController;
+    //[Header("UI 컨트롤러")]
+    //[SerializeField] private UIGaugeBarController UIController;
 
     private void Awake()
     {
@@ -165,7 +165,8 @@ public class EmitManager : MonoBehaviour
 
     private void updateEmitUI()
     {
-        UIController.UpdateBar(currentEmitableTime, emitDurationTime);
+        //UIController.UpdateBar(currentEmitableTime, emitDurationTime);
+        Player.UIController.UpdateEmitBar(currentEmitableTime, emitDurationTime);
     }
 
     private IEnumerator startEmitTimer()

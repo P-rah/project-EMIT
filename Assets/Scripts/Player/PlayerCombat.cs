@@ -17,8 +17,8 @@ public class PlayerCombat : MonoBehaviour
     [Header("Attack Settings")]
     public float attackCoolTime = 0.3f;
     public float attackRecoveryTime = 1f;
-    public int maxAttackCount = 2;
-    public int currentAttackCount;
+    //public int maxAttackCount = 2;
+    //public int currentAttackCount;
     private Coroutine attackRecoveryRoutine;
 
     [Header("Emit Settings")]
@@ -38,8 +38,6 @@ public class PlayerCombat : MonoBehaviour
         input = GetComponent<PlayerInputHandler>();
         state = Player.State;
         grapEffect = Player.GrapEffect;
-
-        currentAttackCount = maxAttackCount;
     }
 
     private void Start()
@@ -62,10 +60,6 @@ public class PlayerCombat : MonoBehaviour
         if (state.IsDead) return;
         CheckInputs();
         CheckEmitable();
-        if (currentAttackCount < maxAttackCount && attackRecoveryRoutine == null)
-        {
-            attackRecoveryRoutine = StartCoroutine(AttackRecoveryRoutine());
-        }
     }
 
     private void CheckInputs()
@@ -82,8 +76,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void ExecuteAttackSweep()
     {
-        if (currentAttackCount == 0) return;
-        else if (canAttackSweep)
+        if (canAttackSweep)
         {
             if(state.CurrentState == State.AttackingGrab)
             {
@@ -93,9 +86,6 @@ public class PlayerCombat : MonoBehaviour
             canAttackGrap = false;
             state.IsAttackingSweep = true;
             hasTriggeredHitEffect = false;
-
-            currentAttackCount--;
-            Player.UIController.UpdateAttackBar();
         }
     }
 
@@ -136,17 +126,13 @@ public class PlayerCombat : MonoBehaviour
 
     public void ExecuteAttackGrab()
     {
-        if (currentAttackCount == 0) return;
-        else if (canAttackGrap)
+        if (canAttackGrap)
         {
             canAttackSweep = false;
             canAttackGrap = false;
             state.IsAttackingGrab = true;
             hasTriggeredHitEffect = false;
             Player.Movement.flippable = false;
-
-            currentAttackCount--;
-            Player.UIController.UpdateAttackBar();
 
             grabAttackHitbox.OnTargetGrapHit += handleGrapHit;
         }
@@ -212,28 +198,8 @@ public class PlayerCombat : MonoBehaviour
         SoundManager.instance.PlaySFX(Player.Instance.grabRetreiveSound);
     }
 
-    private IEnumerator AttackRecoveryRoutine()
-    {
-        yield return new WaitForSeconds(attackRecoveryTime);
-        currentAttackCount++;
-        Player.UIController.UpdateAttackBar();
-        attackRecoveryRoutine = null;
-    }
-
-    private void StopAttackRecoveryRoutine()
-    {
-        StopCoroutine(attackRecoveryRoutine);
-        attackRecoveryRoutine = null;
-    }
-
     private void OnEmitPressed()
     {
-        if(currentAttackCount < maxAttackCount)
-            currentAttackCount++;
-
-        if (currentAttackCount == maxAttackCount && attackRecoveryRoutine != null)
-            StopAttackRecoveryRoutine();
-
         hasTriggeredEmit = false;
     }
 
