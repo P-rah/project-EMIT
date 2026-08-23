@@ -67,7 +67,7 @@ public class PlayerAnimation : MonoBehaviour
             case State.Dashing:
                 animator.SetBool("isDash", true);
                 break;
-            case State.Death:
+            case State.Dead:
                 animator.SetBool("isDeath", true);
                 break;
 

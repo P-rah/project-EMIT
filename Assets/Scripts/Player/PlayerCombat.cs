@@ -29,6 +29,9 @@ public class PlayerCombat : MonoBehaviour
     private bool canAttackGrap = true;
     private bool hasTriggeredHitEffect = false;
 
+    public bool IsAttackingSweep { get; private set; }
+    public bool IsAttackingGrab { get; private set; }
+
     private IGrabbable currentGrabTarget;
 
     private Transform currentTargetTransform;
@@ -84,7 +87,7 @@ public class PlayerCombat : MonoBehaviour
             }
             canAttackSweep = false;
             canAttackGrap = false;
-            state.IsAttackingSweep = true;
+            IsAttackingSweep = true;
             hasTriggeredHitEffect = false;
         }
     }
@@ -92,6 +95,7 @@ public class PlayerCombat : MonoBehaviour
     public void AnimEvent_AttackSweepStart()
     {
         Player.Movement.flippable = false;
+        Player.TempMovement.flippable = false;
         sweepAttackHitbox.OnTargetSweepHit += handleSweepHit;
         sweepAttackHitbox.gameObject.SetActive(true);
         SoundManager.instance.PlaySFX(Player.Instance.sweepSound);
@@ -100,6 +104,7 @@ public class PlayerCombat : MonoBehaviour
     public void AnimEvent_AttackSweepEnd()
     {
         Player.Movement.flippable = true;
+        Player.TempMovement.flippable = true;
         sweepAttackHitbox.gameObject.SetActive(false);
         sweepAttackHitbox.OnTargetSweepHit -= handleSweepHit;
         StartCoroutine(AttackSweepCooldowmRoutine());
@@ -107,7 +112,7 @@ public class PlayerCombat : MonoBehaviour
 
     private IEnumerator AttackSweepCooldowmRoutine()
     {
-        state.IsAttackingSweep = false;
+        IsAttackingSweep = false;
         canAttackGrap = true;
 
         yield return new WaitForSeconds(attackCoolTime);
@@ -130,9 +135,10 @@ public class PlayerCombat : MonoBehaviour
         {
             canAttackSweep = false;
             canAttackGrap = false;
-            state.IsAttackingGrab = true;
+            IsAttackingGrab = true;
             hasTriggeredHitEffect = false;
             Player.Movement.flippable = false;
+            Player.TempMovement.flippable = false;
 
             grabAttackHitbox.OnTargetGrapHit += handleGrapHit;
         }
@@ -161,8 +167,9 @@ public class PlayerCombat : MonoBehaviour
         currentGrabTarget = null;
         grapEffect.StopGrabVisual();
 
-        state.IsAttackingGrab = false;
+        IsAttackingGrab = false;
         Player.Movement.flippable = true;
+        Player.TempMovement.flippable = true;
 
         canAttackSweep = true;
         canAttackGrap = true;

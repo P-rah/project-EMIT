@@ -5,11 +5,6 @@ using EMIT.Utilities;
 public class TempPlayerMovement : MonoBehaviour
 {
 #region 변수 선언
-    private Rigidbody2D rb;
-    private PlayerInputHandler input;
-    private PlayerState state;
-    private DashEffectController dashEffectController;
-    private PlayerDropDownPlatform dropDownPlatform;
 
     [Header("Movement Settings")]
     public float moveSpeed = 15f;
@@ -17,31 +12,41 @@ public class TempPlayerMovement : MonoBehaviour
 
     [Header("Jump Movement")]
     [SerializeField] private float jumpForce = 15f;
-    [Tooltip("대충 점프 로직을 위해 넣은 값 (필요시 문의)")]
     [SerializeField] private float jumpProtectionDuration = 0.1f;
     [SerializeField] private bool isJumpProtected;
-    private bool jumpRequested;
+    [SerializeField] private bool jumpRequested;
+    [SerializeField] private float initialGravityScale;
 
-    [Header("Slope Movement")]
+    [Header("Ground Check")]
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private LayerMask slideMovementLayer; 
     [SerializeField] private Transform groundCheckPos;
     [SerializeField] private float groundCheckRayLength = 0.3f;
     [SerializeField] private bool checkGroundedByRay = true;
+    public bool IsGrounded { get; private set; }
+
+    [Header("Slope Movement")]
+    [SerializeField] private LayerMask slideMovementLayer;
     [SerializeField] private Rigidbody2D.SlideMovement slideMovement;
 
+    [Header("Dash Settings")]
+    [SerializeField] private float dashTime = 0.1f;
+    [SerializeField] private float dashCooldown = 0.5f;
+    [SerializeField] private float dashSpeed = 40f;
+    [SerializeField] private bool canDash = true;
+    [SerializeField] private bool isDashing;
+    public bool IsDashing => isDashing;
+
+    private Vector2 facingDir = Vector2.right;
+    public bool flippable = true;
+
+    private Rigidbody2D rb;
     private CapsuleCollider2D playerBodyCollider;
 
-    [Header("Dash Settings")]
-    public float dashSpeed = 40f;
-    public float dashTime = 0.1f;
-    public float dashCooldown = 0.5f;
-    [SerializeField] private bool isDashing;
-    [SerializeField] private bool canDash = true;
-    private Vector2 facingDir = Vector2.right;
-    private float initialGravityScale;
+    private PlayerState state;
+    private PlayerInputHandler input;
+    private DashEffectController dashEffectController;
+    private PlayerDropDownPlatform dropDownPlatform;
 
-    public bool flippable = true;
 #endregion
 
     private void Awake()
@@ -66,7 +71,7 @@ public class TempPlayerMovement : MonoBehaviour
     }
 
     private void HandleInputs()
-    {
+    { 
         if (input.ConsumeJump())
         {
             ExecuteJump();
@@ -80,7 +85,7 @@ public class TempPlayerMovement : MonoBehaviour
 #region FixedUpdate
     private void FixedUpdate()
     {
-        bool groundedThisFrame = IsGrounded();
+        bool groundedThisFrame = Grounded();
 
         if (ShouldJump(groundedThisFrame))
         {
@@ -110,6 +115,8 @@ public class TempPlayerMovement : MonoBehaviour
     private void UseSlideMovement()
     {
         SetGravityScale(0f);
+
+        if (Player.State.IsDead) return;
 
         float horizontalInput = input.MoveInput.x;
         if (Mathf.Abs(horizontalInput) < 0.01f)
@@ -183,7 +190,7 @@ public class TempPlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(jumpProtectionDuration);
 
-        while (!IsGrounded())
+        while (!Grounded())
         {
             yield return new WaitForFixedUpdate();
         }
@@ -203,14 +210,12 @@ public class TempPlayerMovement : MonoBehaviour
     private IEnumerator DashRoutine()
     {
         canDash = false;
-        state.IsDashing = true;
         isDashing = true;
         rb.linearVelocityY = 0f;
         dashEffectController.StartDashTrail();
 
         yield return new WaitForSeconds(dashTime);
 
-        state.IsDashing = false;
         isDashing = false;
         dashEffectController.StopDashTrail();
 
@@ -218,9 +223,10 @@ public class TempPlayerMovement : MonoBehaviour
         canDash = true;
     }
 #endregion
+
     
 #region 지면판정 관련
-    private bool IsGrounded()
+    private bool Grounded()
     {
         if (checkGroundedByRay)
         {
@@ -246,17 +252,12 @@ public class TempPlayerMovement : MonoBehaviour
 
                 if (!isIgnoredPlatform)
                 {
+                    IsGrounded = true;
                     return true;
                 }
             }
-
+            IsGrounded = false;
             return false;
-        }
-
-        if (Physics2D.OverlapCircle(
-            groundCheckPos.position, groundCheckRayLength, groundLayer))
-        {
-            return true;
         }
         Debug.Log("접지 떨어짐!");
         return false;
@@ -276,6 +277,16 @@ public class TempPlayerMovement : MonoBehaviour
         
         return Vector2.up;
     }
+#endregion
+
+#region 움직임 정지 API
+
+    public void StopMovement()
+    {
+        rb.linearVelocity = Vector2.zero;
+        rb.gravityScale = initialGravityScale;
+    }
+
 #endregion
 
 #region 헬퍼함수들
@@ -309,8 +320,9 @@ public class TempPlayerMovement : MonoBehaviour
         transform.Rotate(0f, 180f, 0f);
     }
 
-    public void Animevent_playWalkSound()
+    public void Animevent_PlayWalkSound()
     {
+        SoundManager.instance.PlaySFX(Player.Instance.walkSound, 0.2f);
     }
 
     private void SetSlideMovement()

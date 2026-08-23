@@ -18,7 +18,7 @@ public enum State
     Dashing,
     AttackingSweep,
     AttackingGrab,
-    Death
+    Dead
 }
 
 public class PlayerState : MonoBehaviour
@@ -39,10 +39,19 @@ public class PlayerState : MonoBehaviour
     public LayerMask groundLayer;
 
     private Rigidbody2D rb;
+    private TempPlayerMovement tempPlayerMovement;
+    private PlayerCombat playerCombat;
+    private PlayerInputHandler input;
+
+    private bool IsTempPlayerMovementActive =>
+        tempPlayerMovement != null && tempPlayerMovement.isActiveAndEnabled;
 
     private void Awake()
     {
         rb = Player.Instance.Rb;
+        tempPlayerMovement = GetComponent<TempPlayerMovement>();
+        playerCombat = GetComponent<PlayerCombat>();
+        input = GetComponent<PlayerInputHandler>();
     }
 
     private void Update()
@@ -54,7 +63,10 @@ public class PlayerState : MonoBehaviour
 
     private void CheckGrounded()
     {
-        IsGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+        IsGrounded = IsTempPlayerMovementActive
+            ? tempPlayerMovement.IsGrounded
+            : Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer) != null;
+
         if (!IsGrounded) isFalling = true;
         else if(isFalling)
         {
@@ -66,22 +78,33 @@ public class PlayerState : MonoBehaviour
 
     private void DetermineState()
     {
+        if (IsTempPlayerMovementActive)
+        {
+            IsDashing = tempPlayerMovement.IsDashing;
+        }
+
+        if (playerCombat != null)
+        {
+            IsAttackingSweep = playerCombat.IsAttackingSweep;
+            IsAttackingGrab = playerCombat.IsAttackingGrab;
+        }
+
         State newState = CurrentState;
 
-        if (IsDead) newState = State.Death;
+        if (IsDead) newState = State.Dead;
         else if (IsAttackingSweep) newState = State.AttackingSweep;
         else if (IsAttackingGrab) newState = State.AttackingGrab;
         else if (IsDashing) newState = State.Dashing;
         else if (IsGrounded)
         {
-            if (Mathf.Abs(rb.linearVelocity.x) > 0.1f)
+            if (Mathf.Abs(input.MoveInput.x) > 0f)
                 newState = State.Running;
             else
                 newState = State.Idle;
         }
         else
         {
-            if (rb.linearVelocity.y > 0.1f)
+            if (rb.linearVelocityY > 0f)
                 newState = State.Jumping;
             else
                 newState = State.Falling;
