@@ -101,10 +101,10 @@ public class EmitManager : MonoBehaviour
         isEmitting = true;
         StartCoroutine(startEmitTimer());
         TimeManager.Instance.StartSlowMotion();
-        SoundManager.instance.PlaySFX(emitStartSound1);
-        SoundManager.instance.PlaySFX(emitStartSound2);
+        SoundManager.Instance.PlaySFX(emitStartSound1);
+        SoundManager.Instance.PlaySFX(emitStartSound2);
         StartCoroutine(emitClockSound());
-        SoundManager.instance.StartEmitBGM();
+        SoundManager.Instance.StartEmitBGM();
     }
 
     private void OnEmitFinished()
@@ -118,8 +118,8 @@ public class EmitManager : MonoBehaviour
         isEmitting = false;
         StartCoroutine (emitCooldown());
         TimeManager.Instance.StopSlowMotion();
-        SoundManager.instance.PlaySFX(emitEndSound);
-        SoundManager.instance.StopEmitBGM();
+        SoundManager.Instance.PlaySFX(emitEndSound);
+        SoundManager.Instance.StopEmitBGM();
         EventManager.TriggerEvent("OnEmitFinished");
         //StartCoroutine(emitCoolDownRoutine());
     }
@@ -133,7 +133,7 @@ public class EmitManager : MonoBehaviour
         emittedFrames = 0;
         isEmitting = false;
         TimeManager.Instance.InstantNormalTime();
-        SoundManager.instance.StopEmitBGM();
+        SoundManager.Instance.StopEmitBGM();
         //StartCoroutine(emitCoolDownRoutine());
     }
 
@@ -193,11 +193,11 @@ public class EmitManager : MonoBehaviour
     {
         while (isEmitting)
         {
-            SoundManager.instance.PlaySFX(emitClockSound1);
+            SoundManager.Instance.PlaySFX(emitClockSound1);
 
             yield return new WaitForSeconds(1f);
 
-            SoundManager.instance.PlaySFX(emitClockSound2);
+            SoundManager.Instance.PlaySFX(emitClockSound2);
 
             yield return new WaitForSeconds(1f);
         }

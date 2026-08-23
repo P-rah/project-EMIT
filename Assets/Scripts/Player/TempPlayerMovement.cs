@@ -322,7 +322,7 @@ public class TempPlayerMovement : MonoBehaviour
 
     public void Animevent_PlayWalkSound()
     {
-        SoundManager.instance.PlaySFX(Player.Instance.walkSound, 0.2f);
+        SoundManager.Instance.PlaySFX(Player.Instance.walkSound, 0.2f);
     }
 
     private void SetSlideMovement()

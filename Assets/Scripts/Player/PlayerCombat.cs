@@ -98,7 +98,7 @@ public class PlayerCombat : MonoBehaviour
         Player.TempMovement.flippable = false;
         sweepAttackHitbox.OnTargetSweepHit += handleSweepHit;
         sweepAttackHitbox.gameObject.SetActive(true);
-        SoundManager.instance.PlaySFX(Player.Instance.sweepSound);
+        SoundManager.Instance.PlaySFX(Player.Instance.sweepSound);
     }
 
     public void AnimEvent_AttackSweepEnd()
@@ -179,8 +179,8 @@ public class PlayerCombat : MonoBehaviour
     {
         grabAttackHitbox.CatchClosestEnemy();
         startGrabVisual();
-        SoundManager.instance.PlaySFX(Player.Instance.grabThrowSound1);
-        SoundManager.instance.PlaySFX(Player.Instance.grabThrowSound2);
+        SoundManager.Instance.PlaySFX(Player.Instance.grabThrowSound1);
+        SoundManager.Instance.PlaySFX(Player.Instance.grabThrowSound2);
     }
 
     private void startGrabVisual()
@@ -202,7 +202,7 @@ public class PlayerCombat : MonoBehaviour
             grapEffect.StartGrabFailVisualRetract();
         }
         canAttackSweep = true;
-        SoundManager.instance.PlaySFX(Player.Instance.grabRetreiveSound);
+        SoundManager.Instance.PlaySFX(Player.Instance.grabRetreiveSound);
     }
 
     private void OnEmitPressed()
@@ -215,7 +215,7 @@ public class PlayerCombat : MonoBehaviour
         //역행 가능상태가 되었을 시 한번만 동작
         if(emitManager.isEmittable && !hasTriggeredEmit)
         {
-            SoundManager.instance.PlaySFX(Player.Instance.canEmitSound);
+            SoundManager.Instance.PlaySFX(Player.Instance.canEmitSound);
             hasTriggeredEmit = true;
         }
     }

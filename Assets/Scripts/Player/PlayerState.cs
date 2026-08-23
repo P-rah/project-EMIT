@@ -70,8 +70,7 @@ public class PlayerState : MonoBehaviour
         if (!IsGrounded) isFalling = true;
         else if(isFalling)
         {
-            // AudioManager.Instance.PlaySFX(Player.Instance.landSound);
-            // SoundManager.instance.PlaySFX(Player.Instance.landSound);
+            // SoundManager.Instance.PlaySFX(Player.Instance.landSound);
             isFalling = false;
         }
     }
