@@ -2512,27 +2512,6 @@ Transform:
   - {fileID: 1729926784}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &723560474 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6880536783117691652, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
-  m_PrefabInstance: {fileID: 771431906}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &723560489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 723560474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dd283c55941f21449982c3f9c5f5aa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIGaugeBarController
-  frontHealthBar: {fileID: 895044925}
-  ghostHealthBar: {fileID: 1784884965}
-  ghostDelay: 0.3
-  ghostDuration: 0.5
 --- !u!1001 &771431906
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2541,14 +2520,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1178739064216388299, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
-      propertyPath: m_SortingLayer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1178739064216388299, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
-      propertyPath: m_SortingLayerID
-      value: -840063207
-      objectReference: {fileID: 0}
+    - target: {fileID: 686861984444984252, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: frontHealthBar
+      value: 
+      objectReference: {fileID: 895044925}
+    - target: {fileID: 686861984444984252, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: ghostHealthBar
+      value: 
+      objectReference: {fileID: 1784884965}
     - target: {fileID: 1873399945288288519, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.79
@@ -2589,13 +2568,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3350538998615800503, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
-      propertyPath: m_SortingLayer
-      value: 2
+    - target: {fileID: 1947091166827854339, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
-    - target: {fileID: 3350538998615800503, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
-      propertyPath: m_SortingLayerID
-      value: -840063207
+    - target: {fileID: 4105558858460047283, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4790368003228941055, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
       propertyPath: 'hoverPoints.Array.data[0]'
@@ -2622,16 +2601,13 @@ PrefabInstance:
       value: Boss
       objectReference: {fileID: 0}
     - target: {fileID: 6880536783117691652, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6880536783117691652, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 723560489}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2452a7b0f72105447b92ef80b4fb1f59, type: 3}
 --- !u!1 &895044923
 GameObject:
@@ -4563,6 +4539,10 @@ PrefabInstance:
     - target: {fileID: 6071649747952069075, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_Name
       value: TestPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 7039165303863016116, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: slideMovementLayer.m_Bits
+      value: 2112
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -30463,7 +30443,7 @@ GameObject:
   - component: {fileID: 2033462111}
   - component: {fileID: 2033462110}
   - component: {fileID: 2033462109}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: PlatformCanPass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30496,7 +30476,7 @@ PlatformEffector2D:
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
-    m_Bits: 6143
+    m_Bits: 2047
   m_RotationalOffset: 0
   m_UseOneWay: 1
   m_UseOneWayGrouping: 0
@@ -31262,6 +31242,10 @@ PrefabInstance:
     - target: {fileID: 7919570647231991048, guid: be5b8d3e30027b547a763ed0aaf489cd, type: 3}
       propertyPath: m_Name
       value: Box
+      objectReference: {fileID: 0}
+    - target: {fileID: 8595313367469662973, guid: be5b8d3e30027b547a763ed0aaf489cd, type: 3}
+      propertyPath: enemyLayer.m_Bits
+      value: 4224
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

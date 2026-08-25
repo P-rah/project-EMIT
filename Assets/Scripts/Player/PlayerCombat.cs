@@ -1,32 +1,32 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 /*
  * 플레이어 공격, 역행 관리용 클래스
  */
 public class PlayerCombat : MonoBehaviour
 {
+    private PlayerAnimation animation;
     private PlayerInputHandler input;
     private PlayerState state;
     private GrapEffect grapEffect;
     private EmitManager emitManager;
+    private TempPlayerMovement playerMovement;
 
     [Header("Hitbox Colliders")]
-    public PlayerAttackHitbox sweepAttackHitbox;
+    public PlayerAttackHitbox[] sweepAttackHitbox;
     public PlayerGrapHitbox grabAttackHitbox;
 
     [Header("Attack Settings")]
-    public float attackCoolTime = 0.3f;
-    public float attackRecoveryTime = 1f;
-    //public int maxAttackCount = 2;
-    //public int currentAttackCount;
-    private Coroutine attackRecoveryRoutine;
+    [SerializeField] private int maxSweepCount = 3;
+    public int sweepCount;
+    private Coroutine continuousSweepTimer;
 
     [Header("Emit Settings")]
     const float emitRecoveryAmountWhenAttackHit = 0.5f;
     private bool hasTriggeredEmit;
 
-    private bool canAttackSweep = true;
-    private bool canAttackGrap = true;
+    private bool canAttack = true;
     private bool hasTriggeredHitEffect = false;
 
     public bool IsAttackingSweep { get; private set; }
@@ -41,6 +41,9 @@ public class PlayerCombat : MonoBehaviour
         input = GetComponent<PlayerInputHandler>();
         state = Player.State;
         grapEffect = Player.GrapEffect;
+        animation = Player.Animation;
+        sweepCount = 0;
+        playerMovement = Player.TempMovement;
     }
 
     private void Start()
@@ -79,44 +82,77 @@ public class PlayerCombat : MonoBehaviour
 
     public void ExecuteAttackSweep()
     {
-        if (canAttackSweep)
+        if (canAttack)
         {
-            if(state.CurrentState == State.AttackingGrab)
+            if (state.CurrentState == State.AttackingGrab)
             {
                 AnimEvent_AttackGrapEnd();
             }
-            canAttackSweep = false;
-            canAttackGrap = false;
+            canAttack = false;
             IsAttackingSweep = true;
             hasTriggeredHitEffect = false;
+
+            if (sweepCount >= maxSweepCount) sweepCount = 1;
+            else sweepCount++;
+            animation.SetAttackSweep(sweepCount);
         }
+        else Debug.Log("공격불가");
+    }
+
+    public void PlayComboEffect(int comboIndex)
+    {
+        if (comboIndex < 0 || comboIndex >= sweepAttackHitbox.Length) return;
+
+        Debug.Log("시작 : " + comboIndex);
+        sweepAttackHitbox[comboIndex].gameObject.SetActive(true);
+        sweepAttackHitbox[comboIndex].OnTargetSweepHit += handleSweepHit;
+    }
+
+    public void EndComboEffect(int comboIndex)
+    {
+        if (comboIndex < 0 || comboIndex >= sweepAttackHitbox.Length) return;
+
+        Debug.Log("끝 : " + comboIndex);
+        sweepAttackHitbox[comboIndex].gameObject.SetActive(false);
+        sweepAttackHitbox[comboIndex].OnTargetSweepHit -= handleSweepHit;
     }
 
     public void AnimEvent_AttackSweepStart()
     {
-        Player.Movement.flippable = false;
-        Player.TempMovement.flippable = false;
-        sweepAttackHitbox.OnTargetSweepHit += handleSweepHit;
-        sweepAttackHitbox.gameObject.SetActive(true);
+        playerMovement.flippable = false;
+        PlayComboEffect(sweepCount - 1);
         SoundManager.instance.PlaySFX(Player.Instance.sweepSound);
+        playerMovement.TriggerMoveWhileAttack();
     }
 
     public void AnimEvent_AttackSweepEnd()
     {
-        Player.Movement.flippable = true;
-        Player.TempMovement.flippable = true;
-        sweepAttackHitbox.gameObject.SetActive(false);
-        sweepAttackHitbox.OnTargetSweepHit -= handleSweepHit;
-        StartCoroutine(AttackSweepCooldowmRoutine());
+        playerMovement.flippable = true;
+        EndComboEffect(sweepCount - 1);
+        //IsAttackingSweep = false;
+        canAttack = true;
+        IsAttackingSweep = false;
     }
 
-    private IEnumerator AttackSweepCooldowmRoutine()
+    public void AnimEvent_ResetSweep()
     {
-        IsAttackingSweep = false;
-        canAttackGrap = true;
+        animation.ResetAttackSweep();
+        //IsAttackingSweep = false;
+        canAttack = true;
+        if (continuousSweepTimer != null)
+        {
+            StopCoroutine(continuousSweepTimer);
+            continuousSweepTimer = null;
+        }
 
-        yield return new WaitForSeconds(attackCoolTime);
-        canAttackSweep = true;
+        continuousSweepTimer = StartCoroutine(ResetSweepCount());
+    }
+
+    private IEnumerator ResetSweepCount()
+    {
+        yield return new WaitForFixedUpdate();
+        sweepCount = 0;
+        continuousSweepTimer = null;
     }
 
     private void handleSweepHit(Transform target, Vector2 hitPoint)
@@ -131,13 +167,12 @@ public class PlayerCombat : MonoBehaviour
 
     public void ExecuteAttackGrab()
     {
-        if (canAttackGrap)
+        if (canAttack)
         {
-            canAttackSweep = false;
-            canAttackGrap = false;
+            canAttack = false;
             IsAttackingGrab = true;
             hasTriggeredHitEffect = false;
-            Player.Movement.flippable = false;
+            //Player.Movement.flippable = false;
             Player.TempMovement.flippable = false;
 
             grabAttackHitbox.OnTargetGrapHit += handleGrapHit;
@@ -168,11 +203,10 @@ public class PlayerCombat : MonoBehaviour
         grapEffect.StopGrabVisual();
 
         IsAttackingGrab = false;
-        Player.Movement.flippable = true;
+        //Player.Movement.flippable = true;
         Player.TempMovement.flippable = true;
 
-        canAttackSweep = true;
-        canAttackGrap = true;
+        canAttack = true;
     }
 
     public void AnimEvent_GrabHitboxActive()
@@ -201,7 +235,7 @@ public class PlayerCombat : MonoBehaviour
         {
             grapEffect.StartGrabFailVisualRetract();
         }
-        canAttackSweep = true;
+        canAttack = true;
         SoundManager.instance.PlaySFX(Player.Instance.grabRetreiveSound);
     }
 

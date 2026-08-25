@@ -10,6 +10,15 @@ public class PlayerUIController : MonoBehaviour
     public Image healthBarImage;
     public Image emitBarImage;
 
+    private void Start()
+    {
+        if (EmitManager.Instance != null)
+        {
+            EmitManager.Instance.ConnectPlayerUIController(this);
+        }
+    }
+
+
     public void UpdateHealthBar()
     {
         float UIRatio = (float)Player.PlayerHealth.currentPlayerHealth / Player.PlayerHealth.playerHealthMax;

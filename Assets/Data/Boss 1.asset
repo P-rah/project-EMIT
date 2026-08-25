@@ -25,8 +25,8 @@ MonoBehaviour:
   recoveryTime: 1
   knockbackRate: 1
   strongKnockbackRate: 4
-  knockbackTime: 0.2
+  knockbackTime: 0.1
   grabForce: 50
-  HitRecoveryTime: 0.2
+  HitRecoveryTime: 0.1
   powerResetTime: 1.5
   invincibilityDuration: 0.2

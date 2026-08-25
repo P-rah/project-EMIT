@@ -57,12 +57,9 @@ public class PlayerAnimation : MonoBehaviour
                 animator.SetBool("isDash", false);
                 break;
             case State.AttackingSweep:
-                animator.SetBool("attackGrap", false);
-                animator.SetTrigger("isAttack");
                 break;
             case State.AttackingGrab:
-                animator.SetBool("attackGrap", true);
-                animator.SetTrigger("isAttack");
+                animator.SetTrigger("isGrap");
                 break;
             case State.Dashing:
                 animator.SetBool("isDash", true);
@@ -72,5 +69,16 @@ public class PlayerAnimation : MonoBehaviour
                 break;
 
         }
+    }
+    public void SetAttackSweep(int currentCombo)
+    {
+        animator.SetTrigger("isAttack");
+        animator.SetInteger("sweepCombo", currentCombo);
+        Debug.Log("attackCount : " + currentCombo);
+    }
+    public void ResetAttackSweep()
+    {
+        animator.SetInteger("sweepCombo", 0);
+        Debug.Log("attackCount리셋");
     }
 }

@@ -124,12 +124,12 @@ TextureImporter:
       name: Effect 1-1_0
       rect:
         serializedVersion: 2
-        x: 64
+        x: 96
         y: 17
-        width: 74
+        width: 42
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.23, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -146,12 +146,12 @@ TextureImporter:
       name: Effect 1-1_1
       rect:
         serializedVersion: 2
-        x: 154
+        x: 186
         y: 19
-        width: 74
+        width: 42
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.23, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -168,12 +168,12 @@ TextureImporter:
       name: Effect 1-1_2
       rect:
         serializedVersion: 2
-        x: 238
+        x: 270
         y: 18
-        width: 74
+        width: 42
         height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.23, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []

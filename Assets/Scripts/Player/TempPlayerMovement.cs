@@ -8,7 +8,10 @@ public class TempPlayerMovement : MonoBehaviour
 
     [Header("Movement Settings")]
     public float moveSpeed = 15f;
-    public float moveSpeedWhileAttack = 0f;
+    public float baseMoveSpeedWhileAttack = 0f;
+    [SerializeField] private float moveSpeedWhileAttack = 5f;
+    [SerializeField] private float moveTimeWhileAttack = 0.2f;
+    [SerializeField] private bool triggerMoveWhileAttack = false;
 
     [Header("Jump Movement")]
     [SerializeField] private float jumpForce = 15f;
@@ -46,8 +49,10 @@ public class TempPlayerMovement : MonoBehaviour
     private PlayerInputHandler input;
     private DashEffectController dashEffectController;
     private PlayerDropDownPlatform dropDownPlatform;
+    private PlayerUIController playerUIController;
+    private SoundManager soundManager;
 
-#endregion
+    #endregion
 
     private void Awake()
     {
@@ -57,15 +62,25 @@ public class TempPlayerMovement : MonoBehaviour
         dropDownPlatform = GetComponent<PlayerDropDownPlatform>();
         state = Player.State;
         dashEffectController = Player.DashEffect;
+        playerUIController = Player.UIController;
 
         initialGravityScale = rb.gravityScale;
 
         SetSlideMovement();
     }
 
+    private void Start()
+    {
+        soundManager = SoundManager.instance;
+    }
+
     private void Update()
     {
-        if (Player.State.IsDead) return;
+        if (state.IsDead)
+        {
+            StopMovement();
+            return;
+        }
         HandleInputs();
         FlipPlayer();
     }
@@ -82,9 +97,26 @@ public class TempPlayerMovement : MonoBehaviour
         }
     }
 
+    public void TriggerMoveWhileAttack()
+    {
+        StartCoroutine(attackingMoveTimer());
+    }
+
+    private IEnumerator attackingMoveTimer()
+    {
+        triggerMoveWhileAttack = true;
+        yield return new WaitForSecondsRealtime(moveTimeWhileAttack);
+        triggerMoveWhileAttack = false;
+    }
+
 #region FixedUpdate
     private void FixedUpdate()
     {
+        if (state.IsDead)
+        {
+            StopMovement();
+            return;
+        }
         bool groundedThisFrame = Grounded();
 
         if (ShouldJump(groundedThisFrame))
@@ -116,8 +148,6 @@ public class TempPlayerMovement : MonoBehaviour
     {
         SetGravityScale(0f);
 
-        if (Player.State.IsDead) return;
-
         float horizontalInput = input.MoveInput.x;
         if (Mathf.Abs(horizontalInput) < 0.01f)
         {
@@ -130,7 +160,8 @@ public class TempPlayerMovement : MonoBehaviour
         float movementSpeed = isDashing ? dashSpeed : moveSpeed;
         if (state.IsAttackingGrab || state.IsAttackingSweep)
         {
-            movementSpeed = moveSpeedWhileAttack;
+            if (triggerMoveWhileAttack) movementSpeed = moveSpeedWhileAttack;
+            else movementSpeed = baseMoveSpeedWhileAttack;
         }
 
         Vector2 slideVelocity = horizontalInput * movementSpeed * groundTangent;
@@ -154,7 +185,8 @@ public class TempPlayerMovement : MonoBehaviour
         float movementSpeed = isDashing ? dashSpeed : moveSpeed;
         if (state.IsAttackingGrab || state.IsAttackingSweep)
         {
-            movementSpeed = moveSpeedWhileAttack;
+            if (triggerMoveWhileAttack) movementSpeed = moveSpeedWhileAttack;
+            else movementSpeed = baseMoveSpeedWhileAttack;
         }
 
         rb.linearVelocityX = input.MoveInput.x * movementSpeed;
@@ -182,6 +214,7 @@ public class TempPlayerMovement : MonoBehaviour
         SetGravityScale(initialGravityScale);
         rb.linearVelocityY = 0f;
         rb.AddForceY(jumpForce, ForceMode2D.Impulse);
+        soundManager.PlaySFX(Player.Instance.jumpSound);
 
         StartCoroutine(RestoreJump());
     }
@@ -213,6 +246,7 @@ public class TempPlayerMovement : MonoBehaviour
         isDashing = true;
         rb.linearVelocityY = 0f;
         dashEffectController.StartDashTrail();
+        soundManager.PlaySFX(Player.Instance.dashSound);
 
         yield return new WaitForSeconds(dashTime);
 
@@ -318,11 +352,12 @@ public class TempPlayerMovement : MonoBehaviour
     {
         facingDir = -facingDir;
         transform.Rotate(0f, 180f, 0f);
+        playerUIController.SetUIFlip();
     }
 
     public void Animevent_PlayWalkSound()
     {
-        SoundManager.instance.PlaySFX(Player.Instance.walkSound, 0.2f);
+        soundManager.PlaySFX(Player.Instance.walkSound, 0.2f);
     }
 
     private void SetSlideMovement()

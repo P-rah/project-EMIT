@@ -7,7 +7,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
-        currentPlayerHealth = playerHealthMax;
+        setPlayerHealth(playerHealthMax);
     }
 
     private void OnEnable()
@@ -39,9 +39,8 @@ public class PlayerHealth : MonoBehaviour
     private void PlayerDead()
     {
         Player.State.IsDead = true;
-        Player.Movement.StopMove();
+        //Player.Movement.StopMove();
         Player.TempMovement.StopMovement();
-        EventManager.TriggerEvent("StopEmit");
         Debug.Log("Player Dead");
     }
 
@@ -52,6 +51,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void AnimEvent_SceneReset()
     {
+        EventManager.TriggerEvent("StopEmit");
         StageManager.Instance.RestartStage();
     }
 }

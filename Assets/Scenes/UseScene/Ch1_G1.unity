@@ -58148,7 +58148,7 @@ GameObject:
   - component: {fileID: 1105770958}
   - component: {fileID: 1105770956}
   - component: {fileID: 1105770961}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: PlatformCanPass
   m_TagString: Untagged
   m_Icon: {fileID: 0}

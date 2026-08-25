@@ -21,11 +21,11 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -1876575632989397844, guid: 9ba899e1b3085904bad9e4e0329cb51c, type: 3}
+      value: {fileID: 5407164698605751720, guid: f998e0d835447c8479ec4ed87309713f, type: 3}
     - time: 0.083333336
-      value: {fileID: 6087416513146440971, guid: 9ba899e1b3085904bad9e4e0329cb51c, type: 3}
-    - time: 0.25
-      value: {fileID: 6087416513146440971, guid: 9ba899e1b3085904bad9e4e0329cb51c, type: 3}
+      value: {fileID: -2978437386786773068, guid: f998e0d835447c8479ec4ed87309713f, type: 3}
+    - time: 0.33333334
+      value: {fileID: -2978437386786773068, guid: f998e0d835447c8479ec4ed87309713f, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -49,15 +49,15 @@ AnimationClip:
       isSerializeReferenceCurve: 0
       metaData: 0
     pptrCurveMapping:
-    - {fileID: -1876575632989397844, guid: 9ba899e1b3085904bad9e4e0329cb51c, type: 3}
-    - {fileID: 6087416513146440971, guid: 9ba899e1b3085904bad9e4e0329cb51c, type: 3}
-    - {fileID: 6087416513146440971, guid: 9ba899e1b3085904bad9e4e0329cb51c, type: 3}
+    - {fileID: 5407164698605751720, guid: f998e0d835447c8479ec4ed87309713f, type: 3}
+    - {fileID: -2978437386786773068, guid: f998e0d835447c8479ec4ed87309713f, type: 3}
+    - {fileID: -2978437386786773068, guid: f998e0d835447c8479ec4ed87309713f, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.33333334
+    m_StopTime: 0.4166667
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -86,6 +86,13 @@ AnimationClip:
     messageOptions: 0
   - time: 0.25
     functionName: AnimEvent_AttackSweepEnd
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.33333334
+    functionName: AnimEvent_ResetSweep
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
 
     public static PlayerState State { get; private set; }
     public static PlayerInputHandler InputHandler { get; private set; }
-    public static PlayerMovement Movement { get; private set; }
+    //public static PlayerMovement Movement { get; private set; }
     public static TempPlayerMovement TempMovement { get; private set; }
     public static PlayerCombat Combat { get; private set; }
     public static PlayerAnimation Animation { get; private set; }
@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
 
         State = GetComponent<PlayerState>();
         InputHandler = GetComponent<PlayerInputHandler>();
-        Movement = GetComponent<PlayerMovement>();
+        //Movement = GetComponent<PlayerMovement>();
         TempMovement = GetComponent<TempPlayerMovement>();
         Combat = GetComponent<PlayerCombat>();
         Animation = GetComponent<PlayerAnimation>();

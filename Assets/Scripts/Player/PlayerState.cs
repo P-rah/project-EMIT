@@ -119,6 +119,7 @@ public class PlayerState : MonoBehaviour
     private void ChangeState(State newState)
     {
         CurrentState = newState;
+        Debug.Log(CurrentState);
     }
 
     private void OnDrawGizmosSelected()

@@ -18,8 +18,8 @@ public static class DamageCalculation<T> where T : IDamageable
             if(EmitManager.Instance.isEmitting) target.dmgType = 3;
             else target.dmgType = 2;
 
-            if(target.currentPower > 0) return baseDamage + target.currentPower * 2;
-            else return baseDamage - target.currentPower;
+            if(target.currentPower > 0) return baseDamage + (target.currentPower * 2);
+            else return baseDamage - (target.currentPower * 2); ;
         }
         target.dmgType = 1;
         return baseDamage;
