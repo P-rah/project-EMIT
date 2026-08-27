@@ -22,7 +22,6 @@ public class PlayerAnimation : MonoBehaviour
 
     private void Update()
     {
-
         if (previousState != state.CurrentState)
         {
             AnimationControl();
@@ -76,9 +75,9 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetInteger("sweepCombo", currentCombo);
         Debug.Log("attackCount : " + currentCombo);
     }
-    public void ResetAttackSweep()
+    public void CancelAttackSweep()
     {
         animator.SetInteger("sweepCombo", 0);
-        Debug.Log("attackCount리셋");
+
     }
 }

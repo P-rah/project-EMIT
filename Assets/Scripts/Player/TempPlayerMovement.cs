@@ -81,7 +81,10 @@ public class TempPlayerMovement : MonoBehaviour
             StopMovement();
             return;
         }
-        HandleInputs();
+        else if (!state.IsAttackingGrab && !state.IsAttackingSweep)
+        {
+            HandleInputs();
+        }
         FlipPlayer();
     }
 
@@ -99,6 +102,7 @@ public class TempPlayerMovement : MonoBehaviour
 
     public void TriggerMoveWhileAttack()
     {
+        StopCoroutine(attackingMoveTimer());
         StartCoroutine(attackingMoveTimer());
     }
 
@@ -160,7 +164,11 @@ public class TempPlayerMovement : MonoBehaviour
         float movementSpeed = isDashing ? dashSpeed : moveSpeed;
         if (state.IsAttackingGrab || state.IsAttackingSweep)
         {
-            if (triggerMoveWhileAttack) movementSpeed = moveSpeedWhileAttack;
+            if (triggerMoveWhileAttack)
+            {
+                Debug.Log("공격 중 움직임");
+                movementSpeed = moveSpeedWhileAttack;
+            }
             else movementSpeed = baseMoveSpeedWhileAttack;
         }
 
@@ -233,7 +241,7 @@ public class TempPlayerMovement : MonoBehaviour
 #endregion
 
 #region 대시
-    private void ExecuteDash()
+    public void ExecuteDash()
     {
         if (canDash && input.MoveInput.x != 0)
         {

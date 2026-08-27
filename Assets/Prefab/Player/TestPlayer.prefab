@@ -916,6 +916,7 @@ MonoBehaviour:
   grabAttackHitbox: {fileID: 645576893945181915}
   maxSweepCount: 3
   sweepCount: 0
+  continuousSweepTime: 0.2
 --- !u!114 &2160909343489536948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1037,7 +1038,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TempPlayerMovement
   moveSpeed: 15
   baseMoveSpeedWhileAttack: 0
-  moveSpeedWhileAttack: 10
+  moveSpeedWhileAttack: 15
   moveTimeWhileAttack: 0.1
   triggerMoveWhileAttack: 0
   jumpForce: 15

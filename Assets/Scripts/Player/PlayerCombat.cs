@@ -20,7 +20,13 @@ public class PlayerCombat : MonoBehaviour
     [Header("Attack Settings")]
     [SerializeField] private int maxSweepCount = 3;
     public int sweepCount;
-    private Coroutine continuousSweepTimer;
+    [SerializeField] private float continuousSweepTime = 0.3f;
+    private Coroutine sweepTimeRoutine;
+    private bool checkContinuousSweep;      //연속 공격 체크 시작
+    private bool triggerContinuousSweep;    //연속 공격의 트리거
+    private bool checkCancelSweep;          //대쉬 체크 시작
+    private bool TriggerCancelSweep;        //대쉬로 인한 캔슬 트리거
+    private bool StartCancelSweep;          //캔슬 시작
 
     [Header("Emit Settings")]
     const float emitRecoveryAmountWhenAttackHit = 0.5f;
@@ -70,6 +76,21 @@ public class PlayerCombat : MonoBehaviour
 
     private void CheckInputs()
     {
+        if (checkCancelSweep)
+        {
+            if (input.DashInput)
+            {
+                TriggerCancelSweep = true;
+            }
+            if (StartCancelSweep && TriggerCancelSweep)
+            {
+                StartCancelSweep = false;
+                TriggerCancelSweep = false;
+                triggerContinuousSweep = false;
+                IsAttackingSweep = false;
+                animation.CancelAttackSweep();
+            }
+        }
         if (input.ConsumeAttackSweep())
         {
             ExecuteAttackSweep();
@@ -84,6 +105,8 @@ public class PlayerCombat : MonoBehaviour
     {
         if (canAttack)
         {
+            if (sweepTimeRoutine != null) StopCoroutine(sweepTimeRoutine);
+            triggerContinuousSweep = false;
             if (state.CurrentState == State.AttackingGrab)
             {
                 AnimEvent_AttackGrapEnd();
@@ -96,14 +119,19 @@ public class PlayerCombat : MonoBehaviour
             else sweepCount++;
             animation.SetAttackSweep(sweepCount);
         }
-        else Debug.Log("공격불가");
+        else
+        {
+            if(checkContinuousSweep&&!TriggerCancelSweep)
+            {
+                triggerContinuousSweep = true;
+            }
+        }
     }
 
     public void PlayComboEffect(int comboIndex)
     {
         if (comboIndex < 0 || comboIndex >= sweepAttackHitbox.Length) return;
 
-        Debug.Log("시작 : " + comboIndex);
         sweepAttackHitbox[comboIndex].gameObject.SetActive(true);
         sweepAttackHitbox[comboIndex].OnTargetSweepHit += handleSweepHit;
     }
@@ -112,47 +140,64 @@ public class PlayerCombat : MonoBehaviour
     {
         if (comboIndex < 0 || comboIndex >= sweepAttackHitbox.Length) return;
 
-        Debug.Log("끝 : " + comboIndex);
         sweepAttackHitbox[comboIndex].gameObject.SetActive(false);
         sweepAttackHitbox[comboIndex].OnTargetSweepHit -= handleSweepHit;
     }
 
+    //공격 판정 시작
     public void AnimEvent_AttackSweepStart()
     {
         playerMovement.flippable = false;
         PlayComboEffect(sweepCount - 1);
         SoundManager.instance.PlaySFX(Player.Instance.sweepSound);
         playerMovement.TriggerMoveWhileAttack();
+        checkCancelSweep = true;
     }
 
+    //공격 버퍼링
+    public void AnimEvent_StartCheckingNextCondition()
+    {
+        checkContinuousSweep = true;
+    }
+
+    //공격 판정 끝
     public void AnimEvent_AttackSweepEnd()
     {
         playerMovement.flippable = true;
         EndComboEffect(sweepCount - 1);
-        //IsAttackingSweep = false;
-        canAttack = true;
-        IsAttackingSweep = false;
+        StartCancelSweep = true;
+        //if (TriggerCancelSweep)
+        //{
+        //    TriggerCancelSweep = false;
+        //    triggerContinuousSweep = false;
+        //    IsAttackingSweep = false;
+        //    animation.CancelAttackSweep();
+        //}
     }
 
-    public void AnimEvent_ResetSweep()
+    //애니메이션이 어떤 경우든 종료되면 실행
+    public void AttackSweepReset()
     {
-        animation.ResetAttackSweep();
-        //IsAttackingSweep = false;
+        checkContinuousSweep = false;
+        checkCancelSweep = false;
         canAttack = true;
-        if (continuousSweepTimer != null)
+        if (triggerContinuousSweep)
         {
-            StopCoroutine(continuousSweepTimer);
-            continuousSweepTimer = null;
+            IsAttackingSweep = true;
+            ExecuteAttackSweep();
         }
-
-        continuousSweepTimer = StartCoroutine(ResetSweepCount());
+        else
+        {
+            IsAttackingSweep = false;
+            sweepTimeRoutine = StartCoroutine(continuousSweepTimer());
+        }
     }
 
-    private IEnumerator ResetSweepCount()
+    private IEnumerator continuousSweepTimer()
     {
-        yield return new WaitForFixedUpdate();
+        yield return new WaitForSeconds(continuousSweepTime);
         sweepCount = 0;
-        continuousSweepTimer = null;
+        sweepTimeRoutine = null;
     }
 
     private void handleSweepHit(Transform target, Vector2 hitPoint)
