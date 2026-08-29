@@ -7,6 +7,8 @@ public class PowerStackUIController : MonoBehaviour
     [SerializeField] private SpriteRenderer stackRenderer;
 
     private const int maxStack = 5;
+    private bool ownerFacingLeft;
+    private int currentStack;
 
     void Start()
     {
@@ -18,6 +20,7 @@ public class PowerStackUIController : MonoBehaviour
         if (stack >= -maxStack && stack <= maxStack)
         {
             UpdateStackDisplay(stack);
+            currentStack = stack;
         }
         else return;
     }
@@ -33,15 +36,30 @@ public class PowerStackUIController : MonoBehaviour
         int spriteIndex;
 
         if (stack > 0)
+        {
             spriteIndex = Mathf.Clamp(stack - 1, 0, stackSprites.Length - 1);
+            CalculateStackDir(true);
+        }
         else
+        {
             spriteIndex = Mathf.Clamp(-stack - 1, 0, stackSprites.Length - 1);
+            CalculateStackDir(false);
+        }
 
         stackRenderer.sprite = stackSprites[spriteIndex];
     }
 
-    public void setPowerStackFlip(bool flip)
+    private void CalculateStackDir(bool isStackPositive)
     {
-        stackRenderer.flipX = flip;
+        if(ownerFacingLeft == isStackPositive)
+            stackRenderer.flipX = false;
+        else
+            stackRenderer.flipX = true;
+    }
+
+    public void OwnerFacingDir(bool isFacingLeft)
+    {
+        this.ownerFacingLeft = isFacingLeft;
+        CalculateStackDir(currentStack > 0);
     }
 }

@@ -360,7 +360,7 @@ public class TempPlayerMovement : MonoBehaviour
     {
         facingDir = -facingDir;
         transform.Rotate(0f, 180f, 0f);
-        playerUIController.SetUIFlip();
+        //playerUIController.SetUIFlip();
     }
 
     public void Animevent_PlayWalkSound()

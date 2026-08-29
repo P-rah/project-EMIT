@@ -128,7 +128,7 @@ public class ObjectBox : MonoBehaviour, IDamageable, IKnockbackable, IGrabbable,
     public void CalculatePowerTimer()
     {
         powerTimer += Time.deltaTime;
-        if (powerTimer > powerResetTime)
+        if (powerTimer > powerResetTime && !emitManager.isEmitting)
             ResetPower();
     }
 

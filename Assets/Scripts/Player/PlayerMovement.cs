@@ -226,7 +226,7 @@ public class PlayerMovement : MonoBehaviour
     {
         facingDir = -facingDir;
         transform.Rotate(0f, 180f, 0f);
-        Player.UIController.SetUIFlip();
+        //Player.UIController.SetUIFlip();
     }
 
     private IEnumerator DashRoutine()

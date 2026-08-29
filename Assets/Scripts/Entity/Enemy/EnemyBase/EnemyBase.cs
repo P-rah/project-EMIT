@@ -140,7 +140,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
         FacingDir = nextFacingDir;
         isFacingLeft = FacingDir == Vector2.left;
         transform.rotation = Quaternion.Euler(0f, isFacingLeft ? 180f : 0f, 0f);
-        powerStackUIController.setPowerStackFlip(isFacingLeft);
+        powerStackUIController.OwnerFacingDir(isFacingLeft);
     }
 
     // ==========================================
