@@ -3,7 +3,25 @@ using UnityEngine.Audio;
 
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager instance;
+    private static SoundManager instance;
+
+    public static SoundManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindAnyObjectByType<SoundManager>();
+
+                if (instance == null)
+                {
+                    GameObject obj = new GameObject("SoundMananger");
+                    instance = obj.AddComponent<SoundManager>();
+                }
+            }
+            return instance;
+        }
+    }
 
     public AudioSource[] objectPoolSpeakers;
 

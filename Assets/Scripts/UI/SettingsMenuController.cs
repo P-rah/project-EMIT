@@ -26,8 +26,8 @@ public class SettingsMenuController : MonoBehaviour
         restartButton.onClick.AddListener(RestartStage);
         quitButton.onClick.AddListener(ReturnToTitle);
 
-        sfxSlider.SetValueWithoutNotify(SoundManager.instance.sfxPlayer.volume);
-        bgmSlider.SetValueWithoutNotify(SoundManager.instance.bgmPlayer.volume);
+        sfxSlider.SetValueWithoutNotify(SoundManager.Instance.sfxPlayer.volume);
+        bgmSlider.SetValueWithoutNotify(SoundManager.Instance.bgmPlayer.volume);
 
         sfxSlider.onValueChanged.AddListener(SetSfxVolume);
         bgmSlider.onValueChanged.AddListener(SetBgmVolume);
@@ -44,12 +44,12 @@ public class SettingsMenuController : MonoBehaviour
 
     private void SetSfxVolume(float volume)
     {
-        SoundManager.instance.sfxPlayer.volume = volume;
+        SoundManager.Instance.sfxPlayer.volume = volume;
     }
 
     private void SetBgmVolume(float volume)
     {
-        SoundManager.instance.bgmPlayer.volume = volume;
+        SoundManager.Instance.bgmPlayer.volume = volume;
     }
 
     private void CloseSettings()

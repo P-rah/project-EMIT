@@ -10,7 +10,7 @@ public class SceneStartSetting : MonoBehaviour
     void Start()
     {
         GameManager.Instance.ChangeState(gameState);
-        if (noBGM) SoundManager.instance.StopBGM();
-        else if(thisSceneBgm != null) SoundManager.instance.PlayBGM(thisSceneBgm, revserse);
+        if (noBGM) SoundManager.Instance.StopBGM();
+        else if(thisSceneBgm != null) SoundManager.Instance.PlayBGM(thisSceneBgm, revserse);
     }
 }

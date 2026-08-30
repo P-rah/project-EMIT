@@ -53,7 +53,7 @@ public class StageManager : MonoBehaviour
 
         TimeManager.Instance.InstantNormalTime();
         // AudioManager.Instance.StopEmitBGM();
-        SoundManager.instance.StopEmitBGM();
+        SoundManager.Instance.StopEmitBGM();
         EventManager.TriggerEvent("OnEmitAborted");
         EmitManager.Instance.EmitReset();
 

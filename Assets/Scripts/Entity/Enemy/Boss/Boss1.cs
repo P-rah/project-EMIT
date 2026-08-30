@@ -146,7 +146,7 @@ public class Boss1 : EnemyBase
 
         if (currentHealth <= 0)
         {
-            if (SoundManager.instance != null && deathSound != null) SoundManager.instance.PlaySFX(deathSound);
+            if (SoundManager.Instance != null && deathSound != null) SoundManager.Instance.PlaySFX(deathSound);
             StageManager.Instance?.EnemyDied();
             gameObject.SetActive(false);
         }
