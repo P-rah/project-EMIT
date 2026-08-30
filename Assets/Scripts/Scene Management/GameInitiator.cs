@@ -4,20 +4,17 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.EventSystems;
 using System.Threading;
 
+/// <summary>
+/// 게임을 시작하기 위한 코어 시스템을 로딩하고 타이틀 씬을 띄우는 클래스.
+/// EMIT 게임 전체의 Single Entry Point
+/// </summary>
 public class GameInitiator : MonoBehaviour
 {
-    /*
-    [SerializeField] private Camera _mainCamera;
-    [SerializeField] private Canvas _canvas;
-    [SerializeField] private ParticleSystem _particleSystem;
-    [SerializeField] private Transform _particleArea;
-    [SerializeField] private EventSystem _eventSystem;
-    */
-
     [SerializeField] private LoadingScreen _loadingScreen;
 
     [Header("Managers")]
     [SerializeField] private GameManager _gameManager;
+    [SerializeField] private SoundManager _soundManager;
     [SerializeField] private SceneControlManager _sceneControlMananger;
 
     private async void Start()
@@ -47,6 +44,7 @@ public class GameInitiator : MonoBehaviour
         _loadingScreen = Instantiate(_loadingScreen);
         
         _gameManager = Instantiate(_gameManager);
+        _soundManager = Instantiate(_soundManager);
         _sceneControlMananger = Instantiate(_sceneControlMananger);
     }
 

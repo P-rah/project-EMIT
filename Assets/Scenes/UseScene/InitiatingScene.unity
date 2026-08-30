@@ -165,6 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameInitiator
   _loadingScreen: {fileID: 4134027646828069627, guid: a2e9a7dca4805cf4f94d0a4320edcf11, type: 3}
   _gameManager: {fileID: 4553982074791237171, guid: ae4249d00177ac044aa2c7c4e061c7f2, type: 3}
+  _soundManager: {fileID: 3607842853201723468, guid: af27410326b60a3469bbe09fa8d61f93, type: 3}
   _sceneControlMananger: {fileID: 4758943096351603342, guid: d7bd0356231639f4f88dd7f95cf8c4e9, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
