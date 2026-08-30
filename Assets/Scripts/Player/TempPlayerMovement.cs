@@ -71,7 +71,7 @@ public class TempPlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        soundManager = SoundManager.instance;
+        soundManager = SoundManager.Instance;
     }
 
     private void Update()
