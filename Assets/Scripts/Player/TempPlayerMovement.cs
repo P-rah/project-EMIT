@@ -166,7 +166,6 @@ public class TempPlayerMovement : MonoBehaviour
         {
             if (triggerMoveWhileAttack)
             {
-                Debug.Log("공격 중 움직임");
                 movementSpeed = moveSpeedWhileAttack;
             }
             else movementSpeed = baseMoveSpeedWhileAttack;

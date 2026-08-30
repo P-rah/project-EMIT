@@ -145,7 +145,7 @@ Transform:
   m_GameObject: {fileID: 1046936314}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.07526, y: 5.80923, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -163,12 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16e53f7fe4152f846b7abb1c3318592f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameInitiator
-  _mainCamera: {fileID: 0}
   _loadingScreen: {fileID: 4134027646828069627, guid: a2e9a7dca4805cf4f94d0a4320edcf11, type: 3}
-  _canvas: {fileID: 0}
-  _particleSystem: {fileID: 0}
-  _particleArea: {fileID: 0}
-  _eventSystem: {fileID: 0}
   _gameManager: {fileID: 4553982074791237171, guid: ae4249d00177ac044aa2c7c4e061c7f2, type: 3}
   _sceneControlMananger: {fileID: 4758943096351603342, guid: d7bd0356231639f4f88dd7f95cf8c4e9, type: 3}
 --- !u!1660057539 &9223372036854775807
