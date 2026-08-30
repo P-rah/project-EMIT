@@ -49,7 +49,6 @@ public class ObjectBox : MonoBehaviour, IDamageable, IKnockbackable, IGrabbable,
         rb.freezeRotation = true;
         powerStackUIController = GetComponentInChildren<PowerStackUIController>();
         objectBoxCollisionDetector = GetComponent<ObjectBoxCollisionDetector>();
-        emitManager = GetComponent<EmitManager>();
 
         if (data == null)
         {
@@ -66,6 +65,11 @@ public class ObjectBox : MonoBehaviour, IDamageable, IKnockbackable, IGrabbable,
             sweepHitSound = data.sweepHitSound;
             grabHitSound = data.grabHitSound;
         }
+    }
+
+    private void Start()
+    {
+        emitManager = EmitManager.Instance;
     }
 
     private void Update()
