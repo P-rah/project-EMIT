@@ -5,12 +5,6 @@ TextureImporter:
   - first:
       213: 4130640169021434097
     second: 5_0
-  - first:
-      213: -7200132072931614835
-    second: 5_1
-  - first:
-      213: -3609754129978504188
-    second: 5_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,12 +103,12 @@ TextureImporter:
       name: 5_0
       rect:
         serializedVersion: 2
-        x: 9
-        y: 39
-        width: 25
-        height: 17
+        x: 0
+        y: 0
+        width: 91
+        height: 90
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -127,55 +121,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: 5_1
-      rect:
-        serializedVersion: 2
-        x: 12
-        y: 38
-        width: 30
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d8f9301170ef31c90800000000000000
-      internalID: -7200132072931614835
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 5_2
-      rect:
-        serializedVersion: 2
-        x: 45
-        y: 34
-        width: 29
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 40cc12c7eb397edc0800000000000000
-      internalID: -3609754129978504188
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 70022d291d845cb42809e8b0193cb67b
     internalID: 0
     vertices: []
     indices: 
@@ -186,8 +136,6 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       5_0: 4130640169021434097
-      5_1: -7200132072931614835
-      5_2: -3609754129978504188
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

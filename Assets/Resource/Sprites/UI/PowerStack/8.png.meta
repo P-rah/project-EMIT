@@ -5,15 +5,6 @@ TextureImporter:
   - first:
       213: 8288426215254106694
     second: 8_0
-  - first:
-      213: -2681809406195053031
-    second: 8_1
-  - first:
-      213: -6521200998356810719
-    second: 8_2
-  - first:
-      213: -2868909495077532586
-    second: 8_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -112,10 +103,10 @@ TextureImporter:
       name: 8_0
       rect:
         serializedVersion: 2
-        x: 9
-        y: 25
-        width: 46
-        height: 31
+        x: 0
+        y: 0
+        width: 91
+        height: 90
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: db1b1eb00ed4aec47876931680a481fd
+    spriteID: 36123d0bfc2d61642993696ccaf68ad7
     internalID: 0
     vertices: []
     indices: 
@@ -145,9 +136,6 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       8_0: 8288426215254106694
-      8_1: -2681809406195053031
-      8_2: -6521200998356810719
-      8_3: -2868909495077532586
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
