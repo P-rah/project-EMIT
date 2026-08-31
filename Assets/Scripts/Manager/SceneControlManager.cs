@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SceneControlManager : MonoBehaviour
 {
+
     #region Singleton
     public static SceneControlManager Instance { get; private set; }
 

@@ -78,7 +78,6 @@ public class TempPlayerMovement : MonoBehaviour
     {
         if (state.IsDead)
         {
-            StopMovement();
             return;
         }
         else if (!state.IsAttackingGrab && !state.IsAttackingSweep)
@@ -116,12 +115,16 @@ public class TempPlayerMovement : MonoBehaviour
 #region FixedUpdate
     private void FixedUpdate()
     {
+        bool groundedThisFrame = Grounded();
+
         if (state.IsDead)
         {
-            StopMovement();
+            if (groundedThisFrame)
+            {
+                rb.bodyType = RigidbodyType2D.Static;
+            }
             return;
         }
-        bool groundedThisFrame = Grounded();
 
         if (ShouldJump(groundedThisFrame))
         {
@@ -166,7 +169,6 @@ public class TempPlayerMovement : MonoBehaviour
         {
             if (triggerMoveWhileAttack)
             {
-                Debug.Log("공격 중 움직임");
                 movementSpeed = moveSpeedWhileAttack;
             }
             else movementSpeed = baseMoveSpeedWhileAttack;

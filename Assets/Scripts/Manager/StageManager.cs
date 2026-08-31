@@ -28,8 +28,14 @@ public class StageManager : MonoBehaviour
             return;
         }
         Instance = this;
+    }
 
-        DontDestroyOnLoad(gameObject);
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 
     public void AddEnemy()
