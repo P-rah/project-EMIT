@@ -28,7 +28,7 @@ public class EmitManager : MonoBehaviour
     public AudioClip emitClockSound2;
 
     private Coroutine startEmitTimer;
-    private Coroutine emitCoolDown;
+    //private Coroutine emitCoolDown;
 
     //[Header("UI 컨트롤러")]
     private PlayerUIController playerUIController;
@@ -125,7 +125,7 @@ public class EmitManager : MonoBehaviour
         }
         emittedFrames = 0;
         isEmitting = false;
-        emitCoolDown = StartCoroutine(EmitCooldown());
+        //emitCoolDown = StartCoroutine(EmitCooldown());
         TimeManager.Instance.StopSlowMotion();
         SoundManager.Instance.PlaySFX(emitEndSound);
         SoundManager.Instance.StopEmitBGM();
@@ -166,6 +166,11 @@ public class EmitManager : MonoBehaviour
         if (currentEmitableTime < emitDurationTime)
         {
             currentEmitableTime += time;
+            if (currentEmitableTime >= emitDurationTime)
+            {
+                currentEmitableTime = emitDurationTime;
+                isEmittable = true;
+            }
             updateEmitUI();
         }
     }
@@ -187,16 +192,16 @@ public class EmitManager : MonoBehaviour
         OnEmitFinished();
     }
 
-    private IEnumerator EmitCooldown()
-    {
-        float timer = 0f;
-        while(timer < emitDurationTime)
-        {
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        isEmittable = true;
-    }
+    //private IEnumerator EmitCooldown()
+    //{
+    //    float timer = 0f;
+    //    while(timer < emitDurationTime)
+    //    {
+    //        timer += Time.deltaTime;
+    //        yield return null;
+    //    }
+    //    isEmittable = true;
+    //}
 
     private IEnumerator emitClockSound()
     {

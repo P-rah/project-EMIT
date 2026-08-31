@@ -58905,8 +58905,8 @@ Canvas:
   m_GameObject: {fileID: 1136438849}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -58917,8 +58917,8 @@ Canvas:
   m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -840063207
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!224 &1136438853
 RectTransform:
@@ -66669,7 +66669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: be259a5391d2e714fb13cfd19edea6d8, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -66682,7 +66682,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
@@ -67096,6 +67096,10 @@ PrefabInstance:
       value: TestPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 8113229768929654293, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: glowSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8113229768929654293, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: emitBarImage
       value: 
       objectReference: {fileID: 1986169855}
@@ -67103,6 +67107,18 @@ PrefabInstance:
       propertyPath: healthBarImage
       value: 
       objectReference: {fileID: 375734686}
+    - target: {fileID: 8113229768929654293, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: emitGlowIntensity
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8113229768929654293, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: emitMaxGlowIntensity
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8113229768929654293, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: emitMinGlowIntensity
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

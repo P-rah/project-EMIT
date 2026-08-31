@@ -16,6 +16,7 @@ public class PowerStackAnimator : MonoBehaviour
     public void ShowPowerStack()
     {
         if (SpriteRenderer.enabled) return;
+        SpriteRenderer.enabled = true;
         StartCoroutine(PowerStafckAnimRoutine());
     }
 
@@ -26,7 +27,6 @@ public class PowerStackAnimator : MonoBehaviour
 
     private IEnumerator PowerStafckAnimRoutine()
     {
-        SpriteRenderer.enabled = true;
         for (int i = 0; i< stackSprite.Length; i++)
         {
             SpriteRenderer.sprite = stackSprite[i];

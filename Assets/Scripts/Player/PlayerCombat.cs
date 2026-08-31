@@ -29,7 +29,7 @@ public class PlayerCombat : MonoBehaviour
     private bool StartCancelSweep;          //캔슬 시작
 
     [Header("Emit Settings")]
-    const float emitRecoveryAmountWhenAttackHit = 0.5f;
+    const float emitRecoveryAmountWhenAttackHit = 0.2f;
     private bool hasTriggeredEmit;
 
     private bool canAttack = true;
@@ -166,13 +166,6 @@ public class PlayerCombat : MonoBehaviour
         playerMovement.flippable = true;
         EndComboEffect(sweepCount - 1);
         StartCancelSweep = true;
-        //if (TriggerCancelSweep)
-        //{
-        //    TriggerCancelSweep = false;
-        //    triggerContinuousSweep = false;
-        //    IsAttackingSweep = false;
-        //    animation.CancelAttackSweep();
-        //}
     }
 
     //애니메이션이 어떤 경우든 종료되면 실행

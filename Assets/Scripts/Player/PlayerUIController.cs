@@ -9,6 +9,13 @@ public class PlayerUIController : MonoBehaviour
 
     public Image healthBarImage;
     public Image emitBarImage;
+    [SerializeField] private float emitMaxGlowIntensity;
+    [SerializeField] private float emitMinGlowIntensity;
+    [SerializeField] private float glowSpeed;
+
+    private bool glowOn;
+
+    private static int _HDR_Intensity = Shader.PropertyToID("_HDR_Intensity");
 
     private void Start()
     {
@@ -18,6 +25,16 @@ public class PlayerUIController : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (!glowOn) return;
+
+        float t = (Mathf.Sin(Time.time * glowSpeed) + 1f) / 2f;
+
+        float glowIntensity = Mathf.Lerp(emitMinGlowIntensity, emitMaxGlowIntensity, t);
+
+        emitBarImage.material.SetFloat(_HDR_Intensity, glowIntensity);
+    }
 
     public void UpdateHealthBar()
     {
@@ -29,7 +46,15 @@ public class PlayerUIController : MonoBehaviour
     public void UpdateEmitBar(float current, float max)
     {
         emitBarImage.fillAmount = current / max;
+        if (emitBarImage.fillAmount == 1) glowOn = true;
+        else
+        {
+            glowOn = false;
+            emitBarImage.material.SetFloat(_HDR_Intensity, 2f);
+        }
     }
+
+
 
     //public void SetUIFlip()
     //{
