@@ -22,6 +22,7 @@ public class PowerStackAnimator : MonoBehaviour
 
     public void HidePowerStack()
     {
+        StopCoroutine(PowerStafckAnimRoutine());
         SpriteRenderer.enabled = false;
     }
 

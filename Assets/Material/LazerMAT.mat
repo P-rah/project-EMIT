@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: UIHDRMAT
+  m_Name: LazerMAT
   m_Shader: {fileID: -6465566751694194690, guid: c592f43a8bf00b04a85c999a5156c87d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -38,14 +38,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _GlowIntensity: 1
+    - _GlowIntensity: 3
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 0.3915094, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &3019676404844602259
+--- !u!114 &5339374876958778855
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

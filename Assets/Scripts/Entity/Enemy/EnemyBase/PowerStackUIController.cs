@@ -31,15 +31,6 @@ public class PowerStackUIController : MonoBehaviour
 
     private void UpdateStackDisplay(int stack)
     {
-        //if (stack == 0)
-        //{
-        //    foreach (PowerStackAnimator powerStack in powerStackAnimators)
-        //    {
-        //        powerStack.HidePowerStack();
-        //    }
-        //    return;
-        //}
-
         if (stack > 0)
         {
             for(int i = 0; i < powerStackAnimators.Length; i++)

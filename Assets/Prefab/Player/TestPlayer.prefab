@@ -794,6 +794,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerUIController
   healthBarImage: {fileID: 0}
   emitBarImage: {fileID: 0}
+  emitMaxGlowIntensity: 4
+  emitMinGlowIntensity: 3
+  glowSpeed: 2
 --- !u!95 &4512678456294159734
 Animator:
   serializedVersion: 7

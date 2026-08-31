@@ -35,8 +35,8 @@ public class Enemy : EnemyBase
 
         StateMachine.UpdateState();
         UpdateTargetDirection();
-        CheckDie();
         CalculatePowerTimer();
+        CheckDie();
     }
 
     public virtual void FixedUpdate()
