@@ -74,7 +74,7 @@ public class EmitShaderController : MonoBehaviour
 
         while(elapsedTime < _distortionTime)
         {
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.fixedDeltaTime;
 
             _material.SetVector(_startPoint, (Vector2)Camera.main.WorldToViewportPoint(startPoint.position));
             lerpedAmount = Mathf.Lerp(startPos, endPos, (elapsedTime / _distortionTime));
@@ -96,7 +96,7 @@ public class EmitShaderController : MonoBehaviour
 
         while (timer < vinetteTime)
         {
-            timer += Time.unscaledDeltaTime;
+            timer += Time.deltaTime;
 
             float currentIntensity = Mathf.Lerp(maxVinetteIntense, 0f, timer / vinetteTime);
 

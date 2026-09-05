@@ -1,4 +1,6 @@
 using EMIT.Utilities;
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehaviour, IEmitableTarget
@@ -19,10 +21,12 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
     private EffectManager effectManager;
 
     private EmitTrackingEffect currentControllEmitGhost;
+    private float ghostDurationTime = 0.3f;
+    private EmitTrackingEffect[] emitGhosts;
+    private Coroutine ghostRoutine;
+    private int currentGhostIndex = 0;
 
     private Animator _animator;
-
-    private bool emitGhostTriggered = false;
 
     private void Awake()
     {
@@ -31,6 +35,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         _rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         spriteRenderer = emitableTarget.GetComponent<SpriteRenderer>();
         _animator = emitableTarget.GetComponent<Animator>();
+        emitGhosts = new EmitTrackingEffect[10];
     } 
     
     private void Start()
@@ -39,18 +44,6 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         
         EmitManager.Instance.emitObjects.Add(this);
         effectManager = EffectManager.Instance;
-    }
-
-    private void FixedUpdate()
-    {
-        if (!emitGhostTriggered) return;
-
-        currentControllEmitGhost = effectManager.EnableEmitGhost();
-        for (int i = 0; i < buffer.Count; i++)
-        {
-            KeyframeStatus frame = buffer.Peek(i);
-            currentControllEmitGhost.setGhost(frame.sprite, frame.position, frame.facingDir);
-        }
     }
 
     private KeyframeStatus GetKeyFrame()
@@ -82,16 +75,23 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         {
             enemyBase.ResetInvincibility();
         }
+
+        currentGhostIndex = 0;
     }
 
     public virtual void BeginGhost()
     {
-        emitGhostTriggered = true;
+        ghostRoutine = StartCoroutine(StartEmitGhost());
     }
 
     public virtual void EndGhost()
     {
-        emitGhostTriggered = false;
+        foreach(EmitTrackingEffect ghosts in emitGhosts)
+        {
+            if(ghosts != null)
+                effectManager.ReturnEmitGhost(ghosts);
+        }
+        if(ghostRoutine != null )StopCoroutine(ghostRoutine);
     }
 
     public virtual void EmitFrame()
@@ -103,6 +103,14 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
             emitableTarget.SetPower(-frame.power);
             spriteRenderer.sprite = frame.sprite;
             spriteRenderer.flipX = Direction2D.IsOpposite(frame.facingDir, Vector2.right);
+        }
+        if (emitGhosts[currentGhostIndex] != null)
+        {
+            if (emitGhosts[currentGhostIndex].getPos() == frame.position)
+            {
+                if(emitGhosts[currentGhostIndex].isEndMove())
+                    effectManager.ReturnEmitGhost(emitGhosts[currentGhostIndex++]);
+            }
         }
     }
 
@@ -119,5 +127,28 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
     public virtual void ResetFrame()
     {
         buffer.Clear();
+    }
+
+    private IEnumerator StartEmitGhost()
+    {
+        float ghostTimer = 0f;
+        int index = 0;
+        currentControllEmitGhost = effectManager.EnableEmitGhost();
+        emitGhosts[index++] = currentControllEmitGhost;
+        for (int i = 0; i < buffer.Count; i++)
+        {
+            if(ghostTimer >= ghostDurationTime)
+            {
+                currentControllEmitGhost.EndMove();
+                currentControllEmitGhost = effectManager.EnableEmitGhost();
+                emitGhosts[index++] = currentControllEmitGhost;
+                ghostTimer = 0f;
+            }
+            KeyframeStatus frame = buffer.Peek(i);
+            currentControllEmitGhost.setGhost(frame.sprite, frame.position, frame.facingDir);
+
+            ghostTimer += 0.01f;
+            yield return new WaitForSecondsRealtime(0.01f);
+        }
     }
 }

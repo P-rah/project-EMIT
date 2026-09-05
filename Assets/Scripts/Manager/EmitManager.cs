@@ -108,6 +108,7 @@ public class EmitManager : MonoBehaviour
         foreach (IEmit obj in emitObjects)
         {
             obj.BeginGhost();
+            obj.BeginEmit();
         }
         isEmitting = true;
         TimeManager.Instance.TimeStop();
@@ -115,6 +116,9 @@ public class EmitManager : MonoBehaviour
         SoundManager.Instance.PlaySFX(emitStartSound2);
         SoundManager.Instance.StartEmitBGM();
         EventManager.TriggerEvent("OnEmitStart");
+
+        startEmitTimer = StartCoroutine(StartEmitTimer());
+        StartCoroutine(emitClockSound());
         StartCoroutine(StartEmitPrepareTimer());
     }
 
@@ -122,11 +126,10 @@ public class EmitManager : MonoBehaviour
     {
         foreach (IEmit obj in emitObjects)
         {
-            obj.EndGhost();
             obj.BeginEmit();
         }
         startEmitTimer = StartCoroutine(StartEmitTimer());
-        TimeManager.Instance.TimeStart();
+
         StartCoroutine(emitClockSound());
     }    
 
@@ -135,6 +138,7 @@ public class EmitManager : MonoBehaviour
         Debug.Log("Emit Finished");
         foreach (IEmit obj in emitObjects)
         {
+            obj.EndGhost();
             obj.EndEmit();
         }
         emittedFrames = 0;
@@ -216,7 +220,7 @@ public class EmitManager : MonoBehaviour
     private IEnumerator StartEmitPrepareTimer()
     {
         yield return new WaitForSecondsRealtime(emitPreparationTime);
-        StartEmit();
+        TimeManager.Instance.TimeStart();
     }
 
     private IEnumerator StartEmitTimer()
