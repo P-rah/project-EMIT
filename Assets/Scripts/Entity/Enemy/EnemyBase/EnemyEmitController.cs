@@ -16,8 +16,13 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
     protected T emitableTarget;
     private Rigidbody2D _rb;
     private SpriteRenderer spriteRenderer;
+    private EffectManager effectManager;
+
+    private EmitTrackingEffect currentControllEmitGhost;
 
     private Animator _animator;
+
+    private bool emitGhostTriggered = false;
 
     private void Awake()
     {
@@ -33,6 +38,19 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         buffer = new EmitBuffer<KeyframeStatus>(EmitManager.Instance.emitBufferFrames);
         
         EmitManager.Instance.emitObjects.Add(this);
+        effectManager = EffectManager.Instance;
+    }
+
+    private void FixedUpdate()
+    {
+        if (!emitGhostTriggered) return;
+
+        currentControllEmitGhost = effectManager.EnableEmitGhost();
+        for (int i = 0; i < buffer.Count; i++)
+        {
+            KeyframeStatus frame = buffer.Peek(i);
+            currentControllEmitGhost.setGhost(frame.sprite, frame.position, frame.facingDir);
+        }
     }
 
     private KeyframeStatus GetKeyFrame()
@@ -59,12 +77,21 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         emitableTarget.SetFacingDirection(Vector2.right);
         emitableTarget.RootMovement();
         if (_animator != null) _animator.enabled = false;
-        //emitableTarget.SetPower(-emitableTarget.currentPower);
 
         if (emitableTarget is EnemyBase enemyBase)
         {
             enemyBase.ResetInvincibility();
         }
+    }
+
+    public virtual void BeginGhost()
+    {
+        emitGhostTriggered = true;
+    }
+
+    public virtual void EndGhost()
+    {
+        emitGhostTriggered = false;
     }
 
     public virtual void EmitFrame()

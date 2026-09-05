@@ -72,4 +72,14 @@ public class ObjectEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavi
     {
         buffer.Clear();
     }
+
+    void IEmit.BeginGhost()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    void IEmit.EndGhost()
+    {
+        throw new System.NotImplementedException();
+    }
 }

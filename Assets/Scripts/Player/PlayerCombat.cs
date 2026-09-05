@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 /*
  * 플레이어 공격, 역행 관리용 클래스
@@ -59,12 +58,12 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.StartListening("OnEmitPressed", OnEmitPressed);
+        EventManager.StartListening("OnEmitStart", OnEmitStart);
     }
 
     private void OnDisable()
     {
-        EventManager.StopListening("OnEmitPressed", OnEmitPressed);
+        EventManager.StopListening("OnEmitStart", OnEmitStart);
     }
 
     private void Update()
@@ -277,7 +276,7 @@ public class PlayerCombat : MonoBehaviour
         SoundManager.Instance.PlaySFX(Player.Instance.grabRetreiveSound);
     }
 
-    private void OnEmitPressed()
+    private void OnEmitStart()
     {
         hasTriggeredEmit = false;
     }

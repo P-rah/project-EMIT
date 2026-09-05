@@ -12,12 +12,14 @@ public class EmitManager : MonoBehaviour
     [Header("EMIT 관련 설정")]
     [SerializeField] private float emitPreparationTime; // 선딜(역행하는 오브젝트가 잠시 가만히 멈춰있을 시간)
     [SerializeField] private float emitDurationTime; // EMIT 지속시간
+    [SerializeField] private float emitCoolTime;    //EMIT 회복 쿨타임
     [SerializeField] public int emitBufferFrames; // EMIT 지속시간동안 역재생할 프레임 수
     [SerializeField] public int emittedFrames;
 
     [Header("현재 EMIT 상태")]
     [SerializeField] public bool isEmitting;
-    public bool isEmittable = true;
+    public bool isEmittable = true;             //역행 가능 상태
+    [SerializeField] private bool isEmitCanRecovery = true; //역행 가능 상태로 전환 가능한가 여부
     private float currentEmitableTime;
 
     [Header("EMIT 효과음")]
@@ -28,7 +30,6 @@ public class EmitManager : MonoBehaviour
     public AudioClip emitClockSound2;
 
     private Coroutine startEmitTimer;
-    //private Coroutine emitCoolDown;
 
     //[Header("UI 컨트롤러")]
     private PlayerUIController playerUIController;
@@ -60,12 +61,16 @@ public class EmitManager : MonoBehaviour
         // Event 구독
         EventManager.StartListening("OnEmitPressed", OnEmitPressed);
         EventManager.StartListening("StopEmit", EmitReset);
+        EventManager.StartListening("OnEmitEnd", OnEmitFinished);
+        EventManager.StartListening("OnPlayerDieEmit", OnPlayerDieEmit);    //플레이어 사망 시 역행 비주얼용
     }
 
     private void OnDisable()
     {
         EventManager.StopListening("OnEmitPressed", OnEmitPressed);
         EventManager.StopListening("StopEmit", EmitReset);
+        EventManager.StopListening("OnEmitEnd", OnEmitFinished);
+        EventManager.StopListening("OnPlayerDieEmit", OnPlayerDieEmit);
     }
 
     private void FixedUpdate()
@@ -80,10 +85,6 @@ public class EmitManager : MonoBehaviour
                     obj.EmitFrame();
                 }
                 emittedFrames++;
-            }
-            else
-            {
-                //OnEmitFinished();
             }
         }
         else
@@ -100,21 +101,34 @@ public class EmitManager : MonoBehaviour
 
     private void OnEmitPressed()
     {
+        if (!isEmittable) return;
         isEmittable = false;
         Debug.Log("Emit Started");
         emittedFrames = 0;
         foreach (IEmit obj in emitObjects)
         {
-            obj.BeginEmit();
+            obj.BeginGhost();
         }
         isEmitting = true;
-        startEmitTimer = StartCoroutine(StartEmitTimer());
-        TimeManager.Instance.StartSlowMotion();
+        TimeManager.Instance.TimeStop();
         SoundManager.Instance.PlaySFX(emitStartSound1);
         SoundManager.Instance.PlaySFX(emitStartSound2);
-        StartCoroutine(emitClockSound());
         SoundManager.Instance.StartEmitBGM();
+        EventManager.TriggerEvent("OnEmitStart");
+        StartCoroutine(StartEmitPrepareTimer());
     }
+
+    private void StartEmit()
+    {
+        foreach (IEmit obj in emitObjects)
+        {
+            obj.EndGhost();
+            obj.BeginEmit();
+        }
+        startEmitTimer = StartCoroutine(StartEmitTimer());
+        TimeManager.Instance.TimeStart();
+        StartCoroutine(emitClockSound());
+    }    
 
     private void OnEmitFinished()
     {
@@ -125,14 +139,31 @@ public class EmitManager : MonoBehaviour
         }
         emittedFrames = 0;
         isEmitting = false;
-        //emitCoolDown = StartCoroutine(EmitCooldown());
-        TimeManager.Instance.StopSlowMotion();
+        if (startEmitTimer != null) StopCoroutine(startEmitTimer);
+        StartCoroutine(EmitCooldown());
         SoundManager.Instance.PlaySFX(emitEndSound);
         SoundManager.Instance.StopEmitBGM();
         EventManager.TriggerEvent("OnEmitFinished");
     }
 
-    //private void OnEmitCanceled()
+    private void OnPlayerDieEmit()
+    {
+        isEmittable = false;
+        emittedFrames = 0;
+        foreach (IEmit obj in emitObjects)
+        {
+            obj.BeginEmit();
+        }
+        isEmitting = true;
+        startEmitTimer = StartCoroutine(StartEmitTimer());
+        SoundManager.Instance.PlaySFX(emitStartSound1);
+        SoundManager.Instance.PlaySFX(emitStartSound2);
+        StartCoroutine(emitClockSound());
+        SoundManager.Instance.StartEmitBGM();
+        EventManager.TriggerEvent("OnEmitStart");
+    }
+
+    //private void OnEmitEnd()
     //{
     //    foreach (IEmit obj in emitObjects)
     //    {
@@ -159,6 +190,7 @@ public class EmitManager : MonoBehaviour
         emittedFrames = 0;
         isEmitting = false;
         isEmittable = true;
+        isEmitCanRecovery = true;
     }
 
     public void AddEmitTime(float time)
@@ -169,7 +201,7 @@ public class EmitManager : MonoBehaviour
             if (currentEmitableTime >= emitDurationTime)
             {
                 currentEmitableTime = emitDurationTime;
-                isEmittable = true;
+                if(isEmitCanRecovery) isEmittable = true;
             }
             updateEmitUI();
         }
@@ -179,6 +211,12 @@ public class EmitManager : MonoBehaviour
     {
         if(playerUIController != null)
             playerUIController.UpdateEmitBar(currentEmitableTime, emitDurationTime);
+    }
+
+    private IEnumerator StartEmitPrepareTimer()
+    {
+        yield return new WaitForSecondsRealtime(emitPreparationTime);
+        StartEmit();
     }
 
     private IEnumerator StartEmitTimer()
@@ -192,16 +230,22 @@ public class EmitManager : MonoBehaviour
         OnEmitFinished();
     }
 
-    //private IEnumerator EmitCooldown()
-    //{
-    //    float timer = 0f;
-    //    while(timer < emitDurationTime)
-    //    {
-    //        timer += Time.deltaTime;
-    //        yield return null;
-    //    }
-    //    isEmittable = true;
-    //}
+    private IEnumerator EmitCooldown()
+    {
+        isEmitCanRecovery = false;
+        float timer = 0f;
+        while (timer < emitCoolTime)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        isEmitCanRecovery = true;
+        if (currentEmitableTime == emitDurationTime)
+        {
+            isEmittable = true;
+            updateEmitUI();
+        }
+    }
 
     private IEnumerator emitClockSound()
     {

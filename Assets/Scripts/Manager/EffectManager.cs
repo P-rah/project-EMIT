@@ -7,14 +7,19 @@ public class EffectManager : MonoBehaviour
 
     [Header("적 피격 이펙트")]
     public GameObject enemyHitEffectPrefab;
-    public int effectPoolSize = 10;
+    [SerializeField]private int effectPoolSize = 10;
 
-    [Header("사망 이펙트 설정")]
+    [Header("사망 이펙트")]
     public GameObject deathEffectPrefab;
-    public int deathPoolSize = 5;
+    [SerializeField] private int deathPoolSize = 5;
+
+    [Header("역행 고스트")]
+    public EmitTrackingEffect emitGhostPrefab;
+    [SerializeField] private int emitGhostPoolSize = 100;
 
     private Queue<GameObject> effectPool = new Queue<GameObject>();
     private Queue<GameObject> deathEffectPool = new Queue<GameObject>();
+    private Queue<EmitTrackingEffect> emitGhostPool = new Queue<EmitTrackingEffect>();
 
     private void Awake()
     {
@@ -26,6 +31,7 @@ public class EffectManager : MonoBehaviour
         Instance = this;
         InitializeEffectPool();
         InitializeDeathPool();
+        InitializeEmitGhostPool();
     }
 
     private void InitializeEffectPool()
@@ -103,5 +109,33 @@ public class EffectManager : MonoBehaviour
     {
         effect.SetActive(false);
         deathEffectPool.Enqueue(effect);
+    }
+
+    //역행 고스트 이펙트
+    private void InitializeEmitGhostPool()
+    {
+        for (int i = 0; i < emitGhostPoolSize; i++)
+        {
+            EmitTrackingEffect emitGhost = Instantiate(emitGhostPrefab, transform);
+            emitGhost.gameObject.SetActive(false);
+            emitGhostPool.Enqueue(emitGhost);
+        }
+    }
+
+    public EmitTrackingEffect EnableEmitGhost()
+    {
+        EmitTrackingEffect emitGhost;
+        if (emitGhostPool.Count > 0) emitGhost = emitGhostPool.Dequeue();
+        else emitGhost = Instantiate(emitGhostPrefab, transform);
+
+        emitGhost.gameObject.SetActive(true);
+        return emitGhost;
+
+    }
+
+    public void ReturnEmitGhost(EmitTrackingEffect emitGhost)
+    {
+        emitGhost.gameObject.SetActive(false);
+        emitGhostPool.Enqueue(emitGhost);
     }
 }

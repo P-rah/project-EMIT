@@ -19,12 +19,12 @@ public class TimeManager : MonoBehaviour
     private bool timeChangeable = true;
 
     [Header("시간 설정")]
-    public float normalTimeScale = 1f;
-    public float slowTimeScale = 0.3f;
+    [SerializeField] private float normalTimeScale = 1f;
+    [SerializeField] private float slowTimeScale = 0f;
 
     [Header("전환 시간")]
-    public float timeToSlowDown = 1f;
-    public float timeToSpeedUp = 1f;
+    [SerializeField] private float timeToSlowDown = 1f;
+    [SerializeField] private float timeToSpeedUp = 1f;
 
     private float targetTimeScale = 1f;
     private float transitionSpeed;
@@ -52,13 +52,13 @@ public class TimeManager : MonoBehaviour
         }
     }
 
-    public void StartSlowMotion()
+    public void TimeStop()
     {
         targetTimeScale = slowTimeScale;
         transitionSpeed = Mathf.Abs(normalTimeScale - slowTimeScale) / timeToSlowDown;
     }
 
-    public void StopSlowMotion()
+    public void TimeStart()
     {
         targetTimeScale = normalTimeScale;
         transitionSpeed = Mathf.Abs(normalTimeScale - slowTimeScale) / timeToSpeedUp;

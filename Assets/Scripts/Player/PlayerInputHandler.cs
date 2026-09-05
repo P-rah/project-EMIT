@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerInputHandler : MonoBehaviour
 {
     public static event Action SettingsToggleRequested;
+    private EmitManager emitManager;
 
     /*
         ===============================================
@@ -26,6 +27,11 @@ public class PlayerInputHandler : MonoBehaviour
         LAYER 2: Send Messages가 인식할 Input을 받아오는 함수들
         ===============================================
     */
+
+    private void Start()
+    {
+        emitManager = EmitManager.Instance;
+    }
 
     public void OnMove(InputValue value)
     {
@@ -60,8 +66,8 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            if(EmitManager.Instance.isEmittable)
-                EventManager.TriggerEvent("OnEmitPressed");
+            if(emitManager.isEmitting) EventManager.TriggerEvent("OnEmitEnd");
+            else EventManager.TriggerEvent("OnEmitPressed");
         }
     }
 

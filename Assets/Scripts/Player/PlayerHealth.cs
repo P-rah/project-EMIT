@@ -46,7 +46,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void AnimEvent_DeadEmitActive()
     {
-        EventManager.TriggerEvent("OnEmitPressed");
+        EventManager.TriggerEvent("OnPlayerDieEmit");
     }
 
     public void AnimEvent_SceneReset()

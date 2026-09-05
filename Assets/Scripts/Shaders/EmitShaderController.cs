@@ -5,7 +5,7 @@ public class EmitShaderController : MonoBehaviour
 {
     private void OnEnable()
     {
-        EventManager.StartListening("OnEmitPressed", StartEffect);
+        EventManager.StartListening("OnEmitStart", StartEffect);
         EventManager.StartListening("OnEmitAborted", AbortEffect);
         EventManager.StartListening("OnEmitFinished", EndEffect);
         EventManager.StartListening("OnPlayerHit", startHitVinette);
@@ -13,7 +13,7 @@ public class EmitShaderController : MonoBehaviour
     }
     private void OnDisable()
     {
-        EventManager.StopListening("OnEmitPressed", StartEffect);
+        EventManager.StopListening("OnEmitStart", StartEffect);
         EventManager.StopListening("OnEmitAborted", AbortEffect);
         EventManager.StopListening("OnEmitFinished", EndEffect);
         EventManager.StopListening("OnPlayerHit", startHitVinette);

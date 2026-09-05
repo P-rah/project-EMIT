@@ -12,6 +12,7 @@ public class PlayerUIController : MonoBehaviour
     [SerializeField] private float emitMaxGlowIntensity;
     [SerializeField] private float emitMinGlowIntensity;
     [SerializeField] private float glowSpeed;
+    private EmitManager emitManager;
 
     private bool glowOn;
 
@@ -19,9 +20,10 @@ public class PlayerUIController : MonoBehaviour
 
     private void Start()
     {
-        if (EmitManager.Instance != null)
+        emitManager = EmitManager.Instance;
+        if (emitManager != null)
         {
-            EmitManager.Instance.ConnectPlayerUIController(this);
+            emitManager.ConnectPlayerUIController(this);
         }
     }
 
@@ -46,7 +48,7 @@ public class PlayerUIController : MonoBehaviour
     public void UpdateEmitBar(float current, float max)
     {
         emitBarImage.fillAmount = current / max;
-        if (emitBarImage.fillAmount == 1) glowOn = true;
+        if (emitManager.isEmittable) glowOn = true;
         else
         {
             glowOn = false;

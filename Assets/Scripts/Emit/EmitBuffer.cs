@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 /*
     KeyFrame 저장은 FIFO, KeyFrame 꺼내기는 LIFO
@@ -44,6 +45,17 @@ public class EmitBuffer<T>
         _count--;
 
         return true;
+    }
+
+    public T Peek(int index)
+    {
+        if (index < 0 || index >= _count)
+        {
+            return default;
+        }
+
+        int targetIndex = (((_head - 1 - index) % N) + N) % N;
+        return _buffer[targetIndex];
     }
 
     public void Clear()
