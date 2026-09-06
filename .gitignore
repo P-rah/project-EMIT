@@ -39,6 +39,9 @@
 *.github
 *.agents
 
+# Codex
+*.codex
+
 # Visual Studio cache directory
 .vs/
 

@@ -6,9 +6,8 @@ using DG.Tweening.Plugins.Core.PathCore;
 using DG.Tweening.Plugins.Options;
 using System.Threading;
 
-// 미완성임
-
 [RequireComponent(typeof(Rigidbody2D))] 
+[RequireComponent(typeof(BoxCollider2D))]
 public class MovingPlatform : MonoBehaviour
 {
     private enum MoveCondition
@@ -55,8 +54,10 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField] private float activationTimer;
     [SerializeField] private float deactivationTimer;
     
-    private CancellationTokenSource transitionCts;
-    private CancellationTokenSource movementCts;
+    private bool movementStarted;
+    private bool returningToStart;
+    private Vector2 startPosition;
+    private float returnSpeed;
 
     private void Awake()
     {
@@ -65,71 +66,120 @@ public class MovingPlatform : MonoBehaviour
         {
             initialPos = transform;
         }
-        activationTimer = 0f;
-        pathPointIndex = 0;
-    }
 
-    private void Start()
-    {
         rb.position = initialPos.position;
-        // StartMovement();   
+        startPosition = rb.position;
+        activationTimer = 0f;
+        deactivationTimer = 0f;
+        pathPointIndex = 0;
+        CreatePathTween();
     }
 
     private void FixedUpdate()
     {
-        UpdateActivationTimer();
         GetDeltaPositionAndMove();
     }
 
-    private void UpdateActivationTimer()
+    private void UpdateTimers()
     {
-        if (!PlatformCanMove())
+        if (pathTween == null)
         {
-            activationTimer = 0f;
             return;
         }
 
-        activationTimer += Time.fixedDeltaTime;
-
-        if (activationTimer >= activationTime)
-        {
-            BeginMovement();
-        }
-    }
-
-    private void UpdateDeactivationTimer()
-    {
         if (PlatformCanMove())
         {
             deactivationTimer = 0f;
+
+            if (movementStarted)
+            {
+                activationTimer = 0f;
+                return;
+            }
+
+            activationTimer += Time.fixedDeltaTime;
+
+            if (activationTimer >= activationTime)
+            {
+                StartMovement();
+            }
+        }
+        else
+        {
+            activationTimer = 0f;
+
+            if (!movementStarted)
+            {
+                deactivationTimer = 0f;
+                return;
+            }
+
+            deactivationTimer += Time.fixedDeltaTime;
+
+            if (deactivationTimer >= deactivationTime)
+            {
+                StopMovement();
+            }
+
+        }
+    }
+
+    private void StartMovement()
+    {
+        if (pathTween == null)
+        {
             return;
         }
 
-        deactivationTimer += Time.fixedDeltaTime;
+        activationTimer = 0f;
+        deactivationTimer = 0f;
+        movementStarted = true;
 
-        if (deactivationTimer >= deactivationTime)
+        if (returningToStart)
         {
-            StopMovement();
+            return;
+        }
+
+        // 하차로 복귀 중이었다면 정방향으로 재출발한다.
+        // 단순 일시정지였으면 PingPong의 역방향도 그대로 재개한다.
+        if (returnWhileNotCarrying || pathTween.Elapsed() == 0f)
+        {
+            pathTween.PlayForward();
+        }
+        else
+        {
+            pathTween.Play();
         }
     }
 
-    private void BeginMovement()
-    {
-        Vector2[] wayPoints = new Vector2[pathPoints.Length];
-        for (int i = 0; i < wayPoints.Length; i++)
+    private void StopMovement() {
+        if (!movementStarted)
         {
-            wayPoints[i] = pathPoints[i].position;
+            return;
         }
-        if (pathPointIndex < wayPoints.Length - 1)
+
+        movementStarted = false;
+        activationTimer = 0f;
+        deactivationTimer = 0f;
+        DeltaPosition = Vector2.zero;
+
+        if (pathTween == null)
         {
-            // Index 범위 검사 완료
-            Vector2 nextPoint = wayPoints[pathPointIndex++];
-            
+            return;
         }
+
+        if (returnWhileNotCarrying && !returningToStart)
+        {
+            pathTween.PlayBackwards();
+            return;
+        }
+
+        pathTween.Pause();
     }
 
-    // Start ->> StartMovement
-    private void StartMovement()
+    /// <summary> rb.position에서 출발해서, 주어진 Path를 cycleSeconds 동안 따라가고,
+    /// PathPlugin이 매 tick 계산한 위치를 PublishDeltaPositionAndMove에게 넘겨라. </summary>
+    private void CreatePathTween()
     {
         if (pathPoints == null || pathPoints.Length == 0)
         {
@@ -143,76 +193,94 @@ public class MovingPlatform : MonoBehaviour
             return;
         }
 
-        Vector2[] wayPoints = new Vector2[pathPoints.Length];
-
-        for (int i = 0; i < pathPoints.Length; i++)
+        Vector3[] wayPoints = ToPositions(pathPoints);
+        if (wayPoints == null)
         {
-            if (pathPoints[i] == null)
+            return;
+        }
+
+        pathTween = DOTween.To(
+            PathPlugin.Get(),                       // Path Tween 계산에 사용할 플러그인 가져옴
+            () => rb.position,                      // 현재 값을 읽는 Getter
+            PublishDeltaPositionAndMove,            // PathPlugin이 계산한 새로운 위치를 전달받는 Setter
+            new Path(pathType, wayPoints, 10, null),
+            cycleSeconds
+        )
+        .SetTarget(rb)
+        .SetUpdate(UpdateType.Manual)
+        .SetAutoKill(false)
+        .SetEase(Ease.Linear)
+        .Pause();
+
+        pathTween.plugOptions.isRigidbody2D = true;
+        pathTween.plugOptions.mode = PathMode.Full3D;
+        pathTween.ForceInit();
+        returnSpeed = pathTween.PathLength() / cycleSeconds;
+    }
+
+    // DOTween을 한 틱 진행시킴
+    private void UpdatePathForCurrentPhysicsStep()
+    {
+        if (returningToStart)
+        {
+            if (!movementStarted && !returnWhileNotCarrying)
             {
-                continue;
+                return;
             }
-            wayPoints[i] = pathPoints[i].position;
+
+            Vector2 nextPosition = Vector2.MoveTowards(
+                rb.position, startPosition, returnSpeed * Time.fixedDeltaTime);
+            PublishDeltaPositionAndMove(nextPosition);
+
+            if (nextPosition == startPosition)
+            {
+                returningToStart = false;
+                // 이미 시작점까지 이동한 뒤에만 Tween을 되감아 위치 점프를 방지한다.
+                pathTween.Rewind();
+                if (movementStarted)
+                {
+                    pathTween.PlayForward();
+                }
+            }
+            return;
         }
 
-        StartDeltaPositionTrackingPath(wayPoints);
-    }
-
-    private void StopMovement() {
-        if (returnWhileNotCarrying)
+        if (!pathTween.IsPlaying())
         {
-            // 왕복이라면 역순으로 감아서 initialPos로
-            // cycle이라면 index 확인 후 가까운 방향으로 initialPos로
+            return;
         }
-        // 그냥 정지
+
+        pathTween.ManualUpdate(Time.fixedDeltaTime, Time.fixedUnscaledDeltaTime);
+
+        if (!pathTween.IsBackwards() && pathTween.IsComplete())
+        {
+            if (traversalMethod == TraversalMethod.Loop)
+            {
+                returningToStart = true;
+            }
+            else
+            {
+                pathTween.PlayBackwards();
+            }
+        }
+        else if (pathTween.IsBackwards() && pathTween.Elapsed() == 0f && movementStarted)
+        {
+            pathTween.PlayForward();
+        }
     }
 
-    
+    private void PublishDeltaPositionAndMove(Vector3 targetPosition)
+    {
+        Vector2 nextPosition = targetPosition;
+        DeltaPosition = nextPosition - rb.position;
+        deltaPositionFixedTime = Time.fixedTime;
+        rb.MovePosition(nextPosition);
+    }
     private void OnDestroy()
     {
         pathTween?.Kill();
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == 3)
-        {
-            playerIsCarried = true;   
-        }
-        anythingIsCarried = true;
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == 3)
-        {
-            playerIsCarried = false;   
-        }
-        anythingIsCarried = false;
-    }
-
-    private bool PlatformCanMove()
-    {
-        switch (moveCondition)
-        {
-            case MoveCondition.Always:
-                return true;
-
-            case MoveCondition.AnythingRides:
-                return anythingIsCarried;
-            
-            case MoveCondition.PlayerRides:
-                return playerIsCarried;
-
-            default:
-                return false;
-        }
-    }
-
-    /* DeltaPosition 관련 */
-
-    /// <summary>
-    /// 지난 물리 프레임 대비 이동량을 계산함  
-    /// </summary>
+    /// <summary> 지난 물리 프레임 대비 이동량을 계산함 </summary>
     public Vector2 GetDeltaPositionAndMove()
     {
         if (!isActiveAndEnabled || pathTween == null)
@@ -224,58 +292,85 @@ public class MovingPlatform : MonoBehaviour
         {
             DeltaPosition = Vector2.zero;
             deltaPositionFixedTime = Time.fixedTime;
-            
+
+            // 플레이어가 먼저 호출해도 타이머와 이동을 같은 틱에 한 번만 갱신한다.
+            UpdateTimers();
             UpdatePathForCurrentPhysicsStep();
         }
 
         return DeltaPosition;
     }
-
-    // StartMovement -> StartDeltaPositionTrackingPath
-    /// <summary>
-    /// rb.position에서 출발해서, 주어진 Path를 cycleSeconds 동안 따라가고, 
-    /// PathPlugin이 매 tick 계산한 위치를 PublishDeltaPositionAndMove에게 넘겨라.
-    /// </summary>
-    private void StartDeltaPositionTrackingPath(Vector2[] wayPoints)
+    private Vector3[] ToPositions(Transform[] pathPoints)
     {
-        Vector3[] path = new Vector3[wayPoints.Length];
-        for (int i = 0; i < wayPoints.Length; i++)
+        Vector3[] wayPoints = new Vector3[pathPoints.Length];
+
+        for (int i = 0; i < pathPoints.Length; i++)
         {
-            path[i] = wayPoints[i];
+            if (pathPoints[i] == null)
+            {
+                Debug.LogError($"MovingPlatform의 Path Points[{i}]가 비어 있습니다.", this);
+                return null;
+            }
+            wayPoints[i] = pathPoints[i].position;
         }
-
-        pathTween = DOTween.To(
-            PathPlugin.Get(),                       // Path Tween 계산에 사용할 플러그인 가져옴
-            () => rb.position,                      // 현재 값을 읽는 Getter
-            PublishDeltaPositionAndMove,            // PathPlugin이 계산한 새로운 위치를 전달받는 Setter
-            new Path(pathType, path, 10, null),
-            cycleSeconds
-        )
-        .SetTarget(rb)
-        .SetUpdate(UpdateType.Fixed);
-
-        pathTween.plugOptions.isRigidbody2D = true;
-        pathTween.plugOptions.mode = PathMode.Full3D;
-        pathTween.SetEase(Ease.Linear);
+        return wayPoints;
     }
 
-    // DOTween을 한 틱 진행시킴
-    // GetDeltaPositionAndMove -> UpdatePathForCurrentPhysicsStep
-    private void UpdatePathForCurrentPhysicsStep()
+    private bool PlatformCanMove()
     {
-        pathTween?.ManualUpdate(
-            Time.fixedDeltaTime,
-            Time.fixedUnscaledDeltaTime
-        );
+        switch (moveCondition)
+        {
+            case MoveCondition.Always:
+                return true;
+
+            case MoveCondition.AnythingRides:
+                return playerIsCarried || anythingIsCarried;
+
+            case MoveCondition.PlayerRides:
+                return playerIsCarried;
+
+            default:
+                return false;
+        }
     }
 
-    private void PublishDeltaPositionAndMove(Vector3 targetPosition)
+    private bool IsFeet(Collider2D other)
     {
-        // targetPosition은 Plugin으로부터 전달받음
-        Vector2 nextPosition = targetPosition;
-        DeltaPosition = nextPosition - rb.position;
-        deltaPositionFixedTime = Time.fixedTime;
-        rb.MovePosition(nextPosition);
+        return other is CircleCollider2D && other.isTrigger &&
+            other.name == "GroundCheck" && other.attachedRigidbody != null &&
+            other.attachedRigidbody.gameObject.layer == 3;
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (IsFeet(other))
+        {
+            playerIsCarried = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (IsFeet(other))
+        {
+            playerIsCarried = false;
+        }
+    }
+
+    // 플레이어 몸체 충돌은 제외하고, 다른 물체의 기존 판정은 유지한다.
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer != 3)
+        {
+            anythingIsCarried = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer != 3)
+        {
+            anythingIsCarried = false;
+        }
+    }
 }
