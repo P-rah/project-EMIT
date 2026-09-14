@@ -44,6 +44,9 @@ public class TempPlayerMovement : MonoBehaviour
 
     private Rigidbody2D rb;
     private CapsuleCollider2D playerBodyCollider;
+    private RaycastHit2D groundHit;
+    private MovingPlatform ride;
+    private Vector2 rideDelta;
 
     private PlayerState state;
     private PlayerInputHandler input;
@@ -115,6 +118,7 @@ public class TempPlayerMovement : MonoBehaviour
 #region FixedUpdate
     private void FixedUpdate()
     {
+        rideDelta = Vector2.zero;
         bool groundedThisFrame = Grounded();
 
         if (state.IsDead)
@@ -130,6 +134,11 @@ public class TempPlayerMovement : MonoBehaviour
         {
             StartJump();
             return;
+        }
+
+        if (!isJumpProtected && ride != null)
+        {
+            rideDelta = ride.GetDeltaPositionAndMove();
         }
 
         if (isJumpProtected ||
@@ -176,7 +185,9 @@ public class TempPlayerMovement : MonoBehaviour
 
         Vector2 slideVelocity = horizontalInput * movementSpeed * groundTangent;
 
-        rb.Slide(slideVelocity, Time.fixedDeltaTime, slideMovement);
+        // 현재 바닥에서 자체 이동을 계산한 뒤, 플랫폼 이동량과 합쳐 한 번만 적용한다.
+        var result = rb.Slide(slideVelocity, Time.fixedDeltaTime, slideMovement);
+        rb.MovePosition(result.position + rideDelta);
     }
 #endregion
 
@@ -199,7 +210,17 @@ public class TempPlayerMovement : MonoBehaviour
             else movementSpeed = baseMoveSpeedWhileAttack;
         }
 
-        rb.linearVelocityX = input.MoveInput.x * movementSpeed;
+        if (!isJumpProtected && ride != null)
+        {
+            // 단방향 발판에서는 기존 속도 이동을 유지하고 수직 운행도 따라간다.
+            SetGravityScale(0f);
+            rb.linearVelocity = new Vector2(input.MoveInput.x * movementSpeed, 0f)
+                + rideDelta / Time.fixedDeltaTime;
+        }
+        else
+        {
+            rb.linearVelocityX = input.MoveInput.x * movementSpeed;
+        }
     }
 #endregion
 
@@ -272,6 +293,9 @@ public class TempPlayerMovement : MonoBehaviour
 #region 지면판정 관련
     private bool Grounded()
     {
+        groundHit = default;
+        ride = null;
+        IsGrounded = false;
         if (checkGroundedByRay)
         {
             RaycastHit2D[] hits = Physics2D.RaycastAll(
@@ -283,19 +307,30 @@ public class TempPlayerMovement : MonoBehaviour
 
             foreach (RaycastHit2D hit in hits)
             {
-                if (hit.collider == null || hit.collider.isTrigger)
+                if (hit.collider == null || hit.collider.isTrigger ||
+                    hit.rigidbody == rb || hit.normal.y <= 0f)
                 {
                     continue;
                 }
 
                 bool isIgnoredPlatform = playerBodyCollider != null &&
+                    (Physics2D.GetIgnoreLayerCollision(
+                        playerBodyCollider.gameObject.layer, hit.collider.gameObject.layer) ||
                     Physics2D.GetIgnoreCollision(
                         playerBodyCollider,
                         hit.collider
-                    );
+                    ));
 
                 if (!isIgnoredPlatform)
                 {
+                    groundHit = hit;
+                    ride = hit.rigidbody != null
+                        ? hit.rigidbody.GetComponent<MovingPlatform>()
+                        : null;
+                    if (ride != null && !ride.isActiveAndEnabled)
+                    {
+                        ride = null;
+                    }
                     IsGrounded = true;
                     return true;
                 }
@@ -312,14 +347,7 @@ public class TempPlayerMovement : MonoBehaviour
     /// </summary>
     private Vector2 GetGroundNormal()
     {
-        RaycastHit2D hit = Physics2D.Raycast(
-            groundCheckPos.position, Vector2.down, groundCheckRayLength, groundLayer); 
-        if (hit.collider != null)
-        {
-            return hit.normal; 
-        }
-        
-        return Vector2.up;
+        return groundHit.collider != null ? groundHit.normal : Vector2.up;
     }
 #endregion
 
@@ -383,17 +411,13 @@ public class TempPlayerMovement : MonoBehaviour
             gravity = Vector2.up, // 임시방편임. 나중에 고쳐야 할수도 있음!
 
             selectedCollider = playerBodyCollider,
-            useSimulationMove = true,
+            useNoMove = true,
+            useSimulationMove = false,
             useLayerMask = true,
             layerMask = slideMovementLayer
         };
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(groundCheckPos.position, groundCheckRayLength);
-    }
 #endregion
 }
 
