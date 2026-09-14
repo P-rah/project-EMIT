@@ -10,7 +10,7 @@ public class ObjectBox : MonoBehaviour, IDamageable, IKnockbackable, IGrabbable,
     private PowerStackUIController powerStackUIController { get; set; }
     public ObjectBoxCollisionDetector objectBoxCollisionDetector;
     public EmitManager emitManager { get; set; }
-    public AudioSource myAudioSource;
+    //public AudioSource myAudioSource;
 
     [SerializeField] protected ObjectData data;
 
@@ -35,9 +35,9 @@ public class ObjectBox : MonoBehaviour, IDamageable, IKnockbackable, IGrabbable,
 
     private float powerTimer { get; set; }
 
-    [Header("사운드 관련")]
-    public AudioClip sweepHitSound { get; set; }
-    public AudioClip grabHitSound { get; set; }
+    //[Header("사운드 관련")]
+    //public AudioClip sweepHitSound { get; set; }
+    //public AudioClip grabHitSound { get; set; }
 
     private Coroutine knockbackRoutine;
     private Coroutine grabRoutine;
@@ -62,8 +62,8 @@ public class ObjectBox : MonoBehaviour, IDamageable, IKnockbackable, IGrabbable,
             HitRecoveryTime = data.HitRecoveryTime;
             powerResetTime = data.powerResetTime;
             powerStackWeight = data.powerStackWeight;
-            sweepHitSound = data.sweepHitSound;
-            grabHitSound = data.grabHitSound;
+            //sweepHitSound = data.sweepHitSound;
+            //grabHitSound = data.grabHitSound;
         }
     }
 
@@ -93,12 +93,12 @@ public class ObjectBox : MonoBehaviour, IDamageable, IKnockbackable, IGrabbable,
                 transitFlipPower = true;
                 FlipPower(Info.knockback.x);
             }
-            myAudioSource.PlayOneShot(sweepHitSound);
+            //myAudioSource.PlayOneShot(sweepHitSound);
             ApplyKnockback();
             if (currentPower * Info.power < 0) ResetPower();
             CalculatePower(Info);
         }
-        else myAudioSource.PlayOneShot(grabHitSound);
+        //else myAudioSource.PlayOneShot(grabHitSound);
 
         transitFlipPower = false;
     }

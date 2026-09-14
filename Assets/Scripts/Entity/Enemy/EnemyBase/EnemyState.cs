@@ -5,12 +5,12 @@ public abstract class EnemyState : StateBase<EnemyStateMachine>
     /// </summary>
 
     protected EnemyStateMachine stateMachine;
-    protected Enemy enemy;
+    protected EnemyBase enemy;
 
     public EnemyState(EnemyStateMachine stateMachine) : base(stateMachine)
     {
         this.stateMachine = stateMachine;
-        this.enemy = stateMachine.enemy;
+        this.enemy = stateMachine.GetComponent<EnemyBase>();
     }
 
     public override abstract void EnterState();

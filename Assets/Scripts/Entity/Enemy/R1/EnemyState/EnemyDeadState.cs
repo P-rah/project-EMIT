@@ -6,8 +6,11 @@ public class EnemyDeadState : EnemyState
      * 다른 EnemyState와 동일하게 상태 생성/소유권을 EnemyStateMachine에 모은 생성자다. 통합 시
      * (Enemy, EnemyAnimator) 생성자로 되돌리지 말고 integration 브랜치의 사망 연출만 EnterState에 합친다.
      */
-    public EnemyDeadState(EnemyStateMachine owner) : base(owner)
+    private DeathEffectType type;
+
+    public EnemyDeadState(EnemyStateMachine owner, DeathEffectType type) : base(owner)
     {
+        this.type = type;
     }
 
     public override void EnterState()
@@ -21,7 +24,7 @@ public class EnemyDeadState : EnemyState
          * isEmittable을 true로 설정하지 않는다.
          */
         enemy.Flip();
-        EffectManager.Instance?.PlayDeathEffect(enemy.transform.position, enemy.isFacingLeft);
+        EffectManager.Instance?.PlayDeathEffect(type, enemy.transform.position, enemy.isFacingLeft);
     }
 
     // public override void UpdateState() { }

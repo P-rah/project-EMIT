@@ -28150,6 +28150,8 @@ MonoBehaviour:
   effectPoolSize: 10
   deathEffectPrefab: {fileID: 6643081525611309640, guid: 19d5b793557818548a4aabe0a2b3a6f3, type: 3}
   deathPoolSize: 5
+  emitGhostPrefab: {fileID: 5116131166044337367, guid: 383e2d52a11b53e4f9d7330a425f568e, type: 3}
+  emitGhostPoolSize: 10
 --- !u!4 &1707551242
 Transform:
   m_ObjectHideFlags: 0
@@ -30079,9 +30081,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeManager
   normalTimeScale: 1
-  slowTimeScale: 1
-  timeToSlowDown: 0.1
-  timeToSpeedUp: 0.1
+  slowTimeScale: 0.05
+  timeToSlowDown: 0.5
+  timeToSpeedUp: 1
 --- !u!4 &1983602749
 Transform:
   m_ObjectHideFlags: 0
@@ -30836,10 +30838,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EmitManager
   emitPreparationTime: 1
   emitDurationTime: 3
+  emitCoolTime: 0
   emitBufferFrames: 0
   emittedFrames: 0
   isEmitting: 0
   isEmittable: 1
+  isEmitCanRecovery: 1
   emitStartSound1: {fileID: 8300000, guid: dcabc291bf3d67740a59b270ff54c7a6, type: 3}
   emitStartSound2: {fileID: 8300000, guid: e43b4b426e62fd34f8ff4cdc098a1f61, type: 3}
   emitEndSound: {fileID: 8300000, guid: 78f6999d143423b4aa842bb7e6a8833f, type: 3}

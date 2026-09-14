@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3992320420525999971
 Transform:
   m_ObjectHideFlags: 0
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 112718269233424128}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4, y: -0.1, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -72,8 +72,8 @@ BoxCollider2D:
   m_Offset: {x: 1, y: 0.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.29407215, y: 0.4}
-    oldSize: {x: 2.625, y: 3.53125}
+    pivot: {x: -0.38400492, y: 0.42}
+    oldSize: {x: 1.28125, y: 2.8125}
     newSize: {x: 1.28125, y: 2.8125}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -147,7 +147,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.28125, y: 2.8125}
+  m_Size: {x: 2.625, y: 3.53125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -5273,21 +5273,20 @@ MonoBehaviour:
   recoveryTime: 1
   powerResetTime: 0
   walkSound: {fileID: 8300000, guid: dff74eaf3cf96e948a0ffc77128191d0, type: 3}
-  attackReadySound: {fileID: 8300000, guid: 066f1955da67a3c48a0390eb610db9ab, type: 3}
+  attackReadySound: {fileID: 8300000, guid: 93bebbf5ae64eec4e9b537cf1d9090e1, type: 3}
   attackSound: {fileID: 8300000, guid: 37207ed13e7e7844a9c59dc59d875952, type: 3}
-  sweepHitSound: {fileID: 8300000, guid: bd023842f8777b04c9047827cd78db44, type: 3}
-  grabHitSound: {fileID: 8300000, guid: b862d6d4f7fe34a4389becebfef2bbd2, type: 3}
+  attackHitSound: {fileID: 8300000, guid: 4f7a35f61fd1ebe4799b3bdcbf14bc16, type: 3}
   deathSound: {fileID: 8300000, guid: 6c28ed22dcc349c4cbb90c09b36c98f1, type: 3}
   currentHealth: 10
   isRooted: 1
   isCurrentHitGrab: 0
   canHit: 0
+  canAttack: 1
   front: {x: 1, y: 0}
   isFacingLeft: 0
   targetDir: {x: 0, y: 0}
   invincibilityDuration: 0.2
   enemyCollisionDetector: {fileID: 0}
-  canAttack: 1
 --- !u!114 &619726166237361685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5347,7 +5346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c818d8e28770344afd73d9fc3f2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStateMachine
-  enemy: {fileID: 0}
+  deathEffectType: 0
 --- !u!82 &5682029497126305882
 AudioSource:
   m_ObjectHideFlags: 0

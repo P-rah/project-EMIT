@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e277a04efb5f0f246aeeb8ffde26a4df, type: 3}
-  m_Name: Test Enemy
+  m_Name: R2
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: R1
   enemyInfo: "\uB85C\uBD07 1"
-  baseHealth: 15
+  baseHealth: 20
   baseAttack: 2
-  baseSpeed: 3
+  baseSpeed: 2
   jumpHeight: 1
   visionRange: 10
   attackRange: 5
   startAttackRange: 2
-  startUpTime: 0.4
-  recoveryTime: 1
+  startUpTime: 0.5
+  recoveryTime: 0.8
   knockbackRate: 1
   strongKnockbackRate: 4
   knockbackTime: 0.2

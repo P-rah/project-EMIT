@@ -122,16 +122,16 @@ public class EmitManager : MonoBehaviour
         StartCoroutine(StartEmitPrepareTimer());
     }
 
-    private void StartEmit()
-    {
-        foreach (IEmit obj in emitObjects)
-        {
-            obj.BeginEmit();
-        }
-        startEmitTimer = StartCoroutine(StartEmitTimer());
+    //private void StartEmit()
+    //{
+    //    foreach (IEmit obj in emitObjects)
+    //    {
+    //        obj.BeginEmit();
+    //    }
+    //    startEmitTimer = StartCoroutine(StartEmitTimer());
 
-        StartCoroutine(emitClockSound());
-    }    
+    //    StartCoroutine(emitClockSound());
+    //}    
 
     private void OnEmitFinished()
     {

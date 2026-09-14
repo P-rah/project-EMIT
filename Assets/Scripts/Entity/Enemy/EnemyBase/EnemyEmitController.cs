@@ -22,6 +22,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
 
     private EmitTrackingEffect currentControllEmitGhost;
     private float ghostDurationTime = 0.3f;
+    private float ghostUpdateTime = 0.01f;
     private EmitTrackingEffect[] emitGhosts;
     private Coroutine ghostRoutine;
     private int currentGhostIndex = 0;
@@ -137,7 +138,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         emitGhosts[index++] = currentControllEmitGhost;
         for (int i = 0; i < buffer.Count; i++)
         {
-            if(ghostTimer >= ghostDurationTime)
+            if (ghostTimer >= ghostDurationTime)
             {
                 currentControllEmitGhost.EndMove();
                 currentControllEmitGhost = effectManager.EnableEmitGhost();
@@ -147,8 +148,8 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
             KeyframeStatus frame = buffer.Peek(i);
             currentControllEmitGhost.setGhost(frame.sprite, frame.position, frame.facingDir);
 
-            ghostTimer += 0.01f;
-            yield return new WaitForSecondsRealtime(0.01f);
+            ghostTimer += ghostUpdateTime;
+            yield return new WaitForSecondsRealtime(ghostUpdateTime);
         }
     }
 }

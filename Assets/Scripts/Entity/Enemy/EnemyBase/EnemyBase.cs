@@ -42,8 +42,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public AudioClip walkSound;
     public AudioClip attackReadySound;
     public AudioClip attackSound;
-    public AudioClip sweepHitSound;
-    public AudioClip grabHitSound;
+    public AudioClip attackHitSound;
+    //public AudioClip grabHitSound;
     public AudioClip deathSound;
 
     [Header("Base State Flags")]
@@ -59,6 +59,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public int dmgType { get; set; }
     public bool transitFlipPower { get; set; }
     public bool canHit;
+    [SerializeField] private bool canAttack = true;
 
     public Vector2 front;
     public bool isFacingLeft = false;
@@ -70,6 +71,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     protected float invincibilityTimer = 0f;
 
     public bool IsInvincible => invincibilityTimer > 0f;
+
+    public EnemyStateMachine StateMachine { get; set; }
+    public StateBase<EnemyStateMachine> CurrentState => StateMachine?.currentState;
+    public StateBase<EnemyStateMachine> IdleState => StateMachine?.IdleState;
+    public StateBase<EnemyStateMachine> DeadState => StateMachine?.DeadState;
 
     public virtual void Awake()
     {
@@ -197,6 +203,14 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
         isRooted = false;
     }
 
+    public bool isPlayerInVision() => Physics2D.CircleCast(transform.position, visionRange, Vector2.right, 0, LayerMask.GetMask("Player"));
+    public bool isPlayerInAttackRange()
+    {
+        if (canAttack)
+            return Physics2D.Raycast(transform.position, targetDir, startAttackRange, LayerMask.GetMask("Player"));
+        else return false;
+    }
+
     // ==========================================
     // 무적 타이머
     // ==========================================
@@ -251,6 +265,14 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     }
 
     public void ResetPowerTImer(){ powerTimer = 0; }
+
+    public void EnableAttackCancel()
+    {
+        if (CurrentState is EnemyAttackState attackState)
+            attackState.SetCancellable(true);
+    }
+
+
     // 추상 매서드
     public abstract void ReceiveAttack(AttackInfo attackInfo);
     public abstract void ReceiveDamage(AttackInfo attackInfo);
@@ -259,4 +281,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
 
     public virtual void StartOverlapDetect() { }
     public virtual void StopOverlapDetect() { }
+
+    internal abstract void NotifyStateEntered(StateBase<EnemyStateMachine> state);
+    internal abstract void NotifyAttackWindupStarted();
+    internal abstract void NotifyAttackStrikeStarted();
+    internal abstract void NotifyGrabStarted(float horizontalOffset);
 }

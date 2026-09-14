@@ -6,10 +6,12 @@ public class EnemyStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackabl
     /// <summary>
     /// 책임 및 기능: Enemy State가 관리되는 규칙
     /// </summary>
-    public Enemy enemy;
+    public EnemyBase enemyBase { get; private set; }
 
-    public IGrabbable GrabbableEntity => enemy;
-    public IKnockbackable KnockbackableEntity => enemy;
+    [SerializeField] private DeathEffectType deathEffectType;
+
+    public IGrabbable GrabbableEntity => enemyBase;
+    public IKnockbackable KnockbackableEntity => enemyBase;
 
     public StateBase<EnemyStateMachine> currentState;
 
@@ -22,17 +24,17 @@ public class EnemyStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackabl
 
     private void Awake()
     {
-        if (enemy == null)
+        if (enemyBase == null)
         {
-            enemy = GetComponent<Enemy>();
+            enemyBase = GetComponent<EnemyBase>();
         }
 
         IdleState = new EnemyIdleState(this);
         AttackState = new EnemyAttackState(this);
         ChaseState = new EnemyChaseState(this);
-        DeadState = new EnemyDeadState(this);
-        KnockbackState = new SharedKnockbackState<EnemyStateMachine>(this, enemy);
-        GrabbedState = new SharedGrabbedState<EnemyStateMachine>(this, enemy);
+        DeadState = new EnemyDeadState(this, deathEffectType);
+        KnockbackState = new SharedKnockbackState<EnemyStateMachine>(this, enemyBase);
+        GrabbedState = new SharedGrabbedState<EnemyStateMachine>(this, enemyBase);
     }
 
     public bool IsCurrentState(object state)
@@ -47,16 +49,16 @@ public class EnemyStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackabl
             throw new ArgumentNullException(nameof(nextState));
         }
 
-        if (!force && (currentState == nextState || !enemy.canChangeState))
+        if (!force && (currentState == nextState || !enemyBase.canChangeState))
         {
             return;
         }
 
         currentState?.ExitState();
         currentState = nextState;
-        //enemy.ResetPowerOutsideHitReaction();
+
         currentState.EnterState();
-        enemy.NotifyStateEntered(currentState);
+        enemyBase.NotifyStateEntered(currentState);
     }
 
     public void SetState(StateBase<EnemyStateMachine> nextState)

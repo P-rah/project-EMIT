@@ -3,6 +3,9 @@ using System.Collections;
 
 public class DieFragment : MonoBehaviour
 {
+    [Header("타입 설정")]
+    public DeathEffectType type;
+
     [Header("폭발 힘 설정")]
     public float minForce = 5f;
     public float maxForce = 10f;
@@ -132,6 +135,6 @@ public class DieFragment : MonoBehaviour
 
     private void DisableDieFrag()
     {
-        EffectManager.Instance.ReturnDeathEffect(this.gameObject);
+        EffectManager.Instance.ReturnDeathEffect(type, this.gameObject);
     }
 }

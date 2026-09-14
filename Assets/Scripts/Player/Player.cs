@@ -34,6 +34,8 @@ public class Player : MonoBehaviour
     public AudioClip grabThrowSound2;
     public AudioClip grabRetreiveSound;
     public AudioClip canEmitSound;
+    public AudioClip sweepHitSound;
+    public AudioClip grabHitSound;
 
     private void Awake()
     {

@@ -1013,7 +1013,7 @@ GameObject:
   - component: {fileID: 5496614871751492946}
   - component: {fileID: 3764518140752545662}
   m_Layer: 9
-  m_Name: EnemyDieFrag
+  m_Name: R1DieFrag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

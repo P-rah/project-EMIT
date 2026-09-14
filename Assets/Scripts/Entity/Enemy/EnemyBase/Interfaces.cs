@@ -48,3 +48,9 @@ public interface IStateMachine
     bool IsCurrentState(object state);
     void ChangeToDefaultState();
 }
+
+public interface IStateControllable
+{
+    bool canChangeState { get; }
+    void NotifyStateEntered(StateBase<EnemyStateMachine> state);
+}

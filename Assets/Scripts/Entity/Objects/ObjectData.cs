@@ -17,7 +17,7 @@ public class ObjectData : ScriptableObject
     public float powerResetTime;
     public int powerStackWeight;
 
-    [Header("사운드 관련")]
-    public AudioClip sweepHitSound;
-    public AudioClip grabHitSound;
+    //[Header("사운드 관련")]
+    //public AudioClip sweepHitSound;
+    //public AudioClip grabHitSound;
 }

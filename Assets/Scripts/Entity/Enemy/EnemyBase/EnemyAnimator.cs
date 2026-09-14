@@ -17,7 +17,7 @@ public class EnemyAnimator : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        StartAnimControl();
+        StartAnimControl(); 
     }
 
     public void StopAnimControl()
@@ -36,15 +36,8 @@ public class EnemyAnimator : MonoBehaviour
         }
     }
 
-    internal void HandleStateEntered(Enemy owner,StateBase<EnemyStateMachine> state)
+    internal void HandleStateEntered(EnemyStateMachine stateMachine, StateBase<EnemyStateMachine> state, Vector2 knockBackForce, Vector2 facingDir)
     {
-        if (owner == null || state == null || owner.StateMachine == null)
-        {
-            return;
-        }
-
-        EnemyStateMachine stateMachine = owner.StateMachine;
-
         switch (state)
         {
             case var _ when state == stateMachine.IdleState:
@@ -56,7 +49,7 @@ public class EnemyAnimator : MonoBehaviour
                 break;
 
             case var _ when state == stateMachine.KnockbackState:
-                if (Direction2D.IsOpposite(owner.currentKnockBackForce, owner.FacingDir))
+                if (Direction2D.IsOpposite(knockBackForce, facingDir))
                 {
                     PlayHitFront();
                 }
@@ -66,7 +59,7 @@ public class EnemyAnimator : MonoBehaviour
                 }
                 break;
             case var _ when state == stateMachine.GrabbedState:
-                if (Direction2D.IsOpposite(owner.currentKnockBackForce, owner.FacingDir))
+                if (Direction2D.IsOpposite(knockBackForce, facingDir))
                 {
                     PlayHitBack();
                 }
@@ -88,21 +81,12 @@ public class EnemyAnimator : MonoBehaviour
         PlayAttackEnd();
     }
 
-    internal void HandleGrabStarted(Enemy owner, float horizontalOffset)
+    internal void HandleGrabStarted(float horizontalOffset, Vector2 facingDir)
     {
-        if (owner == null)
-        {
-            return;
-        }
-
-        if (Direction2D.IsOpposite(horizontalOffset, owner.FacingDir.x))
-        {
+        if (Direction2D.IsOpposite(horizontalOffset, facingDir.x))
             PlayHitBack();
-        }
         else
-        {
             PlayHitFront();
-        }
     }
 
     private void PlayIdle()

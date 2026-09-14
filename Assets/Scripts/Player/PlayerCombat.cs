@@ -5,12 +5,14 @@ using UnityEngine;
  */
 public class PlayerCombat : MonoBehaviour
 {
+    private Player player;
     private PlayerAnimation animation;
     private PlayerInputHandler input;
     private PlayerState state;
     private GrapEffect grapEffect;
     private EmitManager emitManager;
     private TempPlayerMovement playerMovement;
+    private SoundManager soundManager;
 
     [Header("Hitbox Colliders")]
     public PlayerAttackHitbox[] sweepAttackHitbox;
@@ -54,6 +56,8 @@ public class PlayerCombat : MonoBehaviour
     private void Start()
     {
         emitManager = EmitManager.Instance;
+        soundManager = SoundManager.Instance;
+        player = Player.Instance;
     }
 
     private void OnEnable()
@@ -148,7 +152,7 @@ public class PlayerCombat : MonoBehaviour
     {
         playerMovement.flippable = false;
         PlayComboEffect(sweepCount - 1);
-        SoundManager.Instance.PlaySFX(Player.Instance.sweepSound);
+        soundManager.PlaySFX(player.sweepSound);
         playerMovement.TriggerMoveWhileAttack();
         checkCancelSweep = true;
     }
@@ -199,6 +203,8 @@ public class PlayerCombat : MonoBehaviour
             //공격이 적중했을 떄
             hasTriggeredHitEffect = true;
             emitManager.AddEmitTime(emitRecoveryAmountWhenAttackHit);
+            soundManager.PlaySFX(player.sweepHitSound);
+            Debug.Log("공격명중");
         }
     }
 
@@ -220,7 +226,7 @@ public class PlayerCombat : MonoBehaviour
     {
         currentGrabTarget = target.GetComponent<IGrabbable>();
 
-        if(currentGrabTarget !=null)
+        if(currentGrabTarget != null)
         {
             currentTargetTransform = target;
             if (!hasTriggeredHitEffect && !emitManager.isEmitting)
@@ -228,6 +234,8 @@ public class PlayerCombat : MonoBehaviour
                 //공격이 적중했을 때
                 hasTriggeredHitEffect = true;
                 emitManager.AddEmitTime(emitRecoveryAmountWhenAttackHit);
+                soundManager.PlaySFX(player.grabHitSound);
+                Debug.Log("그랩명중");
             }
         }
     }
@@ -250,8 +258,8 @@ public class PlayerCombat : MonoBehaviour
     {
         grabAttackHitbox.CatchClosestEnemy();
         startGrabVisual();
-        SoundManager.Instance.PlaySFX(Player.Instance.grabThrowSound1);
-        SoundManager.Instance.PlaySFX(Player.Instance.grabThrowSound2);
+        soundManager.PlaySFX(player.grabThrowSound1);
+        soundManager.PlaySFX(player.grabThrowSound2);
     }
 
     private void startGrabVisual()
@@ -273,7 +281,7 @@ public class PlayerCombat : MonoBehaviour
             grapEffect.StartGrabFailVisualRetract();
         }
         canAttack = true;
-        SoundManager.Instance.PlaySFX(Player.Instance.grabRetreiveSound);
+        soundManager.PlaySFX(player.grabRetreiveSound);
     }
 
     private void OnEmitStart()
@@ -286,7 +294,7 @@ public class PlayerCombat : MonoBehaviour
         //역행 가능상태가 되었을 시 한번만 동작
         if(emitManager.isEmittable && !hasTriggeredEmit)
         {
-            SoundManager.Instance.PlaySFX(Player.Instance.canEmitSound);
+            soundManager.PlaySFX(player.canEmitSound);
             hasTriggeredEmit = true;
         }
     }

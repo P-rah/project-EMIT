@@ -6,7 +6,7 @@ public class EmitTrackingEffect : MonoBehaviour
     private SpriteRenderer Renderer;
     private bool endMove = false;
 
-    private void OnEnable()
+    private void Awake()
     {
         Transform = GetComponent<Transform>();
         Renderer = GetComponent<SpriteRenderer>();
@@ -20,15 +20,11 @@ public class EmitTrackingEffect : MonoBehaviour
         Renderer.flipX = facingDir.x > 0 ? false : true;
     }
 
-    public Vector2 getPos()
-    {
-        return Transform.position;
-    }
+    public Vector2 getPos() { return Transform.position; }
 
-    public void EndMove()
-    {
-        endMove = true;
-    }
+    public Sprite getSpirte() { return Renderer.sprite; }
+
+    public void EndMove() { endMove = true; }
 
     public bool isEndMove() { return endMove; }
 }

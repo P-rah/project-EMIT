@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class EnemyAttackHitbox : MonoBehaviour
 {
-    private Enemy enemy;
+    private EnemyBase enemyBase;
 
     private void Awake()
     {
-        enemy = GetComponentInParent<Enemy>();
+        enemyBase = GetComponentInParent<EnemyBase>();
     }
 
     protected void OnTriggerEnter2D(Collider2D collision)
@@ -23,6 +23,6 @@ public class EnemyAttackHitbox : MonoBehaviour
     public void AnimEvent_DisableEffect()
     {
         gameObject.SetActive(false);
-        enemy?.EnableCancel();
+        enemyBase?.EnableAttackCancel();
     }
 }

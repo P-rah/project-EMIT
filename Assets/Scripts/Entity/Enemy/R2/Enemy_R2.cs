@@ -1,16 +1,11 @@
 using UnityEngine;
 
-public class Enemy : EnemyBase
-{
-    public EnemyStateMachine StateMachine { get; private set; }
-    public StateBase<EnemyStateMachine> CurrentState => StateMachine?.currentState;
-    public StateBase<EnemyStateMachine> IdleState => StateMachine?.IdleState;
-    public StateBase<EnemyStateMachine> DeadState => StateMachine?.DeadState;
-
+public class Enemy_R2 : EnemyBase
+{   
     private EnemyAnimator _enemyAnimator;
     public EnemyCollisionDetector enemyCollisionDetector;
-
-    [SerializeField] private bool canAttack = true;
+    [SerializeField] private BlockEffect blockEffect;
+    [SerializeField] private AudioClip blockSound;
 
     public override void Init()
     {
@@ -53,10 +48,10 @@ public class Enemy : EnemyBase
         StateMachine.ChangeState(nextState, force);
     }
 
-    internal void NotifyStateEntered(StateBase<EnemyStateMachine> state) => _enemyAnimator?.HandleStateEntered(this, state);
-    internal void NotifyAttackWindupStarted() => _enemyAnimator?.HandleAttackWindupStarted();
-    internal void NotifyAttackStrikeStarted() => _enemyAnimator?.HandleAttackStrikeStarted();
-    internal void NotifyGrabStarted(float horizontalOffset) => _enemyAnimator?.HandleGrabStarted(this, horizontalOffset);
+    internal override void NotifyStateEntered(StateBase<EnemyStateMachine> state) => _enemyAnimator?.HandleStateEntered(StateMachine, state, currentKnockBackForce, FacingDir);
+    internal override void NotifyAttackWindupStarted() => _enemyAnimator?.HandleAttackWindupStarted();
+    internal override void NotifyAttackStrikeStarted() => _enemyAnimator?.HandleAttackStrikeStarted();
+    internal override void NotifyGrabStarted(float horizontalOffset) => _enemyAnimator?.HandleGrabStarted(horizontalOffset, FacingDir);
 
     private void OnDrawGizmos()
     {
@@ -65,13 +60,6 @@ public class Enemy : EnemyBase
         Gizmos.DrawWireSphere(transform.position, visionRange);
     }
 
-    public bool isPlayerInVision() => Physics2D.CircleCast(transform.position, visionRange, Vector2.right, 0, LayerMask.GetMask("Player"));
-    public bool isPlayerInAttackRange()
-    {
-        if (canAttack)
-            return Physics2D.Raycast(transform.position, targetDir, startAttackRange, LayerMask.GetMask("Player"));
-        else return false;
-    }
     public bool isMovingLeft() => rb.linearVelocityX * Vector2.left.magnitude > 0f;
     public bool IsCurrentState(StateBase<EnemyStateMachine> state) => StateMachine.IsCurrentState(state);
 
@@ -89,8 +77,15 @@ public class Enemy : EnemyBase
         if (IsInvincible) return;
         invincibilityTimer = invincibilityDuration;
 
-        AudioClip hitSound = isCurrentHitGrab ? grabHitSound : sweepHitSound;
-        if (myAudioSource != null && hitSound != null) myAudioSource.PlayOneShot(hitSound);
+        if (isFrontAttacked(attackInfo.knockback.x) && !emitManager.isEmitting)
+        {
+            myAudioSource.PlayOneShot(blockSound);
+            blockEffect.EnableEffect();
+            return;
+        }
+
+        //AudioClip hitSound = isCurrentHitGrab ? grabHitSound : sweepHitSound;
+        //if (myAudioSource != null && hitSound != null) myAudioSource.PlayOneShot(hitSound);
 
         if (StateMachine.currentState.CanBeCancelled()) ReceiveKnockback(attackInfo, true);
 
@@ -107,7 +102,7 @@ public class Enemy : EnemyBase
 
     public override void ReceiveDamage(AttackInfo attackInfo)
     {
-        int damage = DamageCalculation<Enemy>.Calculate(attackInfo, this);
+        int damage = DamageCalculation<Enemy_R2>.Calculate(attackInfo, this);
         if (dmgType == 2) ResetPower();
         currentHealth -= damage;
     }
@@ -125,6 +120,8 @@ public class Enemy : EnemyBase
             StateMachine.ChangeState(StateMachine.KnockbackState, force);
         }
         else StateMachine.ChangeState(StateMachine.GrabbedState, force);
+
+        myAudioSource.PlayOneShot(attackHitSound);
     }
 
     public override void ReceiveGrab()
@@ -141,6 +138,11 @@ public class Enemy : EnemyBase
             ChangeState(DeadState, true);
             gameObject.SetActive(false);
         }
+    }
+
+    private bool isFrontAttacked(float attackDir)
+    {
+        return attackDir * FacingDir.x < 0 ? true : false;
     }
 
     public override void StartOverlapDetect()

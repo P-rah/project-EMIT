@@ -1,5 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum DeathEffectType
+{
+    R1,
+    R2
+}
 
 public class EffectManager : MonoBehaviour  
 {
@@ -9,16 +16,23 @@ public class EffectManager : MonoBehaviour
     public GameObject enemyHitEffectPrefab;
     [SerializeField]private int effectPoolSize = 10;
 
-    [Header("사망 이펙트")]
-    public GameObject deathEffectPrefab;
-    [SerializeField] private int deathPoolSize = 5;
+    [System.Serializable]
+    private struct PoolItem
+    {
+        public DeathEffectType type;
+        public GameObject prefab;
+        public int initialSize;
+    }
+    [Header("적 사망 이펙트")]
+    [SerializeField] private List<PoolItem> poolItems;
 
     [Header("역행 고스트")]
     public EmitTrackingEffect emitGhostPrefab;
     [SerializeField] private int emitGhostPoolSize = 100;
 
     private Queue<GameObject> effectPool = new Queue<GameObject>();
-    private Queue<GameObject> deathEffectPool = new Queue<GameObject>();
+    private Dictionary<DeathEffectType, Queue<GameObject>> deathEffectPool;
+    private Dictionary<DeathEffectType, GameObject> prefabDictionary;
     private Queue<EmitTrackingEffect> emitGhostPool = new Queue<EmitTrackingEffect>();
 
     private void Awake()
@@ -86,29 +100,55 @@ public class EffectManager : MonoBehaviour
     //사망 파편 효과
     private void InitializeDeathPool()
     {
-        for (int i = 0; i < deathPoolSize; i++)
+        deathEffectPool = new Dictionary<DeathEffectType, Queue<GameObject>>();
+        prefabDictionary = new Dictionary<DeathEffectType, GameObject>();
+
+        foreach (PoolItem item in poolItems)
         {
-            GameObject DieEffect = Instantiate(deathEffectPrefab, transform);
-            DieEffect.SetActive(false);
-            deathEffectPool.Enqueue(DieEffect);
+            Queue<GameObject> objectQueue = new Queue<GameObject>();
+
+            prefabDictionary.Add(item.type, item.prefab);
+
+            for (int i = 0; i < item.initialSize; i++)
+            {
+                GameObject obj = Instantiate(item.prefab, transform);
+                obj.SetActive(false);
+                objectQueue.Enqueue(obj);
+            }
+
+            deathEffectPool.Add(item.type, objectQueue);
         }
     }
 
-    public void PlayDeathEffect(Vector2 position, bool isFacingLeft)
+    public void PlayDeathEffect(DeathEffectType type, Vector2 position, bool isFacingLeft)
     {
-        GameObject DieEffect;
-        if (deathEffectPool.Count > 0) DieEffect = deathEffectPool.Dequeue();
-        else DieEffect = Instantiate(deathEffectPrefab, transform);
+        if (!deathEffectPool.ContainsKey(type))
+        {
+            Debug.LogError($"{type} 타입이 풀 딕셔너리에 없습니다! 인스펙터를 확인하세요.");
+            return;
+        }
 
-        DieEffect.transform.position = position;
-        DieEffect.transform.rotation = Quaternion.Euler(0f, isFacingLeft ? 180f : 0f, 0f);
-        DieEffect.SetActive(true);
+        Queue<GameObject> queue = deathEffectPool[type];
+
+        if (queue.Count == 0)
+        {
+            GameObject prefab = prefabDictionary[type];
+
+            GameObject newObj = Instantiate(prefab, transform);
+            newObj.SetActive(false);
+
+            queue.Enqueue(newObj);
+        }
+        GameObject obj = queue.Dequeue();
+        obj.transform.position = position;
+        obj.transform.rotation = Quaternion.Euler(0f, isFacingLeft ? 180f : 0f, 0f);
+        obj.SetActive(true);
     }
 
-    public void ReturnDeathEffect(GameObject effect)
+    public void ReturnDeathEffect(DeathEffectType type, GameObject effect)
     {
         effect.SetActive(false);
-        deathEffectPool.Enqueue(effect);
+        deathEffectPool[type].Enqueue(effect);
     }
 
     //역행 고스트 이펙트

@@ -619,6 +619,8 @@ MonoBehaviour:
   grabThrowSound2: {fileID: 8300000, guid: d51967852afcd324582fc9eca0cf7f4a, type: 3}
   grabRetreiveSound: {fileID: 8300000, guid: 535264c3ab35a6d47a56120628447e03, type: 3}
   canEmitSound: {fileID: 8300000, guid: efcfc71b52c0bbf44b419c24bf045297, type: 3}
+  sweepHitSound: {fileID: 8300000, guid: bd023842f8777b04c9047827cd78db44, type: 3}
+  grabHitSound: {fileID: 8300000, guid: b862d6d4f7fe34a4389becebfef2bbd2, type: 3}
 --- !u!114 &6940204959126731079
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -126,8 +126,8 @@ public class Boss1 : EnemyBase
         if (IsInvincible) return;
         invincibilityTimer = invincibilityDuration;
 
-        AudioClip hitSound = isCurrentHitGrab ? grabHitSound : sweepHitSound;
-        if (myAudioSource != null && hitSound != null) myAudioSource.PlayOneShot(hitSound);
+        //AudioClip hitSound = isCurrentHitGrab ? grabHitSound : sweepHitSound;
+        //if (myAudioSource != null && hitSound != null) myAudioSource.PlayOneShot(hitSound);
 
         if (StateMachine.CurrentState == StateMachine.RecoilState)
             StateMachine.ChangeState(StateMachine.GroggyState);
@@ -173,6 +173,8 @@ public class Boss1 : EnemyBase
             StateMachine.ChangeState(StateMachine.KnockbackState, force);
         }
         else StateMachine.ChangeState(StateMachine.GrabbedState, force);
+
+        myAudioSource.PlayOneShot(attackHitSound);
     }
 
     public override void ReceiveGrab()
@@ -181,4 +183,10 @@ public class Boss1 : EnemyBase
     }
     public bool IsHitReactionState(StateBase<BossStateMachine> state)
         => state == StateMachine.KnockbackState || state == StateMachine.GrabbedState || state == StateMachine.GroggyState;
+
+    internal override void NotifyStateEntered(StateBase<EnemyStateMachine> state) { }
+    internal override void NotifyAttackWindupStarted() { }
+    internal override void NotifyAttackStrikeStarted() { }
+    internal override void NotifyGrabStarted(float horizontalOffset) { }
+
 }

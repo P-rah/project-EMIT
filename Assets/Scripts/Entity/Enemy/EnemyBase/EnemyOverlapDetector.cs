@@ -36,8 +36,8 @@ public class EnemyOverlapDetector<T> : MonoBehaviour where T : IKnockbackable
             if (hit.TryGetComponent<IDamageable>(out var knockbackTarget))
             {
                 knockbackTarget.ReceiveAttack(info);
-                //if(Mathf.Abs(knockbackTarget.currentPower) < Mathf.Abs(owner.currentPower))
-                knockbackTarget.SetPower(owner.currentPower);
+                if(Mathf.Abs(knockbackTarget.currentPower) < Mathf.Abs(owner.currentPower))
+                    knockbackTarget.SetPower(owner.currentPower);
             }
         }
     }
