@@ -13,7 +13,6 @@ public class TimeManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     private bool timeChangeable = true;

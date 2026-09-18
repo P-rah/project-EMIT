@@ -4,7 +4,6 @@ using DG.Tweening.Core;
 using DG.Tweening.Plugins;
 using DG.Tweening.Plugins.Core.PathCore;
 using DG.Tweening.Plugins.Options;
-using System.Threading;
 
 [RequireComponent(typeof(Rigidbody2D))] 
 [RequireComponent(typeof(BoxCollider2D))]
@@ -37,8 +36,8 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField] private float activationTime = 1f;
     [Tooltip("플랫폼에서 오브젝트가 하차했다고 인지하기까지 필요한 시간")]
     [SerializeField] private float deactivationTime = 2f;
-    [Tooltip("플랫폼이 특정 지점에 도달한 후 정지해있을 시간")]
-    [SerializeField] private float pauseTime = 1f;
+    //[Tooltip("플랫폼이 특정 지점에 도달한 후 정지해있을 시간")]
+    // [SerializeField] private float pauseTime = 1f;
     [Tooltip("플랫폼이 어떤 조건에서만 움직일지")]
     [SerializeField] private MoveCondition moveCondition;
     [Tooltip("플랫폼의 왕복/순환 방식")]
@@ -48,7 +47,7 @@ public class MovingPlatform : MonoBehaviour
     [Tooltip("직선/곡선/BezierCubic 중 움직임 보간 방식")]
     [SerializeField] private PathType pathType;
 
-    [SerializeField] private int pathPointIndex;
+    // [SerializeField] private int pathPointIndex;
     [SerializeField] private bool playerIsCarried;
     [SerializeField] private bool anythingIsCarried;
     [SerializeField] private float activationTimer;
@@ -71,7 +70,7 @@ public class MovingPlatform : MonoBehaviour
         startPosition = rb.position;
         activationTimer = 0f;
         deactivationTimer = 0f;
-        pathPointIndex = 0;
+        // pathPointIndex = 0;
         CreatePathTween();
     }
 

@@ -14,6 +14,7 @@ public static class SceneDatabase
         public const string Title = "Title";
         public const string Stage = "Stage";
         public const string CutSceneStage = "CutSceneStage";
+        public const string Pause = "Pause";
         public const string StageContent = "StageContent";
         public const string Settings = "Settings";
     }
@@ -43,6 +44,7 @@ public static class SceneDatabase
         //public const string Ch1_4 = "GamePlayScene4";
         //public const string CutSceneStage = "GamePlayScene2";
         public const string SettingsScene = "SettingsScene";
+        public const string PauseScene = "PauseScene";
     }
     
     public static readonly Dictionary<string, string> NextStages = new()

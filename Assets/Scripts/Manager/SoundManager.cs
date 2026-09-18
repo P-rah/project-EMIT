@@ -25,10 +25,28 @@ public class SoundManager : MonoBehaviour
 
     public AudioSource[] objectPoolSpeakers;
 
-    [Header("스피커 (Audio Source)")]
-    public AudioSource bgmPlayer; // 배경음악 전용 (반복 재생)
-    public AudioSource sfxPlayer; // 플레이어 효과음 전용 (반복 재생 없음)
+    public float SfxVolume => sfxVolume;
+    public float BgmVolume => bgmVolume;
 
+    [Header("Audio Mixer")]
+    [SerializeField] private AudioMixerGroup bgmMixerGroup;
+    [SerializeField] private AudioMixerGroup sfxMixerGroup;
+
+    [Header("BGM")]
+    [SerializeField] private AudioClip bgmClip;
+    [Range(0f, 1f)] 
+    [SerializeField] private float bgmVolume = 1f;
+
+    private AudioSource bgmPlayer; // 배경음악 전용 (반복 재생)
+
+    [Header("SFX")]
+    [Range(0f, 1f)] 
+    [SerializeField] private float sfxVolume = 1f;
+    [Min(1)] 
+    [SerializeField] private int channels = 8;
+
+    private AudioSource[] sfxPlayers;
+    private int channelIndex;
 
     private void Awake()
     {
@@ -38,28 +56,63 @@ public class SoundManager : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        InitBgmPlayer();
+        InitSfxPlayer();
     }
 
-    public void PlayBGM(AudioClip bgmClip, bool reverse = false)
+    private void InitBgmPlayer()
     {
-        if (bgmClip == null)
+        GameObject bgmObject = new GameObject("BgmPlayer");
+        bgmObject.transform.SetParent(transform, false);
+
+        bgmPlayer = bgmObject.AddComponent<AudioSource>();
+        bgmPlayer.playOnAwake = false;
+        bgmPlayer.loop = true;
+        bgmPlayer.volume = bgmVolume;
+        bgmPlayer.clip = bgmClip;
+        bgmPlayer.outputAudioMixerGroup = bgmMixerGroup;
+    }
+
+    private void InitSfxPlayer()
+    {
+        GameObject sfxObject = new GameObject("SfxPlayer");
+        sfxObject.transform.SetParent(transform, false);
+
+        int channelCount = Mathf.Max(1, channels);
+        sfxPlayers = new AudioSource[channelCount];
+
+        for (int index = 0; index < sfxPlayers.Length; index++)
+        {
+            sfxPlayers[index] = sfxObject.AddComponent<AudioSource>();
+            sfxPlayers[index].playOnAwake = false;
+            sfxPlayers[index].volume = sfxVolume;
+            sfxPlayers[index].outputAudioMixerGroup = sfxMixerGroup;
+        }
+    }
+
+    public void PlayBGM(AudioClip clip, bool playReverse = false)
+    {
+        if (bgmPlayer == null || clip == null)
         {
             bgmPlayer.Stop();
             return;
         }
-        if (bgmPlayer.clip == bgmClip) return;
 
-        if (reverse) StartEmitBGM();
-        else StopEmitBGM();
-            bgmPlayer.clip = bgmClip;
+        if (bgmPlayer.clip == clip) return;
+
+        if (playReverse) StartEmitBGM(); else StopEmitBGM();
+        
+        bgmPlayer.clip = clip;
         bgmPlayer.loop = true;
         bgmPlayer.Play();
     }
 
     public void StopBGM()
     {
-        bgmPlayer.Stop();
+        if (bgmPlayer != null)
+        {
+            bgmPlayer.Stop();
+        }
     }
 
     public void StopEmitBGM()
@@ -72,11 +125,62 @@ public class SoundManager : MonoBehaviour
         bgmPlayer.pitch = -1f;
     }
 
+    public void SetBgmVolume(float volume)
+    {
+        bgmVolume = Mathf.Clamp01(volume);
+
+        if (bgmPlayer == null) return;
+
+        bgmPlayer.volume = bgmVolume;
+
+        Debug.Log($"BGM Volume set to {bgmVolume}");
+    }
+
+    public void SetSfxVolume(float volume)
+    {
+        sfxVolume = Mathf.Clamp01(volume);
+        
+        if (sfxPlayers == null) return;
+
+        foreach (AudioSource player in sfxPlayers)
+        {
+            player.volume = sfxVolume;
+        }
+
+        Debug.Log($"SFX Volume set to {sfxVolume}");
+    }
+
     public void PlaySFX(AudioClip clip, float pitchRandom = 0f)
     {
+        if (clip == null || sfxPlayers == null || sfxPlayers.Length == 0)
+        {
+            return;
+        }
+
+        AudioSource player = GetAvailableSfxPlayer();
+
         //pitchRandom 값에 따라 랜덤하게 피치를 조절해줌
-        sfxPlayer.pitch = 1.0f + Random.Range(-pitchRandom, pitchRandom);
-        sfxPlayer.PlayOneShot(clip);
-        sfxPlayer.pitch = 1.0f;
+        player.pitch = 1.0f + Random.Range(-pitchRandom, pitchRandom);
+        player.PlayOneShot(clip);
+    }
+
+    private AudioSource GetAvailableSfxPlayer()
+    {
+        for (int offset = 0; offset < sfxPlayers.Length; offset++)
+        {
+            int index = (channelIndex + offset) % sfxPlayers.Length;
+
+            if (sfxPlayers[index].isPlaying)
+            {
+                continue;
+            }
+
+            channelIndex = (index + 1) % sfxPlayers.Length;
+            return sfxPlayers[index];
+        }
+
+        AudioSource fallbackPlayer = sfxPlayers[channelIndex];
+        channelIndex = (channelIndex + 1) % sfxPlayers.Length;
+        return fallbackPlayer;
     }
 }

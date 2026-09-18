@@ -160,13 +160,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1046936314}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16e53f7fe4152f846b7abb1c3318592f, type: 3}
+  m_Script: {fileID: 11500000, guid: 87bda6fc546f04a4a945c687237ada6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameInitiator
-  _loadingScreen: {fileID: 4134027646828069627, guid: a2e9a7dca4805cf4f94d0a4320edcf11, type: 3}
-  _gameManager: {fileID: 4553982074791237171, guid: ae4249d00177ac044aa2c7c4e061c7f2, type: 3}
-  _soundManager: {fileID: 3607842853201723468, guid: af27410326b60a3469bbe09fa8d61f93, type: 3}
-  _sceneControlMananger: {fileID: 4758943096351603342, guid: d7bd0356231639f4f88dd7f95cf8c4e9, type: 3}
+  bgm: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
