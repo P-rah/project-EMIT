@@ -21,7 +21,6 @@ public class SceneControlManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     #endregion
 
@@ -33,29 +32,12 @@ public class SceneControlManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerInputHandler.SettingsToggleRequested += ToggleSettingsScene;
+        // PlayerInputHandler.SettingsToggleRequested += ToggleSettingsScene;
     }
 
     private void OnDisable()
     {
-        PlayerInputHandler.SettingsToggleRequested -= ToggleSettingsScene;
-    }
-
-    private void ToggleSettingsScene()
-    {
-        if (isBusy || !IsActiveSceneInSlot(SceneDatabase.Slots.Stage))
-        {
-            return;
-        }
-
-        if (loadedSceneBySlot.ContainsKey(SceneDatabase.Slots.Settings))
-        {
-            UnloadSettings();
-        }
-        else
-        {
-            LoadSettings();
-        }
+        // PlayerInputHandler.SettingsToggleRequested -= ToggleSettingsScene;
     }
 
     private bool IsActiveSceneInSlot(string slotKey)
@@ -86,7 +68,7 @@ public class SceneControlManager : MonoBehaviour
 
     private IEnumerator ChangeSceneRoutine(SceneTransitionPlan plan)
     {
-        if (plan.Overlay)
+        if (plan.Overlay && LoadingScreen != null)
         {
             LoadingScreen.Show();
         }
@@ -110,7 +92,7 @@ public class SceneControlManager : MonoBehaviour
             // 씬 로드 (액티브 씬이 로드된 슬롯만 액티브 씬으로 설정)
             yield return LoadAdditiveRoutine(kvp.Key, kvp.Value, plan.ActiveSceneName == kvp.Value);
         }
-        if (plan.Overlay)
+        if (plan.Overlay && LoadingScreen != null)
         {
             LoadingScreen.Hide();
         }
@@ -244,12 +226,26 @@ public class SceneControlManager : MonoBehaviour
 
         NewTransition()
         .Unload(SceneDatabase.Slots.Settings)
+        .Unload(SceneDatabase.Slots.Pause)
         .Unload(SceneDatabase.Slots.Stage)
         .Unload(SceneDatabase.Slots.CutSceneStage)
         .Unload(SceneDatabase.Slots.StageContent)
         .Load(SceneDatabase.Slots.Title, SceneDatabase.Scenes.MainMenu, true)
         .WithOverlay()
         .WithCleanupUnusedAssets()
+        .Build();
+    }
+    public void LoadPause()
+    {
+        NewTransition()
+        .Load(SceneDatabase.Slots.Pause, SceneDatabase.Scenes.PauseScene)
+        .Build();
+    }
+
+    public void UnloadPause()
+    {
+        NewTransition()
+        .Unload(SceneDatabase.Slots.Pause)
         .Build();
     }
 
@@ -277,7 +273,7 @@ public class SceneControlManager : MonoBehaviour
         .Build();
     }
 
-    private void LoadStage(LoadIndex loadIndex, bool unloadSettings = false)
+    private void LoadStage(LoadIndex loadIndex, bool unloadUI = false)
     {
         if (!loadedSceneBySlot.TryGetValue(SceneDatabase.Slots.Stage, out string currentStage))
         {
@@ -307,8 +303,12 @@ public class SceneControlManager : MonoBehaviour
         }
 
         SceneTransitionPlan transition = NewTransition();
-        if (unloadSettings) transition.Unload(SceneDatabase.Slots.Settings);
-
+        if (unloadUI) {
+            transition
+            .Unload(SceneDatabase.Slots.Settings)
+            .Unload(SceneDatabase.Slots.Pause);
+        }
+        
         transition
         .Load(SceneDatabase.Slots.Stage, nextStage, true)
         .WithOverlay()
@@ -330,6 +330,29 @@ public class SceneControlManager : MonoBehaviour
     {
         LoadStage(LoadIndex.Current, true);
     }
+
+    public void HandleBackInput()
+    {
+        if (loadedSceneBySlot.ContainsKey(SceneDatabase.Slots.Settings) && 
+            loadedSceneBySlot[SceneDatabase.Slots.Settings] != null)
+        {   
+            // Pause -> Settings
+            UnloadSettings();
+        }
+        else if (loadedSceneBySlot.ContainsKey(SceneDatabase.Slots.Pause) &&
+            loadedSceneBySlot[SceneDatabase.Slots.Pause] != null)
+        {
+            // Pause -> Stage / Pause -> Title
+            UnloadPause();
+        }
+        else if (loadedSceneBySlot.ContainsKey(SceneDatabase.Slots.Stage) &&
+            loadedSceneBySlot[SceneDatabase.Slots.Stage] != null)
+        {
+            // Stage -> Pause
+            LoadPause();
+        }
+    }
+
     public enum LoadIndex
     {
         Previous = -1,

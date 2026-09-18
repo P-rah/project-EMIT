@@ -15,14 +15,14 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-        Cursor.visible = false;
+        // Cursor.visible = false;
     }
 
     public void ChangeState(GameState newState)
     {
         currentState = newState;
 
+        /*
         switch (currentState)
         {
             case GameState.Playing:
@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
                 break;
         }
+        */
     }
 
     public void QuitGame()

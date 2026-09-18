@@ -49,7 +49,7 @@ public class EmitManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
 
         emitBufferFrames = (int)(emitDurationTime * (1 / Time.fixedDeltaTime));
         emittedFrames = 0;
@@ -225,6 +225,7 @@ public class EmitManager : MonoBehaviour
 
     private IEnumerator StartEmitTimer()
     {
+        Debug.Log("Emit Timer Started");
         while (currentEmitableTime >= 0)
         {
             currentEmitableTime -= Time.deltaTime;
