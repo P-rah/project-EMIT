@@ -101,6 +101,7 @@ public class EffectManager : MonoBehaviour
     //사망 파편 효과
     private void InitializeDeathPool()
     {
+        Debug.Log("InitializeDeathPool 호출됨");
         deathEffectPool = new Dictionary<DeathEffectType, Queue<GameObject>>();
         prefabDictionary = new Dictionary<DeathEffectType, GameObject>();
 
