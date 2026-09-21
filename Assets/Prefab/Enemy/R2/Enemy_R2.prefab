@@ -5112,6 +5112,7 @@ MonoBehaviour:
   isFacingLeft: 0
   targetDir: {x: 0, y: 0}
   invincibilityDuration: 0.2
+  hitEffectResetTime: 0.2
   enemyCollisionDetector: {fileID: 0}
   blockEffect: {fileID: 6980602119180145860}
   blockSound: {fileID: 8300000, guid: 9908d03493ea9cf42a6cfd98b10ede37, type: 3}

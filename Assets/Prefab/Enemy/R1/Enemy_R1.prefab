@@ -5286,6 +5286,7 @@ MonoBehaviour:
   isFacingLeft: 0
   targetDir: {x: 0, y: 0}
   invincibilityDuration: 0.2
+  hitEffectResetTime: 0.1
   enemyCollisionDetector: {fileID: 0}
 --- !u!114 &619726166237361685
 MonoBehaviour:

@@ -31,6 +31,7 @@ public class Enemy_R2 : EnemyBase
         StateMachine.UpdateState();
         UpdateTargetDirection();
         CalculatePowerTimer();
+        CalculateHitEffectTimer();
         CheckDie();
     }
 

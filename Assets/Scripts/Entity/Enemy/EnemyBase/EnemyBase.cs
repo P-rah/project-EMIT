@@ -17,6 +17,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public ParticleSystem dragEffect;
     public EmitManager emitManager { get; set; }
     private PowerStackUIController powerStackUIController { get; set; }
+    public SpriteRenderer spriteRenderer { get; set; }
 
     [SerializeField] protected EnemyData data;
 
@@ -69,13 +70,18 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     [Header("Invincibility")]
     public float invincibilityDuration;
     protected float invincibilityTimer = 0f;
-
     public bool IsInvincible => invincibilityTimer > 0f;
+
+    [Header("Hit Effects")]
+    private const float hitEffectResetTime = 0.2f;
+    private static int _flashAmount = Shader.PropertyToID("_FlashAmount");
+    private float hitEffectTimer = 0f;
 
     public EnemyStateMachine StateMachine { get; set; }
     public StateBase<EnemyStateMachine> CurrentState => StateMachine?.currentState;
     public StateBase<EnemyStateMachine> IdleState => StateMachine?.IdleState;
     public StateBase<EnemyStateMachine> DeadState => StateMachine?.DeadState;
+
 
     public virtual void Awake()
     {
@@ -87,6 +93,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
         target = Player.InstanceTransform;
         rb = GetComponent<Rigidbody2D>();
         powerStackUIController = GetComponentInChildren<PowerStackUIController>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         if (rb != null) rb.freezeRotation = true;
 
@@ -154,6 +161,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     // ==========================================
     protected void HitEffectBasedOnDamageType(int type)
     {
+        hitEffectTimer = 0f;
+        spriteRenderer.material.SetFloat(_flashAmount, 1f);
+
         switch (type)
         {
             case 1:
@@ -270,6 +280,15 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     {
         if (CurrentState is EnemyAttackState attackState)
             attackState.SetCancellable(true);
+    }
+
+    public void CalculateHitEffectTimer()
+    {
+        hitEffectTimer += Time.deltaTime;
+        if (hitEffectTimer > hitEffectResetTime)
+        {
+            spriteRenderer.material.SetFloat(_flashAmount, 0f);
+        }
     }
 
 

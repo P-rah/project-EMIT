@@ -65733,6 +65733,10 @@ PrefabInstance:
       propertyPath: attackHitSound
       value: 
       objectReference: {fileID: 8300000, guid: d025ee3274846e2469f0ed3847d1f9e1, type: 3}
+    - target: {fileID: 8742235760636438053, guid: 583a7236d1a63da4a94a5e4f9769ae2a, type: 3}
+      propertyPath: hitEffectResetTime
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

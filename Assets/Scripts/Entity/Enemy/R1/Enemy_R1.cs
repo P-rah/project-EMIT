@@ -29,6 +29,7 @@ public class Enemy : EnemyBase
         StateMachine.UpdateState();
         UpdateTargetDirection();
         CalculatePowerTimer();
+        CalculateHitEffectTimer();
         CheckDie();
     }
 
@@ -75,7 +76,7 @@ public class Enemy : EnemyBase
         if (StateMachine.currentState.CanBeCancelled()) ReceiveKnockback(attackInfo, true);
 
         if(transitFlipPower) FlipPower(attackInfo.knockback.x);
-
+        
         ReceiveDamage(attackInfo);
         HitEffectBasedOnDamageType(dmgType);
 
