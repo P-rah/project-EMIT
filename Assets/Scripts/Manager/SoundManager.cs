@@ -164,6 +164,22 @@ public class SoundManager : MonoBehaviour
         player.PlayOneShot(clip);
     }
 
+    public void PauseAllSFX()
+    {
+        foreach (AudioSource sfx in sfxPlayers)
+        {
+            sfx.Pause();
+        }
+    }
+
+    public void UnPauseAllSFX()
+    {
+        foreach (AudioSource sfx in sfxPlayers)
+        {
+            sfx.UnPause();
+        }
+    }
+
     private AudioSource GetAvailableSfxPlayer()
     {
         for (int offset = 0; offset < sfxPlayers.Length; offset++)

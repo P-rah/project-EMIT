@@ -1892,7 +1892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d0d0a533e2a4644dade31a7ffcbb386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingsMenuController
-  canvasGroup: {fileID: 0}
+  canvasGroup: {fileID: 1642135486}
   exitButton: {fileID: 1447961782}
   quitButton: {fileID: 2068367216}
   sfxSlider: {fileID: 529114394}

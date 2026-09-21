@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
  */
 public class PlayerInputHandler : MonoBehaviour
 {
-    public static event Action SettingsToggleRequested;
     private EmitManager emitManager;
 
     /*
@@ -91,7 +90,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (value.isPressed)
         {
-            SettingsToggleRequested?.Invoke();
+            
         }
     }
     

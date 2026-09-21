@@ -31,7 +31,7 @@ public class PowerStackAnimator : MonoBehaviour
         for (int i = 0; i< stackSprite.Length; i++)
         {
             SpriteRenderer.sprite = stackSprite[i];
-            yield return new WaitForSecondsRealtime(oneFrameSec);
+            yield return TimeManager.Instance.WaitForGameplaySeconds(oneFrameSec);
         }
     }
 

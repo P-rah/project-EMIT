@@ -74,6 +74,11 @@ public class EmitShaderController : MonoBehaviour
 
         while(elapsedTime < _distortionTime)
         {
+            if (TimeManager.Instance.IsPaused)
+            {
+                yield return null;
+                continue;
+            }
             elapsedTime += Time.fixedDeltaTime;
 
             _material.SetVector(_startPoint, (Vector2)Camera.main.WorldToViewportPoint(startPoint.position));

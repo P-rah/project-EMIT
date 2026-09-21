@@ -12,6 +12,7 @@ public class TempPlayerMovement : MonoBehaviour
     [SerializeField] private float moveSpeedWhileAttack = 5f;
     [SerializeField] private float moveTimeWhileAttack = 0.2f;
     [SerializeField] private bool triggerMoveWhileAttack = false;
+    private Coroutine attackMoveRoutine;
 
     [Header("Jump Movement")]
     [SerializeField] private float jumpForce = 15f;
@@ -104,15 +105,16 @@ public class TempPlayerMovement : MonoBehaviour
 
     public void TriggerMoveWhileAttack()
     {
-        StopCoroutine(attackingMoveTimer());
-        StartCoroutine(attackingMoveTimer());
+        if (attackMoveRoutine != null) StopCoroutine(attackMoveRoutine);
+        attackMoveRoutine = StartCoroutine(attackingMoveTimer());
     }
 
     private IEnumerator attackingMoveTimer()
     {
         triggerMoveWhileAttack = true;
-        yield return new WaitForSecondsRealtime(moveTimeWhileAttack);
+        yield return TimeManager.Instance.WaitForGameplaySeconds(moveTimeWhileAttack);
         triggerMoveWhileAttack = false;
+        attackMoveRoutine = null;
     }
 
 #region FixedUpdate

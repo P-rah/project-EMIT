@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 /*
  * 게임 이벤트 제어용 매니저 클래스
  */

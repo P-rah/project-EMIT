@@ -32,12 +32,12 @@ public class SceneControlManager : MonoBehaviour
 
     private void OnEnable()
     {
-        // PlayerInputHandler.SettingsToggleRequested += ToggleSettingsScene;
+
     }
 
     private void OnDisable()
     {
-        // PlayerInputHandler.SettingsToggleRequested -= ToggleSettingsScene;
+
     }
 
     private bool IsActiveSceneInSlot(string slotKey)

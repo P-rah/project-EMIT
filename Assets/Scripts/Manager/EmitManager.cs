@@ -30,6 +30,8 @@ public class EmitManager : MonoBehaviour
     public AudioClip emitClockSound2;
 
     private Coroutine startEmitTimer;
+    private Coroutine prepareEmitTimer;
+    private bool isPreparing;
 
     //[Header("UI 컨트롤러")]
     private PlayerUIController playerUIController;
@@ -75,6 +77,7 @@ public class EmitManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isPreparing || TimeManager.Instance.IsPaused) return;
         if (isEmitting)
         {
             // 프레임을 모두 비워내기
@@ -101,8 +104,9 @@ public class EmitManager : MonoBehaviour
 
     private void OnEmitPressed()
     {
-        if (!isEmittable) return;
+        if (!isEmittable || isEmitting) return;
         isEmittable = false;
+        isPreparing = true;
         Debug.Log("Emit Started");
         emittedFrames = 0;
         foreach (IEmit obj in emitObjects)
@@ -117,9 +121,7 @@ public class EmitManager : MonoBehaviour
         SoundManager.Instance.StartEmitBGM();
         EventManager.TriggerEvent("OnEmitStart");
 
-        startEmitTimer = StartCoroutine(StartEmitTimer());
-        StartCoroutine(emitClockSound());
-        StartCoroutine(StartEmitPrepareTimer());
+        prepareEmitTimer = StartCoroutine(StartEmitPrepareTimer());
     }
 
     //private void StartEmit()
@@ -135,6 +137,16 @@ public class EmitManager : MonoBehaviour
 
     private void OnEmitFinished()
     {
+        if (prepareEmitTimer != null)
+        {
+            StopCoroutine(prepareEmitTimer);
+            prepareEmitTimer = null;
+        }
+        if (isPreparing)
+        {
+            isPreparing = false;
+            TimeManager.Instance.InstantNormalTime();
+        }
         Debug.Log("Emit Finished");
         foreach (IEmit obj in emitObjects)
         {
@@ -185,6 +197,9 @@ public class EmitManager : MonoBehaviour
         Debug.Log("Emit Reset");
         // 리셋
         if(startEmitTimer != null) StopCoroutine(startEmitTimer);
+        if (prepareEmitTimer != null) StopCoroutine(prepareEmitTimer);
+        prepareEmitTimer = null;
+        isPreparing = false;
 
         foreach (IEmit obj in emitObjects)
         {
@@ -219,17 +234,25 @@ public class EmitManager : MonoBehaviour
 
     private IEnumerator StartEmitPrepareTimer()
     {
-        yield return new WaitForSecondsRealtime(emitPreparationTime);
-        TimeManager.Instance.TimeStart();
+        yield return TimeManager.Instance.WaitForGameplaySeconds(emitPreparationTime);
+
+        TimeManager.Instance.InstantNormalTime();
+        isPreparing = false;
+        prepareEmitTimer = null;
+        startEmitTimer = StartCoroutine(StartEmitTimer());
+        StartCoroutine(emitClockSound());
     }
 
     private IEnumerator StartEmitTimer()
     {
         Debug.Log("Emit Timer Started");
-        while (currentEmitableTime >= 0)
+        while (currentEmitableTime >= 0 || TimeManager.Instance.IsPaused)
         {
-            currentEmitableTime -= Time.deltaTime;
-            updateEmitUI();
+            if (!TimeManager.Instance.IsPaused)
+            {
+                currentEmitableTime -= Time.deltaTime;
+                updateEmitUI();
+            }
             yield return null;
         }
         OnEmitFinished();
@@ -239,9 +262,9 @@ public class EmitManager : MonoBehaviour
     {
         isEmitCanRecovery = false;
         float timer = 0f;
-        while (timer < emitCoolTime)
+        while (timer < emitCoolTime || TimeManager.Instance.IsPaused)
         {
-            timer += Time.deltaTime;
+            if (!TimeManager.Instance.IsPaused) timer += Time.deltaTime;
             yield return null;
         }
         isEmitCanRecovery = true;

@@ -82,7 +82,10 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
 
     public virtual void BeginGhost()
     {
-        ghostRoutine = StartCoroutine(StartEmitGhost());
+        if (gameObject.activeSelf)
+        {
+            ghostRoutine = StartCoroutine(StartEmitGhost());
+        }
     }
 
     public virtual void EndGhost()
@@ -97,6 +100,8 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
 
     public virtual void EmitFrame()
     {
+        if (!gameObject.activeSelf) return;
+        
         if (buffer.Pop(out KeyframeStatus frame))
         {
             _rb.MovePosition(frame.position);
@@ -149,7 +154,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
             currentControllEmitGhost.setGhost(frame.sprite, frame.position, frame.facingDir);
 
             ghostTimer += ghostUpdateTime;
-            yield return new WaitForSecondsRealtime(ghostUpdateTime);
+            yield return TimeManager.Instance.WaitForGameplaySeconds(ghostUpdateTime);
         }
     }
 }

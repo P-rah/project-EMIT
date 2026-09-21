@@ -8,6 +8,8 @@ public class LightManager : MonoBehaviour
 
     [Header("조명 설정")]
     private Light2D globalLight;
+    private Coroutine blinkLightRoutine;
+    private float blinkTimeRemaining;
 
     private void Awake()
     {
@@ -34,6 +36,8 @@ public class LightManager : MonoBehaviour
     public void ChangeLightSmoothly(float targetIntensity, float duration)
     {
         StopAllCoroutines();
+        blinkLightRoutine = null;
+        blinkTimeRemaining = 0f;
         StartCoroutine(LightTransitionRoutine(targetIntensity, duration));
     }
 
@@ -55,15 +59,24 @@ public class LightManager : MonoBehaviour
 
     public void BlinkLight(float intensity, float duration)
     {
-        StartCoroutine(BlinkLightRoutine(intensity, duration));
+        SetLightInstantly(intensity);
+        blinkTimeRemaining = Mathf.Max(blinkTimeRemaining, duration);
+        if (blinkLightRoutine == null)
+            blinkLightRoutine = StartCoroutine(BlinkLightRoutine());
     }
 
-    private IEnumerator BlinkLightRoutine(float intensity, float duration)
+    private IEnumerator BlinkLightRoutine()
     {
-        SetLightInstantly(intensity);
+        do
+        {
+            yield return null;
+            if (!TimeManager.Instance.IsPaused)
+                blinkTimeRemaining -= Time.unscaledDeltaTime;
+        }
+        while (blinkTimeRemaining > 0f || TimeManager.Instance.IsPaused);
 
-        yield return new WaitForSecondsRealtime(duration);
-
+        blinkTimeRemaining = 0f;
+        blinkLightRoutine = null;
         SetLightInstantly(1f);
     }
 }

@@ -16,6 +16,7 @@ public class PauseUIController : MonoBehaviour
     [SerializeField] private Button toTitleButton;
 
     private bool isRegistered;
+    private bool pauseSessionActive;
 
     private void OnEnable()
     {
@@ -25,6 +26,14 @@ public class PauseUIController : MonoBehaviour
         {
             enabled = false;
             return;
+        }
+
+        if (!pauseSessionActive)
+        {
+            TimeManager.Instance.Pause();
+            SoundManager.Instance.PauseAllSFX();
+            GlobalInputHandler.Instance?.SetGameplayInputEnabled(false);
+            pauseSessionActive = true;
         }
 
         resumeButton.onClick.AddListener(SceneControlManager.Instance.UnloadPause);
@@ -56,6 +65,14 @@ public class PauseUIController : MonoBehaviour
         if (UIManager.Instance != null)
         {
             UIManager.Instance.RemoveCanvas(canvasGroup, this);
+        }
+
+        if (pauseSessionActive)
+        {
+            TimeManager.Instance?.Resume();
+            SoundManager.Instance.UnPauseAllSFX();
+            GlobalInputHandler.Instance?.SetGameplayInputEnabled(true);
+            pauseSessionActive = false;
         }
     }
 
