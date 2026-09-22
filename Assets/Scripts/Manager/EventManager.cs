@@ -21,7 +21,6 @@ public class EventManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     // 리스너 등록
