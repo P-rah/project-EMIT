@@ -350,7 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31fe5a37a245c4045a094b2714d658d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneControlManager
-  LoadingScreen: {fileID: 0}
+  LoadingScreen: {fileID: 8503026201346269638, guid: 4f92deca0fce81543ac39172190584a5, type: 3}
 --- !u!1 &5206121112472395892
 GameObject:
   m_ObjectHideFlags: 0

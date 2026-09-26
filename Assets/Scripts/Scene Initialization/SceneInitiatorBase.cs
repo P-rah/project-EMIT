@@ -44,5 +44,6 @@ public class SceneInitiatorBase : MonoBehaviour
 
     public virtual void PrepareGame()
     {
+        
     }
 }

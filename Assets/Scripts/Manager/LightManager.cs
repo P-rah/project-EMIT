@@ -19,7 +19,6 @@ public class LightManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public void RegisterLight(Light2D newLight)

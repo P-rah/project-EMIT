@@ -140,7 +140,7 @@ public class EmitManager : MonoBehaviour
         if (prepareEmitTimer != null)
         {
             StopCoroutine(prepareEmitTimer);
-            prepareEmitTimer = null;
+            prepareEmitTimer = null;    
         }
         if (isPreparing)
         {

@@ -16,8 +16,13 @@ public class LoadingScreen : MonoBehaviour
         _loadingText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    public void Show()
+    public async void Show()
     {
+        if (canvasGroup == null)
+        {
+            Awake();
+        }
+
         gameObject.SetActive(true);
         Debug.Log("로딩화면 뜸");
         
@@ -30,10 +35,9 @@ public class LoadingScreen : MonoBehaviour
             canvasGroup.blocksRaycasts = true;
         }
         );
-        
     }
 
-    public void Hide()
+    public async void Hide()
     {
         _loadingText.alpha = 0f;
         canvasGroup.DOFade(0f, fadeOutTime)
