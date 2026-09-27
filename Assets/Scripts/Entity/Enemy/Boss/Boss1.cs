@@ -16,6 +16,11 @@ public class Boss1 : EnemyBase
     public AudioClip hoverSound;
     public AudioClip groggySound;
 
+    protected override void OnEnable()
+    {
+        // 보스 개편 전까지 기존 사망 처리를 유지하며 공통 Emit 종료 판정은 구독하지 않는다.
+    }
+
     public override void Awake()
     {
         base.Awake();

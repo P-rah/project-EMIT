@@ -15,6 +15,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public Rigidbody2D rb { get; set; }
     public AudioSource myAudioSource;
     public ParticleSystem dragEffect;
+    public DieFragment deathFragmentPrefab;
     public EmitManager emitManager { get; set; }
     private PowerStackUIController powerStackUIController { get; set; }
     public SpriteRenderer spriteRenderer { get; set; }
@@ -53,6 +54,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public Vector2 currentKnockBackForce { get; set; }
 
     public int currentHealth;
+    public bool IsDead { get; private set; }
     public bool isRooted;
     public int currentPower { get; protected set; }
     private float powerTimer;
@@ -86,6 +88,16 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public virtual void Awake()
     {
         Init();
+    }
+
+    protected virtual void OnEnable()
+    {
+        EventManager.StartListening("OnEmitFinished", CheckDeath);
+    }
+
+    protected virtual void OnDisable()
+    {
+        EventManager.StopListening("OnEmitFinished", CheckDeath);
     }
 
     public virtual void Init()
@@ -291,6 +303,44 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
         }
     }
 
+
+    // 피해 적용 직후 또는 Emit 종료 시에만 사망을 확인한다.
+    protected void CheckDeath()
+    {
+        if (IsDead || currentHealth > 0) return;
+        if (EmitManager.Instance != null && EmitManager.Instance.isEmitting) return;
+
+        IsDead = true;
+        try
+        {
+            StopOverlapDetect();
+            endDragEffect();
+            OnDeath();
+            if (SoundManager.Instance != null && deathSound != null)
+                SoundManager.Instance.PlaySFX(deathSound);
+        }
+        catch (System.Exception exception)
+        {
+            Debug.LogException(exception, this);
+        }
+
+        try
+        {
+            if (StageManager.Instance != null) StageManager.Instance.EnemyDied();
+        }
+        finally
+        {
+            // 연출이나 스테이지 통지에 실패해도 본체는 남기지 않는다.
+            Destroy(gameObject);
+        }
+    }
+
+    // 연출만 확장한다. 처치 집계와 Destroy는 CheckDeath에서 한 번만 실행한다.
+    protected virtual void OnDeath()
+    {
+        if (StateMachine != null && DeadState != null)
+            StateMachine.ChangeState(DeadState, true);
+    }
 
     // 추상 매서드
     public abstract void ReceiveAttack(AttackInfo attackInfo);

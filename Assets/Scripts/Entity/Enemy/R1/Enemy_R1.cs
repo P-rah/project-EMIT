@@ -23,6 +23,7 @@ public class Enemy : EnemyBase
 
     public virtual void Update()
     {
+        if (IsDead) return;
         UpdateInvincibilityTimer();
         if (emitManager.isEmitting) return;
 
@@ -30,12 +31,11 @@ public class Enemy : EnemyBase
         UpdateTargetDirection();
         CalculatePowerTimer();
         CalculateHitEffectTimer();
-        CheckDie();
     }
 
     public virtual void FixedUpdate()
     {
-        if (isRooted) return;
+        if (IsDead || isRooted) return;
         StateMachine.Move();
     }
 
@@ -67,7 +67,7 @@ public class Enemy : EnemyBase
     // ==========================================
     public override void ReceiveAttack(AttackInfo attackInfo)
     {
-        if (IsInvincible) return;
+        if (IsDead || IsInvincible) return;
         invincibilityTimer = invincibilityDuration;
 
         //AudioClip hitSound = isCurrentHitGrab ? grabHitSound : sweepHitSound;
@@ -88,13 +88,16 @@ public class Enemy : EnemyBase
 
     public override void ReceiveDamage(AttackInfo attackInfo)
     {
+        if (IsDead) return;
         int damage = DamageCalculation<Enemy>.Calculate(attackInfo, this);
         if (dmgType == 2) ResetPower();
         currentHealth -= damage;
+        CheckDeath();
     }
 
     public override void ReceiveKnockback(AttackInfo attackInfo, bool force)
     {
+        if (IsDead) return;
         currentKnockBackForce = attackInfo.knockback;
         isCurrentHitGrab = attackInfo.attackIsGrab;
         bool shouldForceChange = force || canChangeHitState;
@@ -112,18 +115,8 @@ public class Enemy : EnemyBase
 
     public override void ReceiveGrab()
     {
+        if (IsDead) return;
         if (CurrentState is SharedGrabbedState<EnemyStateMachine> grabState) grabState.Grab();
-    }
-
-    private void CheckDie()
-    {
-        if (currentHealth <= 0 && !emitManager.isEmitting)
-        {
-            if (SoundManager.Instance != null && deathSound != null) SoundManager.Instance.PlaySFX(deathSound);
-            StageManager.Instance?.EnemyDied();
-            ChangeState(DeadState, true);
-            gameObject.SetActive(false);
-        }
     }
 
     public override void StartOverlapDetect()
@@ -133,6 +126,6 @@ public class Enemy : EnemyBase
 
     public override void StopOverlapDetect()
     {
-        enemyCollisionDetector.stopDetect();
+        enemyCollisionDetector?.stopDetect();
     }
 }

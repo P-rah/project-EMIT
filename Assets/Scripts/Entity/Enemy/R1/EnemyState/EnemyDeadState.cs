@@ -16,22 +16,23 @@ public class EnemyDeadState : EnemyState
     public override void EnterState()
     {
         Debug.Log("Enemy is Dead");
-        /* INTEGRATION:
-         * 사망 파편의 좌우 방향을 확정하기 위해 먼저 Enemy의 논리 방향과 회전을 동기화한다. 현재 브랜치의
-         * EffectManager에는 방향 인자가 없어 호출을 비활성화했지만 integration/enemy-state-merge에는
-         * PlayDeathEffect(position, isFacingLeft)가 있으므로 병합 후 바로 다음 줄의 호출을 활성화한다.
-         * Emit 가능 여부는 통합 브랜치에서도 PlayerCombat의 적중 카운트가 관리하므로 여기서 별도로
-         * isEmittable을 true로 설정하지 않는다.
-         */
+
         enemy.Flip();
-        EffectManager.Instance?.PlayDeathEffect(type, enemy.transform.position, enemy.isFacingLeft);
+        // 기존 사망 풀 호출은 보존하되 사용하지 않는다.
+        // EffectManager.Instance?.PlayDeathEffect(type, enemy.transform.position, enemy.isFacingLeft);
+        if (enemy.deathFragmentPrefab != null)
+        {
+            // 부모 없이 생성하여 적 본체가 삭제되어도 파편 연출은 계속된다.
+            Object.Instantiate(enemy.deathFragmentPrefab, enemy.transform.position,
+                Quaternion.Euler(0f, enemy.isFacingLeft ? 180f : 0f, 0f));
+        }
     }
 
     // public override void UpdateState() { }
 
     public override void ExitState()
     {
-        // 적이 죽은 이후 실행시킬 로직
-
+        // 사망은 최종 상태이므로 이곳에서 어떤 작업도 실행해서는 안 된다.
+        // Destroy는 ExitState를 호출하지 않는다. 연출은 EnterState, 정리는 공통 사망 처리에서 수행한다.
     }
 }

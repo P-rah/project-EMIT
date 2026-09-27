@@ -5261,6 +5261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   myAudioSource: {fileID: 5682029497126305882}
   dragEffect: {fileID: 577483952097044834}
+  deathFragmentPrefab: {fileID: 3764518140752545662, guid: 19d5b793557818548a4aabe0a2b3a6f3, type: 3}
   data: {fileID: 11400000, guid: 5bc9bf452556c354a9c53f347f4205d7, type: 2}
   maxHealth: 10
   baseAttack: 2

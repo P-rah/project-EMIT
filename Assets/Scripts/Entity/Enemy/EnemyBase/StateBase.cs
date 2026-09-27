@@ -1,3 +1,4 @@
+[System.Serializable]
 public abstract class StateBase<T> where T : IStateMachine
 {
     /// <summary>

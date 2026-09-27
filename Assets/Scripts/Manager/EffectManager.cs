@@ -15,8 +15,9 @@ public class EffectManager : MonoBehaviour
 
     [Header("적 피격 이펙트")]
     public GameObject enemyHitEffectPrefab;
-    [SerializeField]private int effectPoolSize = 10;
+    [SerializeField] private int effectPoolSize = 10;
 
+    /*
     [System.Serializable]
     private struct PoolItem
     {
@@ -26,14 +27,15 @@ public class EffectManager : MonoBehaviour
     }
     [Header("적 사망 이펙트")]
     [SerializeField] private List<PoolItem> poolItems;
+    */
 
     [Header("역행 고스트")]
     public EmitTrackingEffect emitGhostPrefab;
     [SerializeField] private int emitGhostPoolSize = 100;
 
     private Queue<GameObject> effectPool = new Queue<GameObject>();
-    private Dictionary<DeathEffectType, Queue<GameObject>> deathEffectPool;
-    private Dictionary<DeathEffectType, GameObject> prefabDictionary;
+    // private Dictionary<DeathEffectType, Queue<GameObject>> deathEffectPool;
+    // private Dictionary<DeathEffectType, GameObject> prefabDictionary;
     private Queue<EmitTrackingEffect> emitGhostPool = new Queue<EmitTrackingEffect>();
 
     private void Awake()
@@ -45,7 +47,8 @@ public class EffectManager : MonoBehaviour
         }
         Instance = this;
         InitializeEffectPool();
-        InitializeDeathPool();
+        // 사망 파편은 Enemy에서 직접 생성한다. 기존 풀 구현은 보존만 한다.
+        // InitializeDeathPool();
         InitializeEmitGhostPool();
     }
 
@@ -98,6 +101,7 @@ public class EffectManager : MonoBehaviour
 
     }
 
+    /*
     //사망 파편 효과
     private void InitializeDeathPool()
     {
@@ -121,7 +125,6 @@ public class EffectManager : MonoBehaviour
             deathEffectPool.Add(item.type, objectQueue);
         }
     }
-
     public void PlayDeathEffect(DeathEffectType type, Vector2 position, bool isFacingLeft)
     {
         if (!deathEffectPool.ContainsKey(type))
@@ -146,13 +149,15 @@ public class EffectManager : MonoBehaviour
         obj.transform.rotation = Quaternion.Euler(0f, isFacingLeft ? 180f : 0f, 0f);
         obj.SetActive(true);
     }
-
+    
+    
     public void ReturnDeathEffect(DeathEffectType type, GameObject effect)
     {
         effect.SetActive(false);
         deathEffectPool[type].Enqueue(effect);
     }
-
+    */
+    
     //역행 고스트 이펙트
     private void InitializeEmitGhostPool()
     {
