@@ -1,13 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class SharedKnockbackState<T> : StateBase<T> where T : IStateMachine
+public class SharedKnockbackState : EnemyState
 {
-    private EnemyBase enemy;
-
-    public SharedKnockbackState(T owner, EnemyBase enemy) : base(owner)
+    public SharedKnockbackState(IEnemyStateMachine stateMachine) : base(stateMachine)
     {
-        this.enemy = enemy;
     }
 
     private Coroutine knockbackRoutine;
@@ -21,7 +18,7 @@ public class SharedKnockbackState<T> : StateBase<T> where T : IStateMachine
     public override void UpdateState()
     {
         base.UpdateState();
-        if (!owner.IsCurrentState(this) || isKnockbacking())
+        if (!stateMachine.IsCurrentState(this) || isKnockbacking())
         {
             return;
         }
@@ -64,7 +61,7 @@ public class SharedKnockbackState<T> : StateBase<T> where T : IStateMachine
         enemy.canChangeState = true;
         knockbackRoutine = null;
 
-        owner.ChangeToDefaultState();
+        stateMachine.ChangeToDefaultState();
     }
 
     public void stopKnockbackRoutine()

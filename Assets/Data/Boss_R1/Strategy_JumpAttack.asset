@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29c042f2890dad34d9d0a1f25875dadf, type: 3}
+  m_Name: Strategy_JumpAttack
+  m_EditorClassIdentifier: Assembly-CSharp::Boss1JumpAttack
+  startUpTime: 0.5
+  recoveryTime: 2
+  attackSound: {fileID: 0}
+  cameraShakeIntensity: 40
+  cameraShakeDuration: 0.6
+  windupAnimName: Boss1_AttackReady2
+  strikeAnimName: Boss1_Attack2
+  childEffectName: AttackEffect2
+  jumpHeight: 4
+  jumpDuration: 0.8
+  maxTrackingDistance: 8

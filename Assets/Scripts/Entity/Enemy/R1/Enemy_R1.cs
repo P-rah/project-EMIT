@@ -5,6 +5,8 @@ public class Enemy : EnemyBase
     private EnemyAnimator _enemyAnimator;
     public EnemyCollisionDetector enemyCollisionDetector;
 
+    public EnemyStateMachine EnemyStateMachine => StateMachine as EnemyStateMachine;
+
     public override void Init()
     {
         base.Init();
@@ -24,9 +26,9 @@ public class Enemy : EnemyBase
     public virtual void Update()
     {
         UpdateInvincibilityTimer();
-        if (emitManager.isEmitting) return;
+        if (emitManager != null && emitManager.isEmitting) return;
 
-        StateMachine.UpdateState();
+        StateMachine?.UpdateState();
         UpdateTargetDirection();
         CalculatePowerTimer();
         CalculateHitEffectTimer();
@@ -36,18 +38,18 @@ public class Enemy : EnemyBase
     public virtual void FixedUpdate()
     {
         if (isRooted) return;
-        StateMachine.Move();
+        StateMachine?.Move();
     }
 
     // ==========================================
     // Enemy 고유 로직
     // ==========================================
-    public void ChangeState(StateBase<EnemyStateMachine> nextState, bool force)
+    public void ChangeState(IState nextState, bool force)
     {
-        StateMachine.ChangeState(nextState, force);
+        StateMachine?.ChangeState(nextState, force);
     }
 
-    internal override void NotifyStateEntered(StateBase<EnemyStateMachine> state) => _enemyAnimator?.HandleStateEntered(StateMachine, state, currentKnockBackForce, FacingDir);
+    internal override void NotifyStateEntered(IState state) => _enemyAnimator?.HandleStateEntered(StateMachine, state, currentKnockBackForce, FacingDir);
     internal override void NotifyAttackWindupStarted() => _enemyAnimator?.HandleAttackWindupStarted();
     internal override void NotifyAttackStrikeStarted() => _enemyAnimator?.HandleAttackStrikeStarted();
     internal override void NotifyGrabStarted(float horizontalOffset) => _enemyAnimator?.HandleGrabStarted(horizontalOffset, FacingDir);
@@ -60,7 +62,7 @@ public class Enemy : EnemyBase
     }
 
     public bool isMovingLeft() => rb.linearVelocityX * Vector2.left.magnitude > 0f;
-    public bool IsCurrentState(StateBase<EnemyStateMachine> state) => StateMachine.IsCurrentState(state);
+    public bool IsCurrentState(IState state) => StateMachine != null && StateMachine.IsCurrentState(state);
 
     // ==========================================
     // 추상 메서드 오버라이드
@@ -70,13 +72,17 @@ public class Enemy : EnemyBase
         if (IsInvincible) return;
         invincibilityTimer = invincibilityDuration;
 
-        //AudioClip hitSound = isCurrentHitGrab ? grabHitSound : sweepHitSound;
-        //if (myAudioSource != null && hitSound != null) myAudioSource.PlayOneShot(hitSound);
+        if (CurrentState != null && CurrentState.CanBeCancelled())
+        {
+            ReceiveKnockback(attackInfo, true);
+        }
+        else if (CurrentState != null)
+        {
+            ReceiveKnockback(attackInfo, true);
+        }
 
-        if (StateMachine.currentState.CanBeCancelled()) ReceiveKnockback(attackInfo, true);
+        if (transitFlipPower) FlipPower(attackInfo.knockback.x);
 
-        if(transitFlipPower) FlipPower(attackInfo.knockback.x);
-        
         ReceiveDamage(attackInfo);
         HitEffectBasedOnDamageType(dmgType);
 
@@ -97,42 +103,62 @@ public class Enemy : EnemyBase
     {
         currentKnockBackForce = attackInfo.knockback;
         isCurrentHitGrab = attackInfo.attackIsGrab;
-        bool shouldForceChange = force || canChangeHitState;
 
         if (!isCurrentHitGrab)
         {
-            if (StateMachine.currentState == StateMachine.GrabbedState)
-                transitFlipPower = true;
-            StateMachine.ChangeState(StateMachine.KnockbackState, force);
-        }
-        else StateMachine.ChangeState(StateMachine.GrabbedState, force);
+            if (EnemyStateMachine != null)
+            {
+                if (CurrentState == EnemyStateMachine.GrabbedState)
+                    transitFlipPower = true;
 
-        myAudioSource.PlayOneShot(attackHitSound);
+                StateMachine.ChangeState(EnemyStateMachine.KnockbackState, force);
+            }
+        }
+        else
+        {
+            if (EnemyStateMachine != null)
+            {
+                StateMachine.ChangeState(EnemyStateMachine.GrabbedState, force);
+            }
+        }
+
+        if (myAudioSource != null && attackHitSound != null)
+        {
+            myAudioSource.PlayOneShot(attackHitSound);
+        }
     }
 
     public override void ReceiveGrab()
     {
-        if (CurrentState is SharedGrabbedState<EnemyStateMachine> grabState) grabState.Grab();
+        if (CurrentState is SharedGrabbedState grabState)
+        {
+            grabState.Grab();
+        }
     }
 
     private void CheckDie()
     {
-        if (currentHealth <= 0 && !emitManager.isEmitting)
+        if (currentHealth <= 0 && (emitManager == null || !emitManager.isEmitting))
         {
             if (SoundManager.Instance != null && deathSound != null) SoundManager.Instance.PlaySFX(deathSound);
             StageManager.Instance?.EnemyDied();
-            ChangeState(DeadState, true);
+
+            if (EnemyStateMachine != null)
+            {
+                ChangeState(EnemyStateMachine.DeadState, true);
+            }
+
             gameObject.SetActive(false);
         }
     }
 
     public override void StartOverlapDetect()
     {
-        enemyCollisionDetector.startDetect();
+        enemyCollisionDetector?.startDetect();
     }
 
     public override void StopOverlapDetect()
     {
-        enemyCollisionDetector.stopDetect();
+        enemyCollisionDetector?.stopDetect();
     }
 }

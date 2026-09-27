@@ -1,25 +1,23 @@
-public abstract class EnemyState : StateBase<EnemyStateMachine>
+public abstract class EnemyState : IState
 {
-    /// <summary>
-    /// 책임 및 기능: 각 State에서 Enemy가 움직이는 방식 (Enemy 전용 베이스)
-    /// </summary>
-
-    protected EnemyStateMachine stateMachine;
+    protected IEnemyStateMachine stateMachine;
     protected EnemyBase enemy;
 
-    public EnemyState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public EnemyState(IEnemyStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
-        this.enemy = stateMachine.GetComponent<EnemyBase>();
+        this.enemy = stateMachine.EnemyBase;
     }
 
-    public override abstract void EnterState();
-    public override abstract void ExitState();
+    public abstract void EnterState();
+    public abstract void ExitState();
 
-    public override void UpdateState()
+    public virtual void UpdateState()
     {
         CheckState();
     }
+
+    public virtual void Move() { }
 
     public virtual void CheckState()
     {
@@ -33,7 +31,7 @@ public abstract class EnemyState : StateBase<EnemyStateMachine>
             stateMachine.ChangeState(stateMachine.ChaseState);
             return;
         }
-        if (stateMachine.currentState != stateMachine.IdleState)
+        if (stateMachine.CurrentState != stateMachine.IdleState)
         {
             stateMachine.ChangeState(stateMachine.IdleState);
         }

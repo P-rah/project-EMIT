@@ -1,26 +1,24 @@
 using System;
 using UnityEngine;
 
-public class EnemyStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackableContext, IStateMachine
+public class EnemyStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackableContext, IEnemyStateMachine
 {
-    /// <summary>
-    /// 책임 및 기능: Enemy State가 관리되는 규칙
-    /// </summary>
-    public EnemyBase enemyBase { get; private set; }
-
+    [SerializeField] private EnemyBase enemyBase;
     [SerializeField] private DeathEffectType deathEffectType;
+
+    public EnemyBase EnemyBase => enemyBase;
 
     public IGrabbable GrabbableEntity => enemyBase;
     public IKnockbackable KnockbackableEntity => enemyBase;
 
-    public StateBase<EnemyStateMachine> currentState;
+    public IState CurrentState { get; private set; }
 
-    public StateBase<EnemyStateMachine> IdleState;
-    public StateBase<EnemyStateMachine> AttackState;
-    public StateBase<EnemyStateMachine> ChaseState;
-    public StateBase<EnemyStateMachine> DeadState;
-    public StateBase<EnemyStateMachine> KnockbackState;
-    public StateBase<EnemyStateMachine> GrabbedState;
+    public IState IdleState { get; private set; }
+    public IState AttackState { get; private set; }
+    public IState ChaseState { get; private set; }
+    public IState DeadState { get; private set; }
+    public IState KnockbackState { get; private set; }
+    public IState GrabbedState { get; private set; }
 
     private void Awake()
     {
@@ -33,49 +31,50 @@ public class EnemyStateMachine : MonoBehaviour, IGrabbableContext, IKnockbackabl
         AttackState = new EnemyAttackState(this);
         ChaseState = new EnemyChaseState(this);
         DeadState = new EnemyDeadState(this, deathEffectType);
-        KnockbackState = new SharedKnockbackState<EnemyStateMachine>(this, enemyBase);
-        GrabbedState = new SharedGrabbedState<EnemyStateMachine>(this, enemyBase);
+
+        KnockbackState = new SharedKnockbackState(this);
+        GrabbedState = new SharedGrabbedState(this);
     }
 
     public bool IsCurrentState(object state)
     {
-        return currentState == state;
+        return CurrentState == state;
     }
 
-    public void ChangeState(StateBase<EnemyStateMachine> nextState, bool force = false)
+    public void ChangeState(IState nextState, bool force = false)
     {
         if (nextState == null)
         {
             throw new ArgumentNullException(nameof(nextState));
         }
 
-        if (!force && (currentState == nextState || !enemyBase.canChangeState))
+        if (!force && (CurrentState == nextState || !enemyBase.canChangeState))
         {
             return;
         }
 
-        currentState?.ExitState();
-        currentState = nextState;
+        CurrentState?.ExitState();
+        CurrentState = nextState;
 
-        currentState.EnterState();
-        enemyBase.NotifyStateEntered(currentState);
+        CurrentState.EnterState();
+        enemyBase.NotifyStateEntered(CurrentState);
     }
 
-    public void SetState(StateBase<EnemyStateMachine> nextState)
+    public void SetState(IState nextState)
     {
-        currentState = nextState ?? throw new ArgumentNullException(nameof(nextState));
+        CurrentState = nextState ?? throw new ArgumentNullException(nameof(nextState));
     }
 
     public void UpdateState()
     {
-        if (currentState == DeadState) return;
+        if (CurrentState == DeadState) return;
 
-        currentState?.UpdateState();
+        CurrentState?.UpdateState();
     }
 
     public void Move()
     {
-        currentState?.Move();
+        CurrentState?.Move();
     }
 
     public void ChangeToDefaultState()

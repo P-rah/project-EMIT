@@ -1,13 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class SharedGrabbedState<T> : StateBase<T> where T  : IStateMachine
+public class SharedGrabbedState : EnemyState
 {
-    private EnemyBase enemy;
-
-    public SharedGrabbedState(T owner, EnemyBase enemy) : base(owner)
+    public SharedGrabbedState(IEnemyStateMachine stateMachine) : base(stateMachine)
     {
-        this.enemy = enemy;
     }
 
     private Coroutine grabRoutine;
@@ -22,7 +19,7 @@ public class SharedGrabbedState<T> : StateBase<T> where T  : IStateMachine
     public override void UpdateState()
     {
         base.UpdateState();
-        if (!owner.IsCurrentState(this) || isGrabbed()) return;
+        if (!stateMachine.IsCurrentState(this) || isGrabbed()) return;
     }
 
     public override void ExitState()
@@ -66,7 +63,7 @@ public class SharedGrabbedState<T> : StateBase<T> where T  : IStateMachine
         enemy.canChangeState = true;
         grabRoutine = null;
 
-        owner.ChangeToDefaultState();
+        stateMachine.ChangeToDefaultState();
     }
 
     public void stopGrapRoutine()

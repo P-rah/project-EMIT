@@ -1,8 +1,6 @@
 public class EnemyIdleState: EnemyState
 {
-    public EnemyIdleState(EnemyStateMachine owner) : base(owner)
-    {
-    }
+    public EnemyIdleState(IEnemyStateMachine stateMachine) : base(stateMachine) { }
 
     public override void EnterState()
     {

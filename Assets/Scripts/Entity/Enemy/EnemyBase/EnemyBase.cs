@@ -66,6 +66,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public bool isFacingLeft = false;
     public Vector2 targetDir;
     public Vector2 FacingDir { get; private set; } = Vector2.right;
+    public bool flipable = true;
 
     [Header("Invincibility")]
     public float invincibilityDuration;
@@ -77,10 +78,10 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     private static int _flashAmount = Shader.PropertyToID("_FlashAmount");
     private float hitEffectTimer = 0f;
 
-    public EnemyStateMachine StateMachine { get; set; }
-    public StateBase<EnemyStateMachine> CurrentState => StateMachine?.currentState;
-    public StateBase<EnemyStateMachine> IdleState => StateMachine?.IdleState;
-    public StateBase<EnemyStateMachine> DeadState => StateMachine?.DeadState;
+    public IEnemyStateMachine StateMachine { get; set; }
+    public IState CurrentState => StateMachine?.CurrentState;
+    public IState IdleState => StateMachine?.IdleState;
+    public IState DeadState => StateMachine?.DeadState;
 
 
     public virtual void Awake()
@@ -134,7 +135,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
         targetDir = Direction2D.FacingDir(target.position.x - rb.position.x);
         front = targetDir;
 
-        if (canChangeState)
+        if (canChangeState && flipable)
         {
             Flip();
         }
@@ -301,7 +302,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public virtual void StartOverlapDetect() { }
     public virtual void StopOverlapDetect() { }
 
-    internal abstract void NotifyStateEntered(StateBase<EnemyStateMachine> state);
+    internal abstract void NotifyStateEntered(IState state);
     internal abstract void NotifyAttackWindupStarted();
     internal abstract void NotifyAttackStrikeStarted();
     internal abstract void NotifyGrabStarted(float horizontalOffset);

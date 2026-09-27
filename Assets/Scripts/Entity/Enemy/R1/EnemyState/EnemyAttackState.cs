@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class EnemyAttackState : EnemyState
 {
-    public EnemyAttackState(EnemyStateMachine owner) : base(owner)
-    {
-    }
+    public EnemyAttackState(IEnemyStateMachine stateMachine) : base(stateMachine) { }
 
     private Coroutine attackCoroutine;
     private bool isCancellable = false;
@@ -33,11 +31,6 @@ public class EnemyAttackState : EnemyState
 
     public override void ExitState()
     {
-        /* INTEGRATION:
-         * integration/enemy-state-merge의 공격 외곽선 초기화는 이 메서드 시작부에 추가하되, 아래 코루틴
-         * 정리와 이동 잠금 해제는 그대로 둔다. 피격으로 선딜레이가 중단되는 경로에서도 두 정리가 모두
-         * 실행되어야 공격 외곽선과 Root 상태가 남지 않는다.
-         */
         if (attackCoroutine != null)
         {
             enemy.StopCoroutine(attackCoroutine);
@@ -57,10 +50,6 @@ public class EnemyAttackState : EnemyState
     {
         isCancellable = true;
         enemy.NotifyAttackWindupStarted();
-        //if (enemy.myAudioSource != null && enemy.attackReadySound != null)
-        //{
-        //    enemy.myAudioSource.PlayOneShot(enemy.attackReadySound);
-        //}
 
         yield return new WaitForSeconds(enemy.startUpTime);
 
@@ -85,7 +74,7 @@ public class EnemyAttackState : EnemyState
         return attackCoroutine != null;
     }
 
-    public override bool CanBeCancelled()
+    public bool CanBeCancelled()
     {
         return isCancellable;
     }

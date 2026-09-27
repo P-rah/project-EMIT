@@ -4,6 +4,9 @@ public class Enemy_R2 : EnemyBase
 {   
     private EnemyAnimator _enemyAnimator;
     public EnemyCollisionDetector enemyCollisionDetector;
+
+    public EnemyStateMachine EnemyStateMachine => StateMachine as EnemyStateMachine;
+
     [SerializeField] private BlockEffect blockEffect;
     [SerializeField] private AudioClip blockSound;
 
@@ -44,12 +47,12 @@ public class Enemy_R2 : EnemyBase
     // ==========================================
     // Enemy 고유 로직
     // ==========================================
-    public void ChangeState(StateBase<EnemyStateMachine> nextState, bool force)
+    public void ChangeState(IState nextState, bool force)
     {
-        StateMachine.ChangeState(nextState, force);
+        StateMachine?.ChangeState(nextState, force);
     }
 
-    internal override void NotifyStateEntered(StateBase<EnemyStateMachine> state) => _enemyAnimator?.HandleStateEntered(StateMachine, state, currentKnockBackForce, FacingDir);
+    internal override void NotifyStateEntered(IState state) => _enemyAnimator?.HandleStateEntered(StateMachine, state, currentKnockBackForce, FacingDir);
     internal override void NotifyAttackWindupStarted() => _enemyAnimator?.HandleAttackWindupStarted();
     internal override void NotifyAttackStrikeStarted() => _enemyAnimator?.HandleAttackStrikeStarted();
     internal override void NotifyGrabStarted(float horizontalOffset) => _enemyAnimator?.HandleGrabStarted(horizontalOffset, FacingDir);
@@ -62,7 +65,7 @@ public class Enemy_R2 : EnemyBase
     }
 
     public bool isMovingLeft() => rb.linearVelocityX * Vector2.left.magnitude > 0f;
-    public bool IsCurrentState(StateBase<EnemyStateMachine> state) => StateMachine.IsCurrentState(state);
+    public bool IsCurrentState(IState state) => StateMachine.IsCurrentState(state);
 
     public void EnableCancel()
     {
@@ -85,10 +88,7 @@ public class Enemy_R2 : EnemyBase
             return;
         }
 
-        //AudioClip hitSound = isCurrentHitGrab ? grabHitSound : sweepHitSound;
-        //if (myAudioSource != null && hitSound != null) myAudioSource.PlayOneShot(hitSound);
-
-        if (StateMachine.currentState.CanBeCancelled()) ReceiveKnockback(attackInfo, true);
+        if (CurrentState != null && CurrentState.CanBeCancelled()) ReceiveKnockback(attackInfo, true);
 
         if(transitFlipPower) FlipPower(attackInfo.knockback.x);
 
@@ -116,18 +116,30 @@ public class Enemy_R2 : EnemyBase
 
         if (!isCurrentHitGrab)
         {
-            if (StateMachine.currentState == StateMachine.GrabbedState)
-                transitFlipPower = true;
-            StateMachine.ChangeState(StateMachine.KnockbackState, force);
-        }
-        else StateMachine.ChangeState(StateMachine.GrabbedState, force);
+            if (EnemyStateMachine != null)
+            {
+                if (CurrentState == EnemyStateMachine.GrabbedState)
+                    transitFlipPower = true;
 
+                StateMachine.ChangeState(EnemyStateMachine.KnockbackState, force);
+            }
+        }
+        else
+        {
+            if (EnemyStateMachine != null)
+            {
+                StateMachine.ChangeState(EnemyStateMachine.GrabbedState, force);
+            }
+        }
         myAudioSource.PlayOneShot(attackHitSound);
     }
 
     public override void ReceiveGrab()
     {
-        if (CurrentState is SharedGrabbedState<EnemyStateMachine> grabState) grabState.Grab();
+        if (CurrentState is SharedGrabbedState grabState)
+        {
+            grabState.Grab();
+        }
     }
 
     private void CheckDie()

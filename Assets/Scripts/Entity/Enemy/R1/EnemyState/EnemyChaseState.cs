@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class EnemyChaseState : EnemyState
 {
-    public EnemyChaseState(EnemyStateMachine owner) : base(owner)
-    {
-    }
+    public EnemyChaseState(IEnemyStateMachine stateMachine) : base(stateMachine) { }
 
     public override void EnterState()
     {

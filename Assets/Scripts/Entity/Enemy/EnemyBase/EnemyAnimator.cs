@@ -36,7 +36,7 @@ public class EnemyAnimator : MonoBehaviour
         }
     }
 
-    internal void HandleStateEntered(EnemyStateMachine stateMachine, StateBase<EnemyStateMachine> state, Vector2 knockBackForce, Vector2 facingDir)
+    internal void HandleStateEntered(IEnemyStateMachine stateMachine, IState state, Vector2 knockBackForce, Vector2 facingDir)
     {
         switch (state)
         {
@@ -48,7 +48,7 @@ public class EnemyAnimator : MonoBehaviour
                 PlayWalk();
                 break;
 
-            case var _ when state == stateMachine.KnockbackState:
+            case SharedKnockbackState:
                 if (Direction2D.IsOpposite(knockBackForce, facingDir))
                 {
                     PlayHitFront();
@@ -58,7 +58,7 @@ public class EnemyAnimator : MonoBehaviour
                     PlayHitBack();
                 }
                 break;
-            case var _ when state == stateMachine.GrabbedState:
+            case SharedGrabbedState:
                 if (Direction2D.IsOpposite(knockBackForce, facingDir))
                 {
                     PlayHitBack();

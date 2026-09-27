@@ -52,5 +52,36 @@ public interface IStateMachine
 public interface IStateControllable
 {
     bool canChangeState { get; }
-    void NotifyStateEntered(StateBase<EnemyStateMachine> state);
+    void NotifyStateEntered(IState state);
+}
+
+public interface IState
+{
+    void EnterState();
+    void UpdateState();
+    void ExitState();
+    void Move();
+    public virtual bool CanBeCancelled()
+    {
+        return true;
+    }
+    virtual void OnReceiveKnockback() { }
+    virtual void OnReceiveGrab() { }
+}
+
+public interface IEnemyStateMachine : IStateMachine
+{
+    EnemyBase EnemyBase { get; }
+
+    // 공통 상태들 (제네릭 전혀 없음)
+    IState CurrentState { get; }
+    IState IdleState { get; }
+    IState AttackState { get; }
+    IState ChaseState { get; }
+    IState DeadState { get; }
+
+    void ChangeState(IState nextState, bool force = false);
+
+    void UpdateState();
+    void Move();
 }
