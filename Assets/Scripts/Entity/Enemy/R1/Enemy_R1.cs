@@ -26,12 +26,12 @@ public class Enemy : EnemyBase
     public virtual void Update()
     {
         UpdateInvincibilityTimer();
+        CalculateHitEffectTimer();
         if (emitManager != null && emitManager.isEmitting) return;
 
         StateMachine?.UpdateState();
         UpdateTargetDirection();
         CalculatePowerTimer();
-        CalculateHitEffectTimer();
         CheckDie();
     }
 

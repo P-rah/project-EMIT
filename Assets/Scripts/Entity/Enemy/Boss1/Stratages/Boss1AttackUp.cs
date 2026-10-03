@@ -6,6 +6,8 @@ public class Boss1UpAttack: Boss1AttackStrategy
 {
     public override IEnumerator ExecuteAttackRoutine(EnemyBase enemy, System.Action<bool> setCancellable)
     {
+        enemy.attackSound = attackSound;
+        enemy.attackReadySound = attackReadySound;
         setCancellable(false);
 
         enemy.NotifyAttackWindupStarted();

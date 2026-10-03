@@ -31,17 +31,18 @@ public class Boss1AttackState : EnemyState
             stateMachine.ChangeState(stateMachine.ChaseState);
             return;
         }
-
+        enemy.Flip();
         enemy.RootMovement();
         TryAttack();
     }
 
     public override void UpdateState()
     {
-        if (EmitManager.Instance != null && EmitManager.Instance.isEmitting)
+        if (EmitManager.Instance.isEmitting)
         {
             return;
         }
+        if (IsAttacking()) return;
         stateMachine.ChangeState(stateMachine.IdleState);
     }
 
@@ -50,7 +51,6 @@ public class Boss1AttackState : EnemyState
         if (attackCoroutine != null)
         {
             enemy.StopCoroutine(attackCoroutine);
-            attackCoroutine = null;
         }
 
         enemy.UnrootMovement();
@@ -74,7 +74,7 @@ public class Boss1AttackState : EnemyState
 
     private IEnumerator AttackRoutineWrapper()
     {
-        yield return enemy.StartCoroutine(currentStrategy.ExecuteAttackRoutine(enemy, setCancellable => isCancellable = setCancellable));
+        yield return currentStrategy.ExecuteAttackRoutine(enemy, setCancellable => isCancellable = setCancellable);
 
         attackCoroutine = null;
         enemy.UnrootMovement();

@@ -8,9 +8,13 @@ public class Boss1JumpAttack : Boss1AttackStrategy
     [SerializeField] private float jumpHeight = 4f;
     [SerializeField] private float jumpDuration = 0.8f;
     [SerializeField] private float maxTrackingDistance = 8f;
+    [SerializeField] private  AudioClip jumpReadySound;
 
     public override IEnumerator ExecuteAttackRoutine(EnemyBase enemy, System.Action<bool> setCancellable)
     {
+        enemy.attackSound = attackSound;
+        enemy.attackReadySound = attackReadySound;
+        enemy.myAudioSource.PlayOneShot(jumpReadySound);
         setCancellable(false);
         enemy.NotifyAttackWindupStarted();
 

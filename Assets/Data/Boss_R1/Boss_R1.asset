@@ -18,7 +18,7 @@ MonoBehaviour:
   baseAttack: 2
   baseSpeed: 2
   jumpHeight: 1
-  visionRange: 10
+  visionRange: 20
   attackRange: 5
   startAttackRange: 2
   startUpTime: 0.5

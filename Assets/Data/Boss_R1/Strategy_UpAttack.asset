@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Boss1UpAttack
   startUpTime: 0.8
   recoveryTime: 1
-  attackSound: {fileID: 0}
+  attackReadySound: {fileID: 8300000, guid: bb9bf57b7573c9d4d94ea6f4f0b9ba84, type: 3}
+  attackSound: {fileID: 8300000, guid: 88dc63a0d4f37314a828e2d524c31d4e, type: 3}
   cameraShakeIntensity: 10
   cameraShakeDuration: 0.1
   windupAnimName: Boss1_AttackReady3

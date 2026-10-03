@@ -197,6 +197,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
         myAudioSource.pitch = 1.0f;
     }
 
+    public void Animevent_playAttackReadySound()
+    {
+        if (myAudioSource == null || walkSound == null) return;
+        myAudioSource.PlayOneShot(attackReadySound);
+    }
+
     // ==========================================
     // 이동 제어
     // ==========================================
@@ -285,7 +291,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
 
     public void CalculateHitEffectTimer()
     {
-        hitEffectTimer += Time.deltaTime;
+        hitEffectTimer += Time.fixedDeltaTime;
         if (hitEffectTimer > hitEffectResetTime)
         {
             spriteRenderer.material.SetFloat(_flashAmount, 0f);

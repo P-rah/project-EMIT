@@ -29,12 +29,12 @@ public class Enemy_R2 : EnemyBase
     public virtual void Update()
     {
         UpdateInvincibilityTimer();
+        CalculateHitEffectTimer();
         if (emitManager.isEmitting) return;
 
         StateMachine.UpdateState();
         UpdateTargetDirection();
         CalculatePowerTimer();
-        CalculateHitEffectTimer();
         CheckDie();
     }
 

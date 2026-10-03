@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Boss1JumpAttack
   startUpTime: 0.5
   recoveryTime: 2
-  attackSound: {fileID: 0}
+  attackReadySound: {fileID: 8300000, guid: 773ba21c661fc834aaa1c7584e84fda5, type: 3}
+  attackSound: {fileID: 8300000, guid: fe24b6f61258ed044b9006cb5ad6600e, type: 3}
   cameraShakeIntensity: 40
   cameraShakeDuration: 0.6
   windupAnimName: Boss1_AttackReady2
@@ -23,3 +24,4 @@ MonoBehaviour:
   jumpHeight: 4
   jumpDuration: 0.8
   maxTrackingDistance: 8
+  jumpReadySound: {fileID: 8300000, guid: 63f1e0e10649cf944a4022e53c1df87d, type: 3}

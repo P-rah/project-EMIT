@@ -35,12 +35,16 @@ public class Boss_R1 : EnemyBase
     public virtual void Update()
     {
         UpdateInvincibilityTimer();
-        if (emitManager.isEmitting) return;
+        CalculateHitEffectTimer();
+        if (emitManager.isEmitting)
+        {
+            ChangeState(IdleState, true);
+            return;
+        }
 
         StateMachine.UpdateState();
         UpdateTargetDirection();
         CalculatePowerTimer();
-        CalculateHitEffectTimer();
         CheckDie();
     }
 
@@ -73,7 +77,7 @@ public class Boss_R1 : EnemyBase
 
     public void EnableCancel()
     {
-        if (CurrentState is EnemyAttackState attackState)
+        if (CurrentState is Boss1AttackState attackState)
             attackState.SetCancellable(true);
     }
 
@@ -168,6 +172,8 @@ public class Boss_R1 : EnemyBase
     public override void ReceiveKnockback(AttackInfo attackInfo, bool force)
     {
         myAudioSource.PlayOneShot(attackHitSound);
+        currentKnockBackForce = attackInfo.knockback;
+        isCurrentHitGrab = attackInfo.attackIsGrab;
     }
 
     public override void ReceiveGrab()

@@ -9,7 +9,9 @@ public class Boss1DownAttack : Boss1AttackStrategy
 
     public override IEnumerator ExecuteAttackRoutine(EnemyBase enemy, System.Action<bool> setCancellable)
     {
-        for(int i = 0; i < attackCount; i++)
+        enemy.attackSound = attackSound;
+        enemy.attackReadySound = attackReadySound;
+        for (int i = 0; i < attackCount; i++)
         {
             setCancellable(false);
 

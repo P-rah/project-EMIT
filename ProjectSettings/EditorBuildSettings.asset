@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Scenes/UseScene/Ch1_G1.unity
     guid: 440521d582fbcc841be622884f2c5a2d
   - enabled: 1
-    path: Assets/Scenes/UseScene/Ch1_B1.unity
+    path: Assets/Scenes/TestScene/KKM/BossFly.unity
     guid: a3c3408b1f4621543a74978ea71ec549
   - enabled: 1
     path: Assets/Scenes/UseScene/ClearScene.unity

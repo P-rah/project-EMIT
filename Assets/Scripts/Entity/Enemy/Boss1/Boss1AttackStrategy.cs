@@ -6,6 +6,7 @@ public abstract class Boss1AttackStrategy : ScriptableObject
     [Header("공통 공격 설정")]
     public float startUpTime = 0.5f;   // 선딜레이
     public float recoveryTime = 0.5f;  // 후딜레이
+    public AudioClip attackReadySound;      // 공격 준비 사운드
     public AudioClip attackSound;      // 공격 사운드
     public float cameraShakeIntensity = 10f;
     public float cameraShakeDuration = 0.2f;
