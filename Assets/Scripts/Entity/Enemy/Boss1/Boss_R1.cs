@@ -5,6 +5,7 @@ public class Boss_R1 : EnemyBase
 {
     private BossAnimator _bossAnimator;
     public Boss1AttackStrategy CurrentStrategy { get; set; }
+    private UIGaugeBarController _uiBarController;
 
     [SerializeField] private BlockEffect blockEffect;
     [SerializeField] private AudioClip blockSound;
@@ -23,6 +24,7 @@ public class Boss_R1 : EnemyBase
         StateMachine = GetComponent<Boss1StateMachine>();
 
         bossAttackState = new Boss1AttackState(StateMachine);
+        _uiBarController = GetComponent<UIGaugeBarController>();
     }
 
     public virtual void Start()
@@ -30,6 +32,9 @@ public class Boss_R1 : EnemyBase
         StageManager.Instance?.AddEnemy();
         ChangeState(IdleState, false);
         emitManager = EmitManager.Instance;
+
+        _uiBarController.SetMaxAmount(maxHealth);
+        _uiBarController.UpdateBar(currentHealth);
     }
 
     public virtual void Update()
@@ -155,6 +160,7 @@ public class Boss_R1 : EnemyBase
 
         ReceiveDamage(attackInfo);
         HitEffectBasedOnDamageType(dmgType);
+        _uiBarController.UpdateBar(currentHealth);
 
         ResetPowerTImer();
         CalculatePower(attackInfo);

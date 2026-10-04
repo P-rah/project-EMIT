@@ -312,4 +312,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     internal abstract void NotifyAttackWindupStarted();
     internal abstract void NotifyAttackStrikeStarted();
     internal abstract void NotifyGrabStarted(float horizontalOffset);
+
+    public string CurrentStateToString()
+    {
+        return CurrentState.ToString();
+    }
 }

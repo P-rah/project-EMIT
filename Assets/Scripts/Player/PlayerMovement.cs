@@ -139,7 +139,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void ExecuteDash()
     {
-        if (canDash && input.MoveInput.x != 0) StartCoroutine(DashRoutine());
+        if (canDash) StartCoroutine(DashRoutine());
     }
 
     private void ExecuteDown()

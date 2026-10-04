@@ -12161,10 +12161,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1729990556704079558, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2267084427359753174, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10.01
@@ -12209,10 +12205,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Boss1
       objectReference: {fileID: 0}
-    - target: {fileID: 2322426769367571777, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3808333509452986135, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: walkSound
       value: 
@@ -12229,6 +12221,14 @@ PrefabInstance:
       propertyPath: attackHitSound
       value: 
       objectReference: {fileID: 8300000, guid: d025ee3274846e2469f0ed3847d1f9e1, type: 3}
+    - target: {fileID: 6518867401449946513, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
+      propertyPath: frontHealthBar
+      value: 
+      objectReference: {fileID: 1122146702}
+    - target: {fileID: 6518867401449946513, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
+      propertyPath: ghostHealthBar
+      value: 
+      objectReference: {fileID: 1058857067}
     - target: {fileID: 8537339604988419193, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: MaxDistance
       value: 30
@@ -12238,9 +12238,7 @@ PrefabInstance:
       value: 29.70297
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 7685807999782540743, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
-    - {fileID: 2790492362661762002, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}

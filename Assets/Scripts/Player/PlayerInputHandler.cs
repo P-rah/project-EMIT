@@ -8,6 +8,10 @@ public class PlayerInputHandler : MonoBehaviour
 {
     private EmitManager emitManager;
 
+    private TutorialActionType? allowedAction = null;
+
+    public event Action<TutorialActionType> OnActionPerformed;
+
     /*
         ===============================================
         LAYER 1: 인풋을 이용하는 스크립트들이 참조할 input flag들
@@ -34,55 +38,80 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
+        if (!IsAllowed(TutorialActionType.MoveLeft) && !IsAllowed(TutorialActionType.MoveRight))
+        {
+            MoveInput = Vector2.zero;
+            return;
+        }
         MoveInput = value.Get<Vector2>();
+
+        if (MoveInput.x < -0.5f) OnActionPerformed?.Invoke(TutorialActionType.MoveLeft);
+        else if (MoveInput.x > 0.5f) OnActionPerformed?.Invoke(TutorialActionType.MoveRight);
     }
 
     public void OnJump(InputValue value)
     {
+        if (!IsAllowed(TutorialActionType.Jump)) return;
+
         if (value.isPressed)
         {
             JumpInput = true;
+            OnActionPerformed?.Invoke(TutorialActionType.Jump);
         }
     }
 
     public void OnDown(InputValue value)
     {
+        if (!IsAllowed(TutorialActionType.Down)) return;
+
         if (value.isPressed)
         {
             DownInput = true;
+            OnActionPerformed?.Invoke(TutorialActionType.Down);
         }
     }
 
     public void OnDash(InputValue value)
     {
+        if (!IsAllowed(TutorialActionType.Dash)) return;
+
         if (value.isPressed)
         {
             DashInput = true;
+            OnActionPerformed?.Invoke(TutorialActionType.Dash);
         }
     }
 
     public void OnEmit(InputValue value)
     {
+        if (!IsAllowed(TutorialActionType.Emit)) return;
+
         if (value.isPressed)
         {
-            if(emitManager.isEmitting) EventManager.TriggerEvent("OnEmitEnd");
+            if (emitManager.isEmitting) EventManager.TriggerEvent("OnEmitEnd");
             else EventManager.TriggerEvent("OnEmitPressed");
         }
     }
 
     public void OnAttackSweep(InputValue value)
     {
+        if (!IsAllowed(TutorialActionType.AttackSweep)) return;
+
         if (value.isPressed)
         {
             AttackSweepInput = true;
+            OnActionPerformed?.Invoke(TutorialActionType.AttackSweep);
         }
     }
 
     public void OnAttackGrab(InputValue value)
     {
+        if (!IsAllowed(TutorialActionType.AttackGrab)) return;
+
         if (value.isPressed)
         {
             AttackGrabInput = true;
+            OnActionPerformed?.Invoke(TutorialActionType.AttackGrab);
         }
     }
 
@@ -133,5 +162,39 @@ public class PlayerInputHandler : MonoBehaviour
         bool result = AttackGrabInput;
         AttackGrabInput = false;
         return result;
+    }
+
+    /*
+        ===============================================
+        입력 제한 제어 함수
+        =============================================== 
+    */
+    public void SetAllowedAction(TutorialActionType action)
+    {
+        allowedAction = action;
+        ResetAllInputs();
+    }
+
+    public void ClearAllowedAction()
+    {
+        allowedAction = null;
+    }
+
+    private bool IsAllowed(TutorialActionType action)
+    {
+        if (!allowedAction.HasValue) return true;
+
+        return allowedAction.Value == action;
+    }
+
+    private void ResetAllInputs()
+    {
+        MoveInput = Vector2.zero;
+        JumpInput = false;
+        DownInput = false;
+        DashInput = false;
+        EmitInput = false;
+        AttackSweepInput = false;
+        AttackGrabInput = false;
     }
 }

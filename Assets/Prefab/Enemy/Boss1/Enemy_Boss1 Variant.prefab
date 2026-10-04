@@ -362,6 +362,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 977588381057588390, guid: 583a7236d1a63da4a94a5e4f9769ae2a, type: 3}
+      propertyPath: MaxDistance
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 977588381057588390, guid: 583a7236d1a63da4a94a5e4f9769ae2a, type: 3}
+      propertyPath: MinDistance
+      value: 29.70297
+      objectReference: {fileID: 0}
     - target: {fileID: 1041528920650210165, guid: 583a7236d1a63da4a94a5e4f9769ae2a, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -530,6 +538,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6616144674770574750, guid: 583a7236d1a63da4a94a5e4f9769ae2a, type: 3}
       insertIndex: 7
       addedObject: {fileID: 4631367563578364605}
+    - targetCorrespondingSourceObject: {fileID: 6616144674770574750, guid: 583a7236d1a63da4a94a5e4f9769ae2a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6518867401449946513}
     - targetCorrespondingSourceObject: {fileID: 7199434387898351129, guid: 583a7236d1a63da4a94a5e4f9769ae2a, type: 3}
       insertIndex: 1
       addedObject: {fileID: 7731731963717992338}
@@ -678,11 +689,11 @@ MonoBehaviour:
   startUpTime: 0
   recoveryTime: 0
   powerResetTime: 0
-  walkSound: {fileID: 0}
+  walkSound: {fileID: 8300000, guid: 8714e35733561de4fa0cef57036ecf31, type: 3}
   attackReadySound: {fileID: 0}
   attackSound: {fileID: 0}
-  attackHitSound: {fileID: 0}
-  deathSound: {fileID: 0}
+  attackHitSound: {fileID: 8300000, guid: d025ee3274846e2469f0ed3847d1f9e1, type: 3}
+  deathSound: {fileID: 8300000, guid: 6c28ed22dcc349c4cbb90c09b36c98f1, type: 3}
   currentHealth: 0
   isRooted: 0
   isCurrentHitGrab: 0
@@ -694,7 +705,7 @@ MonoBehaviour:
   flipable: 1
   invincibilityDuration: 0
   blockEffect: {fileID: 1948856821697188891}
-  blockSound: {fileID: 0}
+  blockSound: {fileID: 8300000, guid: 9908d03493ea9cf42a6cfd98b10ede37, type: 3}
   availableAttacks:
   - {fileID: 11400000, guid: 45e66d89a196c3a48a86e293fbf155b8, type: 2}
   - {fileID: 11400000, guid: 517582ec154ca194dac35d060166ce9f, type: 2}
@@ -725,6 +736,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c4d1bf4a7f2f464db17e3b158d4dcee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossAnimator
+--- !u!114 &6518867401449946513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2322426769367571777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dd283c55941f21449982c3f9c5f5aa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIGaugeBarController
+  frontHealthBar: {fileID: 0}
+  ghostHealthBar: {fileID: 0}
+  ghostDelay: 0.3
+  ghostDuration: 0.5
 --- !u!82 &8537339604988419193 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 977588381057588390, guid: 583a7236d1a63da4a94a5e4f9769ae2a, type: 3}

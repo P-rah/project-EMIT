@@ -106,7 +106,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         {
             _rb.MovePosition(frame.position);
             _rb.MoveRotation(frame.rotation);
-            emitableTarget.SetPower(-frame.power);
+            emitableTarget.SetPower(frame.power);
             spriteRenderer.sprite = frame.sprite;
             spriteRenderer.flipX = Direction2D.IsOpposite(frame.facingDir, Vector2.right);
         }

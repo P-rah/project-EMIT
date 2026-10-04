@@ -15,14 +15,14 @@ EditorBuildSettings:
     path: Assets/Scenes/UseScene/SettingsScene.unity
     guid: d63f8c268f1fd0e41ae84fb90f0d80ed
   - enabled: 1
-    path: Assets/Scenes/UseScene/Ch1_T1.unity
-    guid: c10a5510059e6ff4dab8f358340e9c7c
-  - enabled: 1
     path: Assets/Scenes/UseScene/Ch1_G1.unity
     guid: 440521d582fbcc841be622884f2c5a2d
   - enabled: 1
-    path: Assets/Scenes/TestScene/KKM/BossFly.unity
-    guid: a3c3408b1f4621543a74978ea71ec549
+    path: Assets/Scenes/UseScene/Ch1_G2.unity
+    guid: d76b9ce327f9f004d886f34b27fb8cd8
+  - enabled: 1
+    path: Assets/Scenes/UseScene/Ch1_B1.unity
+    guid: bd7df21ea4d4baf4fabc9256d7da917e
   - enabled: 1
     path: Assets/Scenes/UseScene/ClearScene.unity
     guid: 1a718b2165c87a941a112270a5bde08e

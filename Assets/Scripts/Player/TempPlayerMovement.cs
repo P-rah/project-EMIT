@@ -185,7 +185,8 @@ public class TempPlayerMovement : MonoBehaviour
             else movementSpeed = baseMoveSpeedWhileAttack;
         }
 
-        Vector2 slideVelocity = horizontalInput * movementSpeed * groundTangent;
+        Vector2 slideVelocity = isDashing ? 
+            facingDir * movementSpeed * groundTangent : horizontalInput * movementSpeed * groundTangent;
 
         // 현재 바닥에서 자체 이동을 계산한 뒤, 플랫폼 이동량과 합쳐 한 번만 적용한다.
         var result = rb.Slide(slideVelocity, Time.fixedDeltaTime, slideMovement);
@@ -221,7 +222,8 @@ public class TempPlayerMovement : MonoBehaviour
         }
         else
         {
-            rb.linearVelocityX = input.MoveInput.x * movementSpeed;
+            rb.linearVelocityX = isDashing ? 
+                facingDir.x * movementSpeed : input.MoveInput.x * movementSpeed;
         }
     }
 #endregion
@@ -268,7 +270,7 @@ public class TempPlayerMovement : MonoBehaviour
 #region 대시
     public void ExecuteDash()
     {
-        if (canDash && input.MoveInput.x != 0)
+        if (canDash)
         {
             StartCoroutine(DashRoutine());
         }

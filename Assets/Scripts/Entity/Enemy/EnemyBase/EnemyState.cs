@@ -36,4 +36,9 @@ public abstract class EnemyState : IState
             stateMachine.ChangeState(stateMachine.IdleState);
         }
     }
+
+    new public virtual string ToString()
+    {
+        return null;
+    }
 }

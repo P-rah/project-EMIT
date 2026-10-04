@@ -28,6 +28,8 @@ public class PlayerCombat : MonoBehaviour
     private bool checkCancelSweep;          //대쉬 체크 시작
     private bool TriggerCancelSweep;        //대쉬로 인한 캔슬 트리거
     private bool StartCancelSweep;          //캔슬 시작
+    private bool sweepBufferStart = false;
+    private bool sweepBuffered = false;
 
     [Header("Emit Settings")]
     const float emitRecoveryAmountWhenAttackHit = 0.2f;
@@ -128,6 +130,10 @@ public class PlayerCombat : MonoBehaviour
             {
                 triggerContinuousSweep = true;
             }
+            else if(sweepBufferStart)
+            {
+                sweepBuffered = true;
+            }
         }
     }
 
@@ -215,7 +221,6 @@ public class PlayerCombat : MonoBehaviour
             canAttack = false;
             IsAttackingGrab = true;
             hasTriggeredHitEffect = false;
-            //Player.Movement.flippable = false;
             Player.TempMovement.flippable = false;
 
             grabAttackHitbox.OnTargetGrapHit += handleGrapHit;
@@ -252,6 +257,12 @@ public class PlayerCombat : MonoBehaviour
         Player.TempMovement.flippable = true;
 
         canAttack = true;
+        if (sweepBuffered)
+        {
+            sweepBuffered = false;
+            ExecuteAttackSweep();
+        }
+        sweepBufferStart = false;
     }
 
     public void AnimEvent_GrabHitboxActive()
@@ -272,6 +283,11 @@ public class PlayerCombat : MonoBehaviour
         else grapEffect.StartGrabFailVisual();
     }
 
+    public void AnimEvent_StartSweepInputBuffer()
+    {
+        sweepBufferStart = true;
+    }
+
     public void AnimEvent_startEnemyGrab()
     {
         if (currentGrabTarget != null)
@@ -280,8 +296,8 @@ public class PlayerCombat : MonoBehaviour
         {
             grapEffect.StartGrabFailVisualRetract();
         }
-        canAttack = true;
         soundManager.PlaySFX(player.grabRetreiveSound);
+        canAttack = true;
     }
 
     private void OnEmitStart()
