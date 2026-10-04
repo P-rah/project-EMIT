@@ -1,6 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class StageManager : MonoBehaviour
 {
@@ -19,6 +18,12 @@ public class StageManager : MonoBehaviour
     [Header("스테이지 정보")]
     public int currentEnemyCount = 0;
     public string nextSceneName;
+
+    private bool canMoveToNextStage = false;
+    private bool isTransitioning = false;
+
+    public bool CanMoveToNextStage => canMoveToNextStage;
+    public event Action StageCleared;
 
     private void Awake()
     {
@@ -47,15 +52,18 @@ public class StageManager : MonoBehaviour
     {
         currentEnemyCount--;
 
-        if (currentEnemyCount <= 0)
+        if (currentEnemyCount <= 0 && !canMoveToNextStage)
         {
-            StartCoroutine(StageClearRoutine());
+            canMoveToNextStage = true;
+            StageCleared?.Invoke();
         }
     }
 
     public void RestartStage()
     {
         currentEnemyCount = 0;
+        canMoveToNextStage = false;
+        isTransitioning = false;
 
         TimeManager.Instance.InstantNormalTime();
         // AudioManager.Instance.StopEmitBGM();
@@ -66,6 +74,7 @@ public class StageManager : MonoBehaviour
         // Scene currentScene = SceneManager.GetActiveScene();
         // SceneManager.LoadScene(currentScene.buildIndex);
         SceneControlManager.Instance.ReloadStage();
+
     }
 
     public void EndStage()
@@ -73,11 +82,21 @@ public class StageManager : MonoBehaviour
         
     }
 
-    private IEnumerator StageClearRoutine()
+    public bool TryMoveToNextStage()
+    {
+        if (!canMoveToNextStage || isTransitioning)
+        {
+            return false;
+        }
+
+        isTransitioning = true;
+        StageClearRoutine();
+        return true;
+    }
+
+    private void StageClearRoutine()
     {
         Debug.Log("스테이지 클리어");
-
-        yield return new WaitForSeconds(2.0f);
 
         currentEnemyCount = 0;
         EmitManager.Instance.EmitReset();

@@ -1,22 +1,23 @@
 using UnityEngine;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
 using TMPro;
 
 public class LoadingScreen : MonoBehaviour
 {
     private CanvasGroup canvasGroup;
 
-    [SerializeField] private TextMeshProUGUI _loadingText;
+    // [SerializeField] private TextMeshProUGUI _loadingText;
     [SerializeField] private float fadeInTime = 0.5f;
     [SerializeField] private float fadeOutTime = 1f;
 
     private void Awake()
     {   
         canvasGroup = GetComponent<CanvasGroup>();
-        _loadingText = GetComponentInChildren<TextMeshProUGUI>();
+        // _loadingText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    public async void Show()
+    public async UniTask Show()
     {
         if (canvasGroup == null)
         {
@@ -26,29 +27,26 @@ public class LoadingScreen : MonoBehaviour
         gameObject.SetActive(true);
         Debug.Log("로딩화면 뜸");
         
-        _loadingText.alpha = 1f;
-        canvasGroup.DOFade(1f, fadeInTime)
+        canvasGroup.alpha = 0f;
+        canvasGroup.blocksRaycasts = true;
+        // _loadingText.alpha = 1f;
+
+        await canvasGroup.DOFade(1f, fadeInTime)
         .SetUpdate(true)
         .SetEase(Ease.OutQuad)
-        .OnComplete(() =>
-        {
-            canvasGroup.blocksRaycasts = true;
-        }
-        );
+        .AsyncWaitForCompletion();
     }
 
-    public async void Hide()
+    public async UniTask Hide()
     {
-        _loadingText.alpha = 0f;
-        canvasGroup.DOFade(0f, fadeOutTime)
+        await canvasGroup.DOFade(0f, fadeOutTime)
         .SetUpdate(true)
         .SetEase(Ease.OutQuad)
-        .OnComplete(() =>
-        {
-            canvasGroup.blocksRaycasts = false;
-            gameObject.SetActive(false);
-            Debug.Log("로딩화면 꺼짐");
-        }
-        );
+        .AsyncWaitForCompletion();
+        
+        canvasGroup.blocksRaycasts = false;
+        gameObject.SetActive(false);
+        
+        Debug.Log("로딩화면 꺼짐");
     }
 }
