@@ -25,6 +25,7 @@ public class Enemy : EnemyBase
 
     public virtual void Update()
     {
+        if (IsDead) return;
         UpdateInvincibilityTimer();
         CalculateHitEffectTimer();
         if (emitManager != null && emitManager.isEmitting) return;
@@ -32,12 +33,11 @@ public class Enemy : EnemyBase
         StateMachine?.UpdateState();
         UpdateTargetDirection();
         CalculatePowerTimer();
-        CheckDie();
     }
 
     public virtual void FixedUpdate()
     {
-        if (isRooted) return;
+        if (IsDead || isRooted) return;
         StateMachine?.Move();
     }
 
@@ -69,7 +69,7 @@ public class Enemy : EnemyBase
     // ==========================================
     public override void ReceiveAttack(AttackInfo attackInfo)
     {
-        if (IsInvincible) return;
+        if (IsDead || IsInvincible) return;
         invincibilityTimer = invincibilityDuration;
 
         if (CurrentState != null && CurrentState.CanBeCancelled())
@@ -94,13 +94,16 @@ public class Enemy : EnemyBase
 
     public override void ReceiveDamage(AttackInfo attackInfo)
     {
+        if (IsDead) return;
         int damage = DamageCalculation<Enemy>.Calculate(attackInfo, this);
         if (dmgType == 2) ResetPower();
         currentHealth -= damage;
+        CheckDeath();
     }
 
     public override void ReceiveKnockback(AttackInfo attackInfo, bool force)
     {
+        if (IsDead) return;
         currentKnockBackForce = attackInfo.knockback;
         isCurrentHitGrab = attackInfo.attackIsGrab;
 
@@ -130,25 +133,10 @@ public class Enemy : EnemyBase
 
     public override void ReceiveGrab()
     {
+        if (IsDead) return;
         if (CurrentState is SharedGrabbedState grabState)
         {
             grabState.Grab();
-        }
-    }
-
-    private void CheckDie()
-    {
-        if (currentHealth <= 0 && (emitManager == null || !emitManager.isEmitting))
-        {
-            if (SoundManager.Instance != null && deathSound != null) SoundManager.Instance.PlaySFX(deathSound);
-            StageManager.Instance?.EnemyDied();
-
-            if (EnemyStateMachine != null)
-            {
-                ChangeState(EnemyStateMachine.DeadState, true);
-            }
-
-            gameObject.SetActive(false);
         }
     }
 

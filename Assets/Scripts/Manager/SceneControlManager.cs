@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -70,7 +71,7 @@ public class SceneControlManager : MonoBehaviour
     {
         if (plan.Overlay && LoadingScreen != null)
         {
-            LoadingScreen.Show();
+            yield return LoadingScreen.Show().ToCoroutine();
         }
         // 언로드할 씬들에 대해 각각 언로드를 수행
         foreach (var slotKey in plan.ScenesToUnload)
@@ -94,7 +95,7 @@ public class SceneControlManager : MonoBehaviour
         }
         if (plan.Overlay && LoadingScreen != null)
         {
-            LoadingScreen.Hide();
+            yield return LoadingScreen.Hide().ToCoroutine();
         }
         isBusy = false;
     }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using UnityEngine.EventSystems;
+using UnityEngine.Tilemaps;
 /// <summary>
 /// 특정 유형의 씬이 로드되기 이전에 실행하는 Base Class
 /// 특정 씬 유형의 Single Entry Point
@@ -44,5 +45,6 @@ public class SceneInitiatorBase : MonoBehaviour
 
     public virtual void PrepareGame()
     {
+        
     }
 }

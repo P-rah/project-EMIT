@@ -47,6 +47,12 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         effectManager = EffectManager.Instance;
     }
 
+    protected virtual void OnDestroy()
+    {
+        if (EmitManager.Instance != null) EmitManager.Instance.emitObjects?.Remove(this);
+        EndGhost();
+    }
+
     private KeyframeStatus GetKeyFrame()
     {
         KeyframeStatus frame;
@@ -90,12 +96,20 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
 
     public virtual void EndGhost()
     {
-        foreach(EmitTrackingEffect ghosts in emitGhosts)
+        if (ghostRoutine != null)
         {
-            if(ghosts != null)
-                effectManager.ReturnEmitGhost(ghosts);
+            StopCoroutine(ghostRoutine);
+            ghostRoutine = null;
         }
-        if(ghostRoutine != null )StopCoroutine(ghostRoutine);
+        if (emitGhosts == null) return;
+
+        for (int i = 0; i < emitGhosts.Length; i++)
+        {
+            if (emitGhosts[i] != null && effectManager != null)
+                effectManager.ReturnEmitGhost(emitGhosts[i]);
+            emitGhosts[i] = null;
+        }
+        currentControllEmitGhost = null;
     }
 
     public virtual void EmitFrame()
@@ -110,12 +124,17 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
             spriteRenderer.sprite = frame.sprite;
             spriteRenderer.flipX = Direction2D.IsOpposite(frame.facingDir, Vector2.right);
         }
-        if (emitGhosts[currentGhostIndex] != null)
+        else return;
+
+        if (currentGhostIndex < emitGhosts.Length && emitGhosts[currentGhostIndex] != null)
         {
             if (emitGhosts[currentGhostIndex].getPos() == frame.position)
             {
                 if(emitGhosts[currentGhostIndex].isEndMove())
-                    effectManager.ReturnEmitGhost(emitGhosts[currentGhostIndex++]);
+                {
+                    effectManager.ReturnEmitGhost(emitGhosts[currentGhostIndex]);
+                    emitGhosts[currentGhostIndex++] = null;
+                }
             }
         }
     }

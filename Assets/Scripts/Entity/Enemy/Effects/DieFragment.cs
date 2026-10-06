@@ -135,6 +135,7 @@ public class DieFragment : MonoBehaviour
 
     private void DisableDieFrag()
     {
-        EffectManager.Instance.ReturnDeathEffect(type, this.gameObject);
+        // EffectManager.Instance.ReturnDeathEffect(type, this.gameObject);
+        Destroy(gameObject);
     }
 }

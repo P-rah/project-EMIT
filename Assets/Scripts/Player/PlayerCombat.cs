@@ -290,10 +290,11 @@ public class PlayerCombat : MonoBehaviour
 
     public void AnimEvent_startEnemyGrab()
     {
-        if (currentGrabTarget != null)
+        if (currentTargetTransform != null && currentGrabTarget != null)
             currentGrabTarget.ReceiveGrab();
         else if (currentTargetTransform == null)
         {
+            currentGrabTarget = null;
             grapEffect.StartGrabFailVisualRetract();
         }
         soundManager.PlaySFX(player.grabRetreiveSound);
