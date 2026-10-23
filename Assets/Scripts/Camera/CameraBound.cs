@@ -54,12 +54,34 @@ public class CameraBound : MonoBehaviour
             new Vector2(localMax.x, localMin.y) - offset
         };
 
+        const float thickness = 1f;
+        Vector2 center = (localMin + localMax) * 0.5f;
+        Vector2 size = localMax - localMin;
+
+        AddWall(new Vector2(localMin.x - thickness / 2f, center.y),
+            new Vector2(thickness, size.y + thickness * 2f));
+        AddWall(new Vector2(localMax.x + thickness / 2f, center.y),
+            new Vector2(thickness, size.y + thickness * 2f));
+        AddWall(new Vector2(center.x, localMin.y - thickness / 2f),
+            new Vector2(size.x, thickness));
+        AddWall(new Vector2(center.x, localMax.y + thickness / 2f),
+            new Vector2(size.x, thickness));
+
         foreach (CinemachineConfiner2D confiner in FindObjectsByType<CinemachineConfiner2D>(
                      FindObjectsInactive.Include))
         {
             if (confiner.m_BoundingShape2D == boundingShape)
                 confiner.InvalidateCache();
         }
+    }
+
+    private void AddWall(Vector2 center, Vector2 size)
+    {
+        BoxCollider2D wall = gameObject.AddComponent<BoxCollider2D>();
+        wall.offset = center;
+        wall.size = size;
+        wall.isTrigger = false;
+        wall.compositeOperation = Collider2D.CompositeOperation.None;
     }
 
     private static bool HasArea(Bounds bounds)
