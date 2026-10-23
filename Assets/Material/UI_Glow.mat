@@ -42,7 +42,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorMask: 15
-    - _HDR_Intensity: 2
+    - _HDR_Intensity: 3.5
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0

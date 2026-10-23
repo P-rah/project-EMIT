@@ -29,6 +29,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private float timeToSpeedUp = 1f;
 
     public bool IsPaused { get; private set;}
+    public event System.Action Paused;
     private float storedTimeScale = 0f; // 일시정지 시 저장해두는 직전 프레임의 TimeScale
 
     private float targetTimeScale = 1f;
@@ -75,6 +76,7 @@ public class TimeManager : MonoBehaviour
         storedTimeScale = Time.timeScale;
         Time.timeScale = 0f;
         IsPaused = true;
+        Paused?.Invoke();
     }
 
     public void Resume()

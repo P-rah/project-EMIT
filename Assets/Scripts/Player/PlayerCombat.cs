@@ -81,7 +81,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void CheckInputs()
     {
-        if (checkCancelSweep)
+        if (!input.UsingInputBuffer && checkCancelSweep)
         {
             if (input.DashInput)
             {
@@ -137,6 +137,22 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    // 기존 플래그 기반 캔슬 경로는 유지하고, 버퍼 경로는 대시 시작 직전에만 호출한다.
+    public bool TryCancelSweepForBufferedDash()
+    {
+        if (!IsAttackingSweep || !checkCancelSweep || !StartCancelSweep) return false;
+
+        StartCancelSweep = false;
+        TriggerCancelSweep = false;
+        triggerContinuousSweep = false;
+        checkContinuousSweep = false;
+        checkCancelSweep = false;
+        IsAttackingSweep = false;
+        playerMovement.flippable = true;
+        animation.CancelAttackSweep();
+        return true;
+    }
+
     public void PlayComboEffect(int comboIndex)
     {
         if (comboIndex < 0 || comboIndex >= sweepAttackHitbox.Length) return;
@@ -180,6 +196,11 @@ public class PlayerCombat : MonoBehaviour
     //애니메이션이 어떤 경우든 종료되면 실행
     public void AttackSweepReset()
     {
+        if (input.UsingInputBuffer)
+        {
+            StartCancelSweep = false;
+            TriggerCancelSweep = false;
+        }
         checkContinuousSweep = false;
         checkCancelSweep = false;
         canAttack = true;

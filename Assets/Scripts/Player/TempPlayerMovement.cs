@@ -39,6 +39,7 @@ public class TempPlayerMovement : MonoBehaviour
     [SerializeField] private bool canDash = true;
     [SerializeField] private bool isDashing;
     public bool IsDashing => isDashing;
+    public bool CanDash => canDash;
 
     private Vector2 facingDir = Vector2.right;
     public bool flippable = true;
@@ -51,6 +52,7 @@ public class TempPlayerMovement : MonoBehaviour
 
     private PlayerState state;
     private PlayerInputHandler input;
+    private PlayerCombat combat;
     private DashEffectController dashEffectController;
     private PlayerDropDownPlatform dropDownPlatform;
     private PlayerUIController playerUIController;
@@ -62,6 +64,7 @@ public class TempPlayerMovement : MonoBehaviour
     {
         rb = Player.Instance.Rb;
         input = GetComponent<PlayerInputHandler>();
+        combat = GetComponent<PlayerCombat>();
         playerBodyCollider = GetComponent<CapsuleCollider2D>();
         dropDownPlatform = GetComponent<PlayerDropDownPlatform>();
         state = Player.State;
@@ -84,7 +87,7 @@ public class TempPlayerMovement : MonoBehaviour
         {
             return;
         }
-        else if (!state.IsAttackingGrab && !state.IsAttackingSweep)
+        else if (!input.UsingInputBuffer && !state.IsAttackingGrab && !state.IsAttackingSweep)
         {
             HandleInputs();
         }
@@ -132,7 +135,13 @@ public class TempPlayerMovement : MonoBehaviour
             return;
         }
 
-        if (ShouldJump(groundedThisFrame))
+        if (input.UsingInputBuffer)
+        {
+            // 대시 우선. 실행할 수 없는 대시는 점프의 실행을 막지 않는다.
+            if (!input.GameplayInputBlocked && !input.Buffer.TryExecute(Command.Dash) &&
+                input.Buffer.TryExecute(Command.Jump)) return;
+        }
+        else if (ShouldJump(groundedThisFrame))
         {
             StartJump();
             return;
@@ -176,7 +185,7 @@ public class TempPlayerMovement : MonoBehaviour
         Vector2 groundTangent = GetRightFacingTangent(groundNormal);
 
         float movementSpeed = isDashing ? dashSpeed : moveSpeed;
-        if (state.IsAttackingGrab || state.IsAttackingSweep)
+        if (IsAttacking)
         {
             if (triggerMoveWhileAttack)
             {
@@ -207,7 +216,7 @@ public class TempPlayerMovement : MonoBehaviour
         }
 
         float movementSpeed = isDashing ? dashSpeed : moveSpeed;
-        if (state.IsAttackingGrab || state.IsAttackingSweep)
+        if (IsAttacking)
         {
             if (triggerMoveWhileAttack) movementSpeed = moveSpeedWhileAttack;
             else movementSpeed = baseMoveSpeedWhileAttack;
@@ -229,6 +238,26 @@ public class TempPlayerMovement : MonoBehaviour
 #endregion
 
 #region 점프
+    private bool IsAttacking => input.UsingInputBuffer && combat != null
+        ? combat.IsAttackingGrab || combat.IsAttackingSweep
+        : state.IsAttackingGrab || state.IsAttackingSweep;
+
+    public void ClearPendingJumpInput()
+    {
+        jumpRequested = false;
+    }
+
+    // Grounded()가 갱신된 FixedUpdate에서 버퍼 명령이 호출한다.
+    public bool TryBufferedJump()
+    {
+        if (!isActiveAndEnabled || input.GameplayInputBlocked || !IsGrounded ||
+            isJumpProtected || isDashing || IsAttacking) return false;
+
+        StartJump();
+        IsGrounded = false;
+        return true;
+    }
+
     private void ExecuteJump()
     {   
         jumpRequested = true;
@@ -268,6 +297,20 @@ public class TempPlayerMovement : MonoBehaviour
 #endregion
 
 #region 대시
+    public bool TryBufferedDash()
+    {
+        if (!isActiveAndEnabled || input.GameplayInputBlocked || !canDash || isDashing)
+            return false;
+        if (combat != null && combat.IsAttackingGrab) return false;
+
+        bool cancelSweep = combat != null && combat.IsAttackingSweep;
+        if (cancelSweep && !combat.TryCancelSweepForBufferedDash()) return false;
+
+        ExecuteDash();
+        if (cancelSweep) Player.Animation.StartBufferedDash();
+        return true;
+    }
+
     public void ExecuteDash()
     {
         if (canDash)

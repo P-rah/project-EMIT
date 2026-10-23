@@ -6,11 +6,50 @@ using UnityEngine.InputSystem;
  */
 public class PlayerInputHandler : MonoBehaviour
 {
-    private EmitManager emitManager;
 
     private TutorialActionType? allowedAction = null;
 
     public event Action<TutorialActionType> OnActionPerformed;
+
+    [Header("Optional Jump / Dash Buffer")]
+    [SerializeField] private InputBuffer inputBuffer;
+    [SerializeField] private bool useInputBuffer = true;
+
+    private IBufferedCommand jumpCommand;
+    private IBufferedCommand dashCommand;
+    private PlayerInput playerInput;
+    private PlayerState playerState;
+
+    public InputBuffer Buffer => inputBuffer;
+    public bool UsingInputBuffer => useInputBuffer && inputBuffer != null && inputBuffer.isActiveAndEnabled;
+    public bool GameplayInputBlocked => !isActiveAndEnabled ||
+        (playerInput != null && !playerInput.inputIsActive) ||
+        (playerState != null && playerState.IsDead) ||
+        (TimeManager.Instance != null && TimeManager.Instance.IsPaused) || Time.timeScale <= 0f;
+
+    private void Awake()
+    {
+        playerInput = GetComponent<PlayerInput>();
+        playerState = GetComponent<PlayerState>();
+    }
+
+    private void Update()
+    {
+        if (UsingInputBuffer && GameplayInputBlocked) ResetAllInputs();
+    }
+
+    private void OnDisable()
+    {
+        ResetAllInputs();
+    }
+
+    public void SetInputBufferEnabled(bool enabled)
+    {
+        Vector2 heldMove = MoveInput;
+        ResetAllInputs();
+        useInputBuffer = enabled;
+        MoveInput = heldMove;
+    }
 
     /*
         ===============================================
@@ -25,16 +64,17 @@ public class PlayerInputHandler : MonoBehaviour
     public bool EmitInput { get; private set; }
     public bool AttackSweepInput { get; private set; }
     public bool AttackGrabInput { get; private set; }
+
     /*
         ===============================================
         LAYER 2: Send Messages가 인식할 Input을 받아오는 함수들
+
+        FIX: 외부에서 Flag를 바로 이용하는 것이 아니라,
+        
+        PlayerInputHandler는 커맨드를 생성해서 Buffer에 등록.
+
         ===============================================
     */
-
-    private void Start()
-    {
-        emitManager = EmitManager.Instance;
-    }
 
     public void OnMove(InputValue value)
     {
@@ -52,10 +92,16 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnJump(InputValue value)
     {
         if (!IsAllowed(TutorialActionType.Jump)) return;
+        if (UsingInputBuffer && GameplayInputBlocked) return;
 
         if (value.isPressed)
         {
-            JumpInput = true;
+            if (UsingInputBuffer)
+            {
+                jumpCommand ??= new BufferedJumpCommand(GetComponent<TempPlayerMovement>());
+                inputBuffer.Register(Command.Jump, jumpCommand);
+            }
+            else JumpInput = true;
             OnActionPerformed?.Invoke(TutorialActionType.Jump);
         }
     }
@@ -74,10 +120,16 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnDash(InputValue value)
     {
         if (!IsAllowed(TutorialActionType.Dash)) return;
+        if (UsingInputBuffer && GameplayInputBlocked) return;
 
         if (value.isPressed)
         {
-            DashInput = true;
+            if (UsingInputBuffer)
+            {
+                dashCommand ??= new BufferedDashCommand(GetComponent<TempPlayerMovement>());
+                inputBuffer.Register(Command.Dash, dashCommand);
+            }
+            else DashInput = true;
             OnActionPerformed?.Invoke(TutorialActionType.Dash);
         }
     }
@@ -88,7 +140,7 @@ public class PlayerInputHandler : MonoBehaviour
 
         if (value.isPressed)
         {
-            if (emitManager.isEmitting) EventManager.TriggerEvent("OnEmitEnd");
+            if (EmitManager.Instance.isEmitting) EventManager.TriggerEvent("OnEmitEnd");
             else EventManager.TriggerEvent("OnEmitPressed");
         }
     }
@@ -187,8 +239,10 @@ public class PlayerInputHandler : MonoBehaviour
         return allowedAction.Value == action;
     }
 
-    private void ResetAllInputs()
+    public void ResetAllInputs()
     {
+        if (inputBuffer != null) inputBuffer.Clear();
+        GetComponent<TempPlayerMovement>()?.ClearPendingJumpInput();
         MoveInput = Vector2.zero;
         JumpInput = false;
         DownInput = false;

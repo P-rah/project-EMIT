@@ -80,4 +80,14 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetInteger("sweepCombo", 0);
 
     }
+
+    public void StartBufferedDash()
+    {
+        animator.ResetTrigger("isAttack");
+        animator.SetInteger("sweepCombo", 0);
+        animator.SetBool("isDash", true);
+        // 기존 Controller에는 공격 -> 대시 전이가 없어 버퍼 캔슬 경로에서만 명시적으로 전환한다.
+        // 공격 상태의 OnStateExit는 기존 AttackStateMonitor가 정리한다.
+        animator.Play("Base Layer.Deva_Dash", 0, 0f);
+    }
 }

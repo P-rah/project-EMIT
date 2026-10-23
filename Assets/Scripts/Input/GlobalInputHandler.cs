@@ -44,6 +44,7 @@ public class GlobalInputHandler : MonoBehaviour
             }
             else
             {
+                playerInput.GetComponent<PlayerInputHandler>()?.ResetAllInputs();
                 if (playerInput.inputIsActive) playerInput.DeactivateInput();
             }
         }
