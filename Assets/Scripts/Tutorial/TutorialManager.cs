@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Localization.Components;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -10,17 +11,20 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private PlayerInputHandler playerInput;
     [SerializeField] private TextMeshProUGUI guideText;
 
-    // 외부 매니저 및 상태 변수
+    [Header("Localization 설정")]
+    [SerializeField] private string tableName = "Tutorial Text Table";
+
     private TimeManager timeManager;
     private LightManager lightManager;
     private TutorialBase currentStep;
 
+    private LocalizeStringEvent localizeStringEvent;
+
     private bool isTutorialActive = false;
     private bool isPendingDelay = false;
-    private bool canComplete = false; // 최소 대기 시간 충족 여부
+    private bool canComplete = false;
     private int currentTutorialOrder = 1;
 
-    // 코루틴 핸들
     private Coroutine startDelayCoroutine;
     private Coroutine unlockInputCoroutine;
 
@@ -37,6 +41,19 @@ public class TutorialManager : MonoBehaviour
         }
 
         currentTutorialOrder = 1;
+
+        if (guideText != null)
+        {
+            if (!guideText.TryGetComponent(out localizeStringEvent))
+            {
+                localizeStringEvent = guideText.gameObject.AddComponent<LocalizeStringEvent>();
+            }
+
+            localizeStringEvent.OnUpdateString.AddListener((translatedText) =>
+            {
+                guideText.text = translatedText;
+            });
+        }
     }
 
     private void Start()
@@ -67,18 +84,12 @@ public class TutorialManager : MonoBehaviour
     // 1. 순서 검사 및 요청 처리
     // ========================================================================
 
-    /// <summary>
-    /// 지정한 튜토리얼이 지금 실행될 차례인지 검사
-    /// </summary>
     public bool CanStartTutorial(TutorialBase step)
     {
         if (step == null || isTutorialActive || isPendingDelay) return false;
         return currentTutorialOrder == step.tutorialOrder;
     }
 
-    /// <summary>
-    /// 외부 트리거에서 튜토리얼 실행 요청 시 호출
-    /// </summary>
     public bool TryStartTutorial(TutorialBase step)
     {
         if (!CanStartTutorial(step)) return false;
@@ -115,28 +126,25 @@ public class TutorialManager : MonoBehaviour
     {
         currentStep = step;
         isTutorialActive = true;
-        canComplete = false; // 튜토리얼 시작 시 입력 완료 차단
+        canComplete = false;
 
-        // 입력 제한 설정
         if (playerInput != null && currentStep.requiredAction != TutorialActionType.Any)
         {
             playerInput.SetAllowedAction(currentStep.requiredAction);
         }
 
-        // 가이드 텍스트 출력
-        if (guideText != null)
+        if (localizeStringEvent != null && !string.IsNullOrEmpty(currentStep.messageKey))
         {
-            guideText.text = currentStep.messageKey;
+            localizeStringEvent.StringReference.SetReference(tableName, currentStep.messageKey);
+            localizeStringEvent.RefreshString();
         }
 
-        // Time / Light 매니저 연동
         if (currentStep.freezeTime)
         {
             if (timeManager != null) timeManager.Pause();
             if (lightManager != null) lightManager.SetLightInstantly(0.1f);
         }
 
-        // minDisplayDuration 대기 코루틴 가동
         if (unlockInputCoroutine != null)
         {
             StopCoroutine(unlockInputCoroutine);
@@ -148,13 +156,12 @@ public class TutorialManager : MonoBehaviour
         }
         else
         {
-            canComplete = true; // 대기 시간이 0 이하라면 즉시 완료 가능
+            canComplete = true;
         }
     }
 
     private IEnumerator UnlockInputRoutine(float duration)
     {
-        // 시간을 멈추는 freezeTime 옵션이 있을 수 있으므로 Realtime 사용
         yield return new WaitForSecondsRealtime(duration);
         canComplete = true;
         unlockInputCoroutine = null;
@@ -166,10 +173,7 @@ public class TutorialManager : MonoBehaviour
 
     private void HandlePlayerAction(TutorialActionType action)
     {
-        // 아직 대기 시간(minDisplayDuration)이 안 지났으면 완료 불가
         if (!isTutorialActive || currentStep == null || !canComplete) return;
-
-        Debug.Log("이거 호출됨");
 
         if (currentStep.requiredAction == action || currentStep.requiredAction == TutorialActionType.Any)
         {
@@ -191,24 +195,26 @@ public class TutorialManager : MonoBehaviour
 
         if (guideText != null)
         {
-            guideText.text = null;
+            guideText.text = string.Empty;
         }
 
-        // Time / Light 매니저 복원
+        if (localizeStringEvent != null)
+        {
+            localizeStringEvent.StringReference.Clear();
+        }
+
         if (currentStep != null && currentStep.freezeTime)
         {
             if (timeManager != null) timeManager.Resume();
             if (lightManager != null) lightManager.SetLightInstantly(1f);
         }
 
-        // 진행 상태 갱신
         isTutorialActive = false;
         isPendingDelay = false;
         canComplete = false;
         currentStep = null;
         currentTutorialOrder++;
 
-        // 실행 중인 코루틴 정리
         if (startDelayCoroutine != null)
         {
             StopCoroutine(startDelayCoroutine);

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f265418081df4a34088b24bc81d4430e, type: 3}
   m_Name: TUT11 1
   m_EditorClassIdentifier: Assembly-CSharp::TutorialBase
-  tutorialID: TUT_Attack_08
+  tutorialID: Tut1_13
   tutorialOrder: 13
-  messageKey: "\uC801\uC744 \uC55E\uC73C\uB85C \uB0A0\uB824\uBCF4\uC138\uC694."
+  messageKey: Tut1_13
   requiredAction: 3
   freezeTime: 1
   startDelay: 0

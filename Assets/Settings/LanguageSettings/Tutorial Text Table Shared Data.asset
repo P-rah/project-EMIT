@@ -1,0 +1,128 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Tutorial Text Table Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: Tutorial Text Table
+  m_TableCollectionNameGuidString: afd94a66f9ff47641b45ad78e1947c8e
+  m_Entries:
+  - m_Id: 75508572160
+    m_Key: Tut1_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 378702225408
+    m_Key: Tut1_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 390190424064
+    m_Key: Tut1_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 448612884480
+    m_Key: Tut1_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 450739396608
+    m_Key: Tut1_5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 453071429632
+    m_Key: Tut1_6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 540984041472
+    m_Key: Tut1_7
+    m_Metadata:
+      m_Items: []
+  - m_Id: 541554466816
+    m_Key: Tut1_8
+    m_Metadata:
+      m_Items: []
+  - m_Id: 542531739648
+    m_Key: Tut1_9
+    m_Metadata:
+      m_Items: []
+  - m_Id: 543076999168
+    m_Key: Tut1_10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 543538372608
+    m_Key: Tut1_11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 544050077696
+    m_Key: Tut1_12
+    m_Metadata:
+      m_Items: []
+  - m_Id: 544591142912
+    m_Key: Tut1_13
+    m_Metadata:
+      m_Items: []
+  - m_Id: 545090265088
+    m_Key: Tut1_14
+    m_Metadata:
+      m_Items: []
+  - m_Id: 780898230272
+    m_Key: Tut1_15
+    m_Metadata:
+      m_Items: []
+  - m_Id: 781409935360
+    m_Key: Tut1_16
+    m_Metadata:
+      m_Items: []
+  - m_Id: 865426038784
+    m_Key: Tut1_17
+    m_Metadata:
+      m_Items: []
+  - m_Id: 866373951488
+    m_Key: Tut1_18
+    m_Metadata:
+      m_Items: []
+  - m_Id: 912498712576
+    m_Key: Tut2_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 913014611968
+    m_Key: Tut2_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 913505345536
+    m_Key: Tut2_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 965246279680
+    m_Key: Tut2_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 965737013248
+    m_Key: Tut2_5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1021684834304
+    m_Key: Tut2_6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1042287255552
+    m_Key: Tut2_7
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 5863931335326302503
+  references:
+    version: 2
+    RefIds:
+    - rid: 5863931335326302503
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1792745282739

@@ -1,0 +1,134 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Tutorial Text Table_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: afd94a66f9ff47641b45ad78e1947c8e, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 75508572160
+    m_Localized: Press A or D to move.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 378702225408
+    m_Localized: Press Space to jump.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 390190424064
+    m_Localized: Left-Click to Attack.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 448612884480
+    m_Localized: 'If you attack in the same direction
+
+      The ''Strike'' stacks
+      up.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 450739396608
+    m_Localized: 'Reached maximum stack.
+
+      Move behind the enemy.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 453071429632
+    m_Localized: "Attack from behind to consume all stacks \nand deal bonus damage
+      based on stacks."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 540984041472
+    m_Localized: Press Shift to dash.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 541554466816
+    m_Localized: Right-Click to pull enemies in front of you.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 542531739648
+    m_Localized: "Attack a pulled enemy to knock them back \nin your facing direction."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 543076999168
+    m_Localized: Move close to the enemy.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 543538372608
+    m_Localized: Keep attacking the enemy.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 544050077696
+    m_Localized: Stacks maxed out. Pull the enemy in.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 544591142912
+    m_Localized: Launched the enemy forward.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 545090265088
+    m_Localized: 'Enemies hit by a launched target
+
+      inherit their Strike stacks.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 780898230272
+    m_Localized: Quickly move behind and attack the enemy.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 781409935360
+    m_Localized: Press S to drop through platforms.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 865426038784
+    m_Localized: Boxes in the map gain more Strike stacks.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 866373951488
+    m_Localized: Launch boxes to build the enemy's Strike stacks much faster.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 912498712576
+    m_Localized: Attack enemies to build Strike stacks.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 913014611968
+    m_Localized: 'Press E to rewind time for everything around you
+
+      except
+      yourself.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 913505345536
+    m_Localized: You can move freely, but enemy time reverses.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 965246279680
+    m_Localized: "Enemy Strike stacks also reverse \nand won't decay from your attacks."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 965737013248
+    m_Localized: During rewind, land multiple hits to deal Strike Damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1021684834304
+    m_Localized: Attack enemies to fill the Rewind Gauge (top-left)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1042287255552
+    m_Localized: Defeat all enemies in the map to proceed.
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

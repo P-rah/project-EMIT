@@ -100,7 +100,7 @@ Material:
     - _NoiseScale: 10.6
     - _NoiseSpeed: 0.062
     - _NoiseStrength: 0.05
-    - _OutlineThicc: 0.003
+    - _OutlineThicc: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ShaderRad: 0

@@ -124,8 +124,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeManager
   normalTimeScale: 1
-  slowTimeScale: 0.3
-  timeToSlowDown: 0.1
+  slowTimeScale: 0.1
+  timeToSlowDown: 0
   timeToSpeedUp: 0.1
 --- !u!1 &4593370772509752370
 GameObject:
@@ -173,8 +173,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EffectManager
   enemyHitEffectPrefab: {fileID: 5330935576519871132, guid: 190f713c249f645439e5e69cb7edae70, type: 3}
   effectPoolSize: 10
-  deathEffectPrefab: {fileID: 6643081525611309640, guid: 19d5b793557818548a4aabe0a2b3a6f3, type: 3}
-  deathPoolSize: 5
+  emitGhostPrefab: {fileID: 0}
+  emitGhostPoolSize: 100
 --- !u!1 &8604238472692047828
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,13 +219,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9ef31c5db6db6048a0a248b5764a0a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EmitManager
-  emitPreparationTime: 1
+  emitPreparationTime: 0.1
   emitDurationTime: 1
+  emitCoolTime: 0
   emitBufferFrames: 0
   emittedFrames: 0
   isEmitting: 0
   isEmittable: 1
-  emitStartSound: {fileID: 0}
+  isEmitCanRecovery: 1
+  emitStartSound1: {fileID: 0}
+  emitStartSound2: {fileID: 0}
   emitEndSound: {fileID: 0}
   emitClockSound1: {fileID: 0}
   emitClockSound2: {fileID: 0}

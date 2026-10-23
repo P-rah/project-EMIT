@@ -699,9 +699,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeManager
   normalTimeScale: 1
-  slowTimeScale: 0
-  timeToSlowDown: 1
-  timeToSpeedUp: 1
+  slowTimeScale: 0.1
+  timeToSlowDown: 0
+  timeToSpeedUp: 0.8
 --- !u!1001 &2201020870025603276
 PrefabInstance:
   m_ObjectHideFlags: 0

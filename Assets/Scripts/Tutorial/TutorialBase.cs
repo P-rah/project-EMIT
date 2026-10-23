@@ -23,9 +23,8 @@ public class TutorialBase : ScriptableObject
     public string tutorialID;
     public int tutorialOrder;
 
-    //[Header("다국어 키")]
-    //public string messageKey;
-    [TextArea] public string messageKey;
+    [Header("다국어 키")]
+    public string messageKey;
 
     public TutorialActionType requiredAction;
     public bool freezeTime = true;

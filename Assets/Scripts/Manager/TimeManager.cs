@@ -22,10 +22,10 @@ public class TimeManager : MonoBehaviour
 
     [Header("시간 설정")]
     [SerializeField] private float normalTimeScale = 1f;
-    [SerializeField] private float slowTimeScale = 0f;
+    [SerializeField] private float slowTimeScale = 0.1f;
 
     [Header("전환 시간")]
-    [SerializeField] private float timeToSlowDown = 1f;
+    [SerializeField] private float timeToSlowDown = 0f;
     [SerializeField] private float timeToSpeedUp = 1f;
 
     public bool IsPaused { get; private set;}

@@ -11318,13 +11318,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EffectManager
   enemyHitEffectPrefab: {fileID: 5330935576519871132, guid: 190f713c249f645439e5e69cb7edae70, type: 3}
   effectPoolSize: 10
-  poolItems:
-  - type: 0
-    prefab: {fileID: 6643081525611309640, guid: 19d5b793557818548a4aabe0a2b3a6f3, type: 3}
-    initialSize: 5
-  - type: 1
-    prefab: {fileID: 6643081525611309640, guid: 6608a5413683d7849a99546ddd649f74, type: 3}
-    initialSize: 5
   emitGhostPrefab: {fileID: 5116131166044337367, guid: 383e2d52a11b53e4f9d7330a425f568e, type: 3}
   emitGhostPoolSize: 100
 --- !u!4 &1707551242
@@ -11441,7 +11434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneStartSetting
   gameState: 0
   thisSceneBgm: {fileID: 8300000, guid: 135897a0e99fae243b2e995d390f6cb6, type: 3}
-  noBGM: 0
+  noBGM: 1
   revserse: 0
 --- !u!4 &1761408770
 Transform:
@@ -12005,11 +11998,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3286993156168076105, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.658
+      value: -5.09
       objectReference: {fileID: 0}
     - target: {fileID: 3286993156168076105, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.024
+      value: -2.02
       objectReference: {fileID: 0}
     - target: {fileID: 3286993156168076105, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12163,11 +12156,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2267084427359753174, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10.01
+      value: 12.43
       objectReference: {fileID: 0}
     - target: {fileID: 2267084427359753174, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44
+      value: -0.33
       objectReference: {fileID: 0}
     - target: {fileID: 2267084427359753174, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: m_LocalPosition.z

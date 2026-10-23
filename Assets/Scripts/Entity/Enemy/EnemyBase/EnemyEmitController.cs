@@ -74,7 +74,6 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
     public virtual void BeginEmit()
     {
         spriteRenderer.material.SetFloat("_OutlineThick", 1f);
-        emitableTarget.SetFacingDirection(Vector2.right);
         emitableTarget.RootMovement();
         if (_animator != null) _animator.enabled = false;
 
@@ -122,7 +121,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
             _rb.MoveRotation(frame.rotation);
             emitableTarget.SetPower(frame.power);
             spriteRenderer.sprite = frame.sprite;
-            spriteRenderer.flipX = Direction2D.IsOpposite(frame.facingDir, Vector2.right);
+            emitableTarget.SetFacingDirection(frame.facingDir);
         }
         else return;
 
