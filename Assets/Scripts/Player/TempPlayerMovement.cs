@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using EMIT.Utilities;
 
 public class TempPlayerMovement : MonoBehaviour
@@ -20,11 +21,15 @@ public class TempPlayerMovement : MonoBehaviour
     [SerializeField] private bool isJumpProtected;
     [SerializeField] private bool jumpRequested;
     [SerializeField] private float initialGravityScale;
+    private float jumpProtectionRemaining;
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private Transform groundCheckPos;
+    // 기존 프리팹의 참조를 보존한다. 접지는 몸체 캡슐의 접촉/캐스트로 판정한다.
+    [SerializeField, HideInInspector] private Transform groundCheckPos;
+    [Tooltip("접지 중 지면과의 작은 간격을 보정할 최대 캐스트 거리")]
     [SerializeField] private float groundCheckRayLength = 0.3f;
+    [InspectorName("Check Grounded")]
     [SerializeField] private bool checkGroundedByRay = true;
     public bool IsGrounded { get; private set; }
 
@@ -46,7 +51,13 @@ public class TempPlayerMovement : MonoBehaviour
 
     private Rigidbody2D rb;
     private CapsuleCollider2D playerBodyCollider;
-    private RaycastHit2D groundHit;
+    private const float MaxGroundAngle = 80f;
+    private readonly List<ContactPoint2D> groundContacts = new();
+    private readonly List<RaycastHit2D> groundCastHits = new();
+    private ContactFilter2D groundFilter;
+    private Collider2D groundCollider;
+    private Vector2 groundNormal = Vector2.up;
+    private float groundSnapDistance;
     private MovingPlatform ride;
     private Vector2 rideDelta;
 
@@ -72,6 +83,8 @@ public class TempPlayerMovement : MonoBehaviour
         playerUIController = Player.UIController;
 
         initialGravityScale = rb.gravityScale;
+        groundFilter = new ContactFilter2D { useTriggers = false };
+        groundFilter.SetLayerMask(groundLayer);
 
         SetSlideMovement();
     }
@@ -124,7 +137,21 @@ public class TempPlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         rideDelta = Vector2.zero;
+        jumpProtectionRemaining = Mathf.Max(0f, jumpProtectionRemaining - Time.fixedDeltaTime);
+
+        // 충돌 필터를 먼저 갱신해야 같은 물리 프레임에 플랫폼 지지가 해제된다.
+        if (dropDownPlatform != null && dropDownPlatform.isActiveAndEnabled &&
+            dropDownPlatform.PreparePhysicsStep(groundCollider))
+        {
+            ClearGround();
+            isJumpProtected = false;
+            jumpProtectionRemaining = 0f;
+            SetGravityScale(initialGravityScale);
+            rb.linearVelocityY = Mathf.Min(rb.linearVelocityY, -dropDownPlatform.DropSpeed);
+        }
+
         bool groundedThisFrame = Grounded();
+        if (groundedThisFrame) isJumpProtected = false;
 
         if (state.IsDead)
         {
@@ -152,20 +179,17 @@ public class TempPlayerMovement : MonoBehaviour
             rideDelta = ride.GetDeltaPositionAndMove();
         }
 
-        if (isJumpProtected ||
-            (dropDownPlatform != null && dropDownPlatform.HasStandingPlatform))
-        {
-            UseLinearVelocityMovement();
-            return;
-        }
-
-        if (groundedThisFrame)
+        // One-way 접촉은 PlatformEffector2D가 처리하도록 물리 속도로 이동한다.
+        bool canUseSlide = groundedThisFrame && !isJumpProtected &&
+            !PlayerDropDownPlatform.IsOneWayPlatform(groundCollider) &&
+            (slideMovementLayer.value & (1 << groundCollider.gameObject.layer)) != 0;
+        if (canUseSlide)
         {
             UseSlideMovement();
         }
         else
         {
-            UseLinearVelocityMovement();
+            UseLinearVelocityMovement(groundedThisFrame && !isJumpProtected);
         }
     }
 #endregion
@@ -175,27 +199,9 @@ public class TempPlayerMovement : MonoBehaviour
     {
         SetGravityScale(0f);
 
-        float horizontalInput = input.MoveInput.x;
-        if (Mathf.Abs(horizontalInput) < 0.01f)
-        {
-            horizontalInput = 0f;
-        }
-
-        Vector2 groundNormal = GetGroundNormal();
         Vector2 groundTangent = GetRightFacingTangent(groundNormal);
-
-        float movementSpeed = isDashing ? dashSpeed : moveSpeed;
-        if (IsAttacking)
-        {
-            if (triggerMoveWhileAttack)
-            {
-                movementSpeed = moveSpeedWhileAttack;
-            }
-            else movementSpeed = baseMoveSpeedWhileAttack;
-        }
-
-        Vector2 slideVelocity = isDashing ? 
-            facingDir * movementSpeed * groundTangent : horizontalInput * movementSpeed * groundTangent;
+        Vector2 slideVelocity = groundTangent * GetMovementDirection() * GetMovementSpeed();
+        slideVelocity += Vector2.down * (groundSnapDistance / Time.fixedDeltaTime);
 
         // 현재 바닥에서 자체 이동을 계산한 뒤, 플랫폼 이동량과 합쳐 한 번만 적용한다.
         var result = rb.Slide(slideVelocity, Time.fixedDeltaTime, slideMovement);
@@ -204,37 +210,40 @@ public class TempPlayerMovement : MonoBehaviour
 #endregion
 
 #region 공중/플랫폼
-    private void UseLinearVelocityMovement()
+    private void UseLinearVelocityMovement(bool grounded)
     {
-        if (isDashing)
+        float speed = GetMovementDirection() * GetMovementSpeed();
+        if (grounded)
         {
+            // 지지면 접선으로 이동하고, 정지 시에는 중력에 의해 미끄러지지 않는다.
             SetGravityScale(0f);
+            rb.linearVelocity = GetRightFacingTangent(groundNormal) * speed
+                + (rideDelta + Vector2.down * groundSnapDistance) / Time.fixedDeltaTime;
         }
         else
         {
-            SetGravityScale(initialGravityScale);
-        }
-
-        float movementSpeed = isDashing ? dashSpeed : moveSpeed;
-        if (IsAttacking)
-        {
-            if (triggerMoveWhileAttack) movementSpeed = moveSpeedWhileAttack;
-            else movementSpeed = baseMoveSpeedWhileAttack;
-        }
-
-        if (!isJumpProtected && ride != null)
-        {
-            // 단방향 발판에서는 기존 속도 이동을 유지하고 수직 운행도 따라간다.
-            SetGravityScale(0f);
-            rb.linearVelocity = new Vector2(input.MoveInput.x * movementSpeed, 0f)
-                + rideDelta / Time.fixedDeltaTime;
-        }
-        else
-        {
-            rb.linearVelocityX = isDashing ? 
-                facingDir.x * movementSpeed : input.MoveInput.x * movementSpeed;
+            bool horizontalDash = isDashing && !IsDroppingThroughPlatform;
+            SetGravityScale(horizontalDash ? 0f : initialGravityScale);
+            rb.linearVelocity = new Vector2(speed, horizontalDash ? 0f : rb.linearVelocity.y);
         }
     }
+
+    private float GetMovementDirection()
+    {
+        if (isDashing) return facingDir.x;
+        return Mathf.Abs(input.MoveInput.x) < 0.01f ? 0f : input.MoveInput.x;
+    }
+
+    private float GetMovementSpeed()
+    {
+        if (isDashing) return dashSpeed;
+        if (IsAttacking) return triggerMoveWhileAttack ? moveSpeedWhileAttack : baseMoveSpeedWhileAttack;
+        return moveSpeed;
+    }
+
+    private bool IsDroppingThroughPlatform => dropDownPlatform != null &&
+        dropDownPlatform.isActiveAndEnabled &&
+        (dropDownPlatform.IsDropThroughHeld || dropDownPlatform.IsDropping);
 #endregion
 
 #region 점프
@@ -274,25 +283,13 @@ public class TempPlayerMovement : MonoBehaviour
     private void StartJump()
     {
         isJumpProtected = true;
+        jumpProtectionRemaining = jumpProtectionDuration;
+        ClearGround();
 
         SetGravityScale(initialGravityScale);
         rb.linearVelocityY = 0f;
         rb.AddForceY(jumpForce, ForceMode2D.Impulse);
         soundManager.PlaySFX(Player.Instance.jumpSound);
-
-        StartCoroutine(RestoreJump());
-    }
-
-    private IEnumerator RestoreJump()
-    {
-        yield return new WaitForSeconds(jumpProtectionDuration);
-
-        while (!Grounded())
-        {
-            yield return new WaitForFixedUpdate();
-        }
-
-        isJumpProtected = false;
     }
 #endregion
 
@@ -322,7 +319,7 @@ public class TempPlayerMovement : MonoBehaviour
     {
         canDash = false;
         isDashing = true;
-        rb.linearVelocityY = 0f;
+        if (!IsGrounded && !IsDroppingThroughPlatform) rb.linearVelocityY = 0f;
         dashEffectController.StartDashTrail();
         soundManager.PlaySFX(Player.Instance.dashSound);
 
@@ -340,61 +337,79 @@ public class TempPlayerMovement : MonoBehaviour
 #region 지면판정 관련
     private bool Grounded()
     {
-        groundHit = default;
+        bool wasGrounded = IsGrounded;
+        Collider2D previousGround = groundCollider;
+        ClearGround();
+
+        if (!checkGroundedByRay || playerBodyCollider == null || jumpProtectionRemaining > 0f)
+            return false;
+
+        float minGroundNormalY = Mathf.Cos(MaxGroundAngle * Mathf.Deg2Rad);
+        float skin = Physics2D.defaultContactOffset * 2f;
+        playerBodyCollider.GetContacts(groundFilter, groundContacts);
+        foreach (ContactPoint2D contact in groundContacts)
+        {
+            Collider2D surface = contact.collider == playerBodyCollider
+                ? contact.otherCollider : contact.collider;
+            if (!contact.enabled || !CanStandOn(surface) || contact.normal.y < minGroundNormalY ||
+                contact.point.y > playerBodyCollider.bounds.center.y + skin) continue;
+
+            Vector2 surfaceVelocity = surface.attachedRigidbody != null
+                ? surface.attachedRigidbody.GetPointVelocity(contact.point) : Vector2.zero;
+            if (isJumpProtected && Vector2.Dot(rb.linearVelocity - surfaceVelocity, contact.normal) > 0.01f)
+                continue;
+
+            if (!IsGrounded || contact.normal.y > groundNormal.y)
+                SetGround(surface, contact.normal);
+        }
+
+        if (IsGrounded) return true;
+
+        // 새로운 착지는 활성 접촉으로만 인정한다. 캐스트는 기존 지지를 짧게
+        // 이어 주는 데만 사용하여 아래에서 통과 중인 플랫폼에 붙지 않게 한다.
+        if (!wasGrounded || isJumpProtected) return false;
+
+        playerBodyCollider.Cast(Vector2.down, groundFilter, groundCastHits, groundCheckRayLength, true);
+        float closestDistance = float.PositiveInfinity;
+        foreach (RaycastHit2D hit in groundCastHits)
+        {
+            if (!CanStandOn(hit.collider) || hit.distance <= 0f ||
+                hit.normal.y < minGroundNormalY || hit.distance >= closestDistance) continue;
+            if (PlayerDropDownPlatform.IsOneWayPlatform(hit.collider) && hit.collider != previousGround)
+                continue;
+
+            closestDistance = hit.distance;
+            SetGround(hit.collider, hit.normal);
+            groundSnapDistance = Mathf.Max(0f, hit.distance - skin);
+        }
+
+        return IsGrounded;
+    }
+
+    private bool CanStandOn(Collider2D surface)
+    {
+        return surface != null && !surface.isTrigger && surface.attachedRigidbody != rb &&
+            !Physics2D.GetIgnoreLayerCollision(playerBodyCollider.gameObject.layer, surface.gameObject.layer) &&
+            !Physics2D.GetIgnoreCollision(playerBodyCollider, surface);
+    }
+
+    private void SetGround(Collider2D surface, Vector2 normal)
+    {
+        groundCollider = surface;
+        groundNormal = normal.normalized;
+        ride = surface.attachedRigidbody != null
+            ? surface.attachedRigidbody.GetComponent<MovingPlatform>() : null;
+        if (ride != null && !ride.isActiveAndEnabled) ride = null;
+        IsGrounded = true;
+    }
+
+    private void ClearGround()
+    {
+        groundCollider = null;
+        groundNormal = Vector2.up;
+        groundSnapDistance = 0f;
         ride = null;
         IsGrounded = false;
-        if (checkGroundedByRay)
-        {
-            RaycastHit2D[] hits = Physics2D.RaycastAll(
-                groundCheckPos.position,
-                Vector2.down,
-                groundCheckRayLength,
-                groundLayer
-            );
-
-            foreach (RaycastHit2D hit in hits)
-            {
-                if (hit.collider == null || hit.collider.isTrigger ||
-                    hit.rigidbody == rb || hit.normal.y <= 0f)
-                {
-                    continue;
-                }
-
-                bool isIgnoredPlatform = playerBodyCollider != null &&
-                    (Physics2D.GetIgnoreLayerCollision(
-                        playerBodyCollider.gameObject.layer, hit.collider.gameObject.layer) ||
-                    Physics2D.GetIgnoreCollision(
-                        playerBodyCollider,
-                        hit.collider
-                    ));
-
-                if (!isIgnoredPlatform)
-                {
-                    groundHit = hit;
-                    ride = hit.rigidbody != null
-                        ? hit.rigidbody.GetComponent<MovingPlatform>()
-                        : null;
-                    if (ride != null && !ride.isActiveAndEnabled)
-                    {
-                        ride = null;
-                    }
-                    IsGrounded = true;
-                    return true;
-                }
-            }
-            IsGrounded = false;
-            return false;
-        }
-        Debug.Log("접지 떨어짐!");
-        return false;
-    }
-    
-    /// <summary>
-    /// 아래쪽 땅의 각도를 체크함
-    /// </summary>
-    private Vector2 GetGroundNormal()
-    {
-        return groundHit.collider != null ? groundHit.normal : Vector2.up;
     }
 #endregion
 
@@ -450,12 +465,12 @@ public class TempPlayerMovement : MonoBehaviour
         slideMovement = new Rigidbody2D.SlideMovement
         {
             maxIterations = 4,
-            surfaceSlideAngle = 80f,
-            gravitySlipAngle = 80f,
+            surfaceSlideAngle = MaxGroundAngle,
+            gravitySlipAngle = 90f,
 
             surfaceUp = Vector2.up,
-            surfaceAnchor = Vector2.down * 1f,
-            gravity = Vector2.up, // 임시방편임. 나중에 고쳐야 할수도 있음!
+            surfaceAnchor = Vector2.down * groundCheckRayLength,
+            gravity = Vector2.zero, // 접지 속도에 별도의 중력 이동을 더하지 않는다.
 
             selectedCollider = playerBodyCollider,
             useNoMove = true,
