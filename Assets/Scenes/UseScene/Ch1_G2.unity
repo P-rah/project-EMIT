@@ -105146,6 +105146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TutorialManager
   playerInput: {fileID: 323777610405375316}
   guideText: {fileID: 1029700557}
+  tableName: Tutorial Text Table
 --- !u!4 &1722565387
 Transform:
   m_ObjectHideFlags: 0
@@ -105176,7 +105177,7 @@ GameObject:
   - component: {fileID: 1743291257}
   - component: {fileID: 1743291256}
   - component: {fileID: 1743291255}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: PlatformCanPass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
