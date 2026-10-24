@@ -179,6 +179,15 @@ public class TempPlayerMovement : MonoBehaviour
             rideDelta = ride.GetDeltaPositionAndMove();
         }
 
+        if (groundedThisFrame && !isJumpProtected && !HasGroundMovement)
+        {
+            // 정지 중에는 하향 보정과 Slide의 표면 추종이 모서리에서
+            // 미끄러짐을 만들지 않도록, 지지 발판의 이동량만 따라간다.
+            SetGravityScale(0f);
+            rb.linearVelocity = rideDelta / Time.fixedDeltaTime;
+            return;
+        }
+
         // One-way 접촉은 PlatformEffector2D가 처리하도록 물리 속도로 이동한다.
         bool canUseSlide = groundedThisFrame && !isJumpProtected &&
             !PlayerDropDownPlatform.IsOneWayPlatform(groundCollider) &&
@@ -240,6 +249,9 @@ public class TempPlayerMovement : MonoBehaviour
         if (IsAttacking) return triggerMoveWhileAttack ? moveSpeedWhileAttack : baseMoveSpeedWhileAttack;
         return moveSpeed;
     }
+
+    private bool HasGroundMovement =>
+        !Mathf.Approximately(GetMovementDirection() * GetMovementSpeed(), 0f);
 
     private bool IsDroppingThroughPlatform => dropDownPlatform != null &&
         dropDownPlatform.isActiveAndEnabled &&
@@ -369,7 +381,11 @@ public class TempPlayerMovement : MonoBehaviour
         // 이어 주는 데만 사용하여 아래에서 통과 중인 플랫폼에 붙지 않게 한다.
         if (!wasGrounded || isJumpProtected) return false;
 
-        playerBodyCollider.Cast(Vector2.down, groundFilter, groundCastHits, groundCheckRayLength, true);
+        // 정지 시에는 접촉 허용 오차 안의 지지만 유지한다. 이동용 탐색 거리로
+        // 아래쪽 계단까지 접지로 인정하면 하향 보정 없이 공중에 멈출 수 있다.
+        float castDistance = HasGroundMovement
+            ? groundCheckRayLength : Mathf.Min(groundCheckRayLength, skin);
+        playerBodyCollider.Cast(Vector2.down, groundFilter, groundCastHits, castDistance, true);
         float closestDistance = float.PositiveInfinity;
         foreach (RaycastHit2D hit in groundCastHits)
         {
