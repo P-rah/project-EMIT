@@ -51,7 +51,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void AnimEvent_SceneReset()
     {
-        //EventManager.TriggerEvent("StopEmit");
-        //StageManager.Instance.RestartStage();
+        EventManager.TriggerEvent("StopEmit");
+        StageManager.Instance.RestartStage();
     }
 }

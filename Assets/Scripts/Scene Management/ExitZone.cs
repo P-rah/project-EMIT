@@ -10,7 +10,6 @@ public class ExitZone : MonoBehaviour
     private void Awake()
     {
         exitCollider = GetComponent<BoxCollider2D>();
-        exitCollider.isTrigger = false;
     }
 
     private void Start()
