@@ -20,9 +20,9 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
     private SpriteRenderer spriteRenderer;
     private EffectManager effectManager;
 
-    private EmitTrackingEffect currentControllEmitGhost;
-    private float ghostDurationTime = 0.3f;
-    private float ghostUpdateTime = 0.01f;
+    private EmitTrackingEffect currentControlledGhost;
+    private float ghostDurationTime = 0.005f;
+    private float ghostUpdateTime = 0.001f;
     private EmitTrackingEffect[] emitGhosts;
     private Coroutine ghostRoutine;
     private int currentGhostIndex = 0;
@@ -36,7 +36,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
         _rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         spriteRenderer = emitableTarget.GetComponent<SpriteRenderer>();
         _animator = emitableTarget.GetComponent<Animator>();
-        emitGhosts = new EmitTrackingEffect[10];
+        emitGhosts = new EmitTrackingEffect[100];
     } 
     
     private void Start()
@@ -108,7 +108,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
                 effectManager.ReturnEmitGhost(emitGhosts[i]);
             emitGhosts[i] = null;
         }
-        currentControllEmitGhost = null;
+        currentControlledGhost = null;
     }
 
     public virtual void EmitFrame()
@@ -157,22 +157,51 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
     {
         float ghostTimer = 0f;
         int index = 0;
-        currentControllEmitGhost = effectManager.EnableEmitGhost();
-        emitGhosts[index++] = currentControllEmitGhost;
+        currentControlledGhost = effectManager.EnableEmitGhost();
+        emitGhosts[index++] = currentControlledGhost;
+
         for (int i = 0; i < buffer.Count; i++)
         {
             if (ghostTimer >= ghostDurationTime)
             {
-                currentControllEmitGhost.EndMove();
-                currentControllEmitGhost = effectManager.EnableEmitGhost();
-                emitGhosts[index++] = currentControllEmitGhost;
+                currentControlledGhost.EndMove();
+                currentControlledGhost = effectManager.EnableEmitGhost();
+                emitGhosts[index++] = currentControlledGhost;
                 ghostTimer = 0f;
             }
-            KeyframeStatus frame = buffer.Peek(i);
-            currentControllEmitGhost.setGhost(frame.sprite, frame.position, frame.facingDir);
+
+            KeyframeStatus frame = buffer.getFrameAt(i);
+            float ghostAlpha = Mathf.Max((100 - index * 7f) / 255f, 2.55f / 255f);
+            currentControlledGhost.setGhost(frame.sprite, frame.position, frame.facingDir, ghostAlpha);
 
             ghostTimer += ghostUpdateTime;
             yield return TimeManager.Instance.WaitForGameplaySeconds(ghostUpdateTime);
         }
     }
+    /*
+    private IEnumerator StartEmitGhost()
+    {
+        float ghostTimer = 0f;
+        int index = 0;
+        currentControlledGhost = effectManager.EnableEmitGhost();
+        emitGhosts[index++] = currentControlledGhost;
+
+        for (int i = 0; i < buffer.Count; i++)
+        {
+            if (ghostTimer >= ghostDurationTime)
+            {
+                currentControlledGhost.EndMove();
+                currentControlledGhost = effectManager.EnableEmitGhost();
+                emitGhosts[index++] = currentControlledGhost;
+                ghostTimer = 0f;
+            }
+            
+            KeyframeStatus frame = buffer.getFrameAt(i);
+            currentControlledGhost.setGhost(frame.sprite, frame.position, frame.facingDir, ghostAlpha);
+
+            ghostTimer += ghostUpdateTime;
+            yield return TimeManager.Instance.WaitForGameplaySeconds(ghostUpdateTime);
+        }
+    }
+    */
 }

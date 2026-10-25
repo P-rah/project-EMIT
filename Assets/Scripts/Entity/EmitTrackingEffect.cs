@@ -2,27 +2,31 @@ using UnityEngine;
 
 public class EmitTrackingEffect : MonoBehaviour
 {
-    private Transform Transform;
-    private SpriteRenderer Renderer;
+    private SpriteRenderer renderer;
     private bool endMove = false;
 
     private void Awake()
     {
-        Transform = GetComponent<Transform>();
-        Renderer = GetComponent<SpriteRenderer>();
+        renderer = GetComponent<SpriteRenderer>();
     }
 
-    public void setGhost(Sprite sprite , Vector2 position, Vector2 facingDir)
+    // 고스트 위치 확정하기
+    public void setGhost(Sprite sprite , Vector2 position, Vector2 facingDir, float ghostAlpha = 1f)
     {
         endMove = false;
-        Transform.position = position;
-        Renderer.sprite = sprite;
-        Renderer.flipX = facingDir.x > 0 ? false : true;
+        transform.position = position;
+        renderer.sprite = sprite;
+    
+        Color ghostColor = Color.yellow;
+        ghostColor.a = ghostAlpha;
+        renderer.color = ghostColor;
+    
+        renderer.flipX = facingDir.x > 0 ? false : true;
     }
 
-    public Vector2 getPos() { return Transform.position; }
+    public Vector2 getPos() { return transform.position; }
 
-    public Sprite getSpirte() { return Renderer.sprite; }
+    public Sprite getSpirte() { return renderer.sprite; }
 
     public void EndMove() { endMove = true; }
 

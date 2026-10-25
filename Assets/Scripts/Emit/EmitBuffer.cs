@@ -47,7 +47,7 @@ public class EmitBuffer<T>
         return true;
     }
 
-    public T Peek(int index)
+    public T getFrameAt(int index)
     {
         if (index < 0 || index >= _count)
         {
