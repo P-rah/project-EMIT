@@ -11,7 +11,7 @@ public class EmitTrackingEffect : MonoBehaviour
     }
 
     // 고스트 위치 확정하기
-    public void setGhost(Sprite sprite , Vector2 position, Vector2 facingDir, float ghostAlpha)
+    public void setGhost(Sprite sprite , Vector2 position, Vector2 facingDir, float ghostAlpha = 1f)
     {
         endMove = false;
         transform.position = position;

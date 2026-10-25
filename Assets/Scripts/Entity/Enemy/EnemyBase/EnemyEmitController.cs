@@ -21,7 +21,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
     private EffectManager effectManager;
 
     private EmitTrackingEffect currentControlledGhost;
-    private float ghostDurationTime = 0.01f;
+    private float ghostDurationTime = 0.005f;
     private float ghostUpdateTime = 0.001f;
     private EmitTrackingEffect[] emitGhosts;
     private Coroutine ghostRoutine;
@@ -171,7 +171,7 @@ public class EnemyEmitController<T> : MonoBehaviour, IEmit where T : MonoBehavio
             }
 
             KeyframeStatus frame = buffer.getFrameAt(i);
-            float ghostAlpha = Mathf.Max((100 - index * 10f) / 255f, 2.55f / 255f);
+            float ghostAlpha = Mathf.Max((100 - index * 7f) / 255f, 2.55f / 255f);
             currentControlledGhost.setGhost(frame.sprite, frame.position, frame.facingDir, ghostAlpha);
 
             ghostTimer += ghostUpdateTime;
