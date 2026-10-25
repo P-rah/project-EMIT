@@ -40,7 +40,7 @@ public class PlayerUIController : MonoBehaviour
 
     public void UpdateHealthBar()
     {
-        float UIRatio = (float)Player.PlayerHealth.currentPlayerHealth / Player.PlayerHealth.playerHealthMax;
+        float UIRatio = (float)Player.PlayerHealth.currentPlayerHealth / Player.PlayerHealth.maxPlayerHealth;
 
         healthBarImage.fillAmount = UIRatio;
     }
