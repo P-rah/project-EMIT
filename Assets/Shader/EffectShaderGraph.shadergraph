@@ -3045,7 +3045,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
     "m_ObjectId": "2527a4b45a2b4edcaf450f470c5f256d",
     "m_Id": 0,
-    "m_DisplayName": "VinettingColor",
+    "m_DisplayName": "VignettingColor",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_HideConnector": false,
@@ -4685,7 +4685,7 @@
     "m_ObjectId": "54d401ef758749058b43d3df50e9b20f",
     "m_Title": "Black and White Filter",
     "m_Position": {
-        "x": 63.5,
+        "x": 64.0,
         "y": -1293.0
     }
 }
@@ -4986,7 +4986,7 @@
     "m_ObjectId": "5dee1ad2440845e4b3f5fb107c21e357",
     "m_Title": "FullScreenFrame",
     "m_Position": {
-        "x": 1647.5,
+        "x": 1648.0,
         "y": 1605.0
     }
 }
@@ -7850,10 +7850,10 @@
     "promotedFromAssetID": "",
     "promotedFromCategoryName": "",
     "promotedOrdering": -1,
-    "m_Name": "VinettingIntensity",
+    "m_Name": "VignettingIntensity",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "VinettingIntensity",
-    "m_DefaultReferenceName": "_VinettingIntensity",
+    "m_RefNameGeneratedByDisplayName": "VignettingIntensity",
+    "m_DefaultReferenceName": "_VignettingIntensity",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -9301,7 +9301,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "cef6053f83ef4fd8aea30ec431f30bf3",
     "m_Id": 0,
-    "m_DisplayName": "VinettingIntensity",
+    "m_DisplayName": "VignettingIntensity",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_HideConnector": false,
@@ -9324,10 +9324,10 @@
     "promotedFromAssetID": "",
     "promotedFromCategoryName": "",
     "promotedOrdering": -1,
-    "m_Name": "VinettingColor",
+    "m_Name": "VignettingColor",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "VinettingColor",
-    "m_DefaultReferenceName": "_VinettingColor",
+    "m_RefNameGeneratedByDisplayName": "VignettingColor",
+    "m_DefaultReferenceName": "_VignettingColor",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,

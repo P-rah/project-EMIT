@@ -48,6 +48,7 @@ public class PlayerHealth : MonoBehaviour
         if (isInvulnerable) return;
 
         currentPlayerHealth -= 1;
+        EventManager.TriggerEvent("OnPlayerDamaged");
 
         if (currentPlayerHealth <= 0)
         {

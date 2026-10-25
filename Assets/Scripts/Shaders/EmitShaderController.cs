@@ -8,7 +8,7 @@ public class EmitShaderController : MonoBehaviour
         EventManager.StartListening("OnEmitStart", StartEffect);
         EventManager.StartListening("OnEmitAborted", AbortEffect);
         EventManager.StartListening("OnEmitFinished", EndEffect);
-        EventManager.StartListening("OnPlayerHit", startHitVinette);
+        EventManager.StartListening("OnPlayerDamaged", startHitVignette);
         //EventManager.StartListening<int>("OnEmitRecoveryCount", setEmitUI);
     }
     private void OnDisable()
@@ -16,21 +16,20 @@ public class EmitShaderController : MonoBehaviour
         EventManager.StopListening("OnEmitStart", StartEffect);
         EventManager.StopListening("OnEmitAborted", AbortEffect);
         EventManager.StopListening("OnEmitFinished", EndEffect);
-        EventManager.StopListening("OnPlayerHit", startHitVinette);
+        EventManager.StopListening("OnPlayerDamaged", startHitVignette);
         //EventManager.StopListening<float>("OnEmitRecoveryCount", setEmitUI);
     }
 
-    [SerializeField]
-    private float _distortionTime = 0.75f;
+    [SerializeField] private float _distortionTime = 0.75f;
     private Material _material;
     private static int _shaderRad = Shader.PropertyToID("_ShaderRad");
     private static int _startPoint = Shader.PropertyToID("_StartPoint");
     public Transform startPoint;
     private Coroutine emitDistortionAction;
 
-    private static int _vinettingIntensity = Shader.PropertyToID("_VinettingIntensity");
-    private float maxVinetteIntense = 0.2f;
-    private float vinetteTime = 1f;
+    private static int _vignettingIntensity = Shader.PropertyToID("_VignettingIntensity");
+    private float maxVignetteIntense = 0.2f;
+    private float vignetteTime = 1f;
 
     //private static int _emitableAlpha = Shader.PropertyToID("_EmitableAlpha");
 
@@ -89,27 +88,27 @@ public class EmitShaderController : MonoBehaviour
         }
     }
 
-    private void startHitVinette()
+    private void startHitVignette()
     {
-        StartCoroutine(HitVinetteAction());
+        StartCoroutine(HitVignetteAction());
     }
 
-    IEnumerator HitVinetteAction()
+    IEnumerator HitVignetteAction()
     {
         float timer = 0f;
-        _material.SetFloat(_vinettingIntensity, maxVinetteIntense);
+        _material.SetFloat(_vignettingIntensity, maxVignetteIntense);
 
-        while (timer < vinetteTime)
+        while (timer < vignetteTime)
         {
             timer += Time.deltaTime;
 
-            float currentIntensity = Mathf.Lerp(maxVinetteIntense, 0f, timer / vinetteTime);
+            float currentIntensity = Mathf.Lerp(maxVignetteIntense, 0f, timer / vignetteTime);
 
-            _material.SetFloat(_vinettingIntensity, currentIntensity);
+            _material.SetFloat(_vignettingIntensity, currentIntensity);
 
             yield return null;
         }
-        _material.SetFloat(_vinettingIntensity, 0f);
+        _material.SetFloat(_vignettingIntensity, 0f);
     }
 
     //private void setEmitUI(float rate)
