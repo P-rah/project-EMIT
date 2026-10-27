@@ -5686,8 +5686,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b83daf350aef0a4f8eddfb51d72e428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  playerHealthMax: 3
+  maxPlayerHealth: 3
   currentPlayerHealth: 0
+  invulnerableTime: 1
+  isInvulnerable: 0
 --- !u!114 &8113229768929654293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5747,7 +5749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5adc1c76d6fdfd843a382e62f12bea34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TempPlayerMovement
-  moveSpeed: 15
+  moveSpeed: 13
   baseMoveSpeedWhileAttack: 0
   moveSpeedWhileAttack: 15
   moveTimeWhileAttack: 0.1

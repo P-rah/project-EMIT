@@ -6,7 +6,8 @@ using UnityEngine.Pool;
 public enum DeathEffectType
 {
     R1,
-    R2
+    R2,
+    B1
 }
 
 public class EffectManager : MonoBehaviour  

@@ -678,6 +678,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Boss_R1
   myAudioSource: {fileID: 8537339604988419193}
   dragEffect: {fileID: 2254280529328709858}
+  deathFragmentPrefab: {fileID: 880920225105984406, guid: dcf9c8f632067a944add19c7cdf3cd86, type: 3}
   data: {fileID: 11400000, guid: e0d86d9f0753e8d46a0340258d80b4b3, type: 2}
   maxHealth: 0
   baseAttack: 0

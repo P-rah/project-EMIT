@@ -11413,6 +11413,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1761408770}
   - component: {fileID: 1761408769}
+  - component: {fileID: 1761408771}
   m_Layer: 0
   m_Name: SceneStartSetting
   m_TagString: Untagged
@@ -11433,9 +11434,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneStartSetting
   gameState: 0
-  thisSceneBgm: {fileID: 8300000, guid: 135897a0e99fae243b2e995d390f6cb6, type: 3}
-  noBGM: 1
+  thisSceneBgm: {fileID: 8300000, guid: dbdf28ce388e8cc4db5ed71051e97a3c, type: 3}
+  noBGM: 0
   revserse: 0
+  cursorVisible: 0
 --- !u!4 &1761408770
 Transform:
   m_ObjectHideFlags: 0
@@ -11451,6 +11453,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1761408771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761408768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd0aad9534fd29c4c8868a4ec766154d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossClear
+  slowTime: 2
+  delayTime: 5
 --- !u!1 &1807595392
 GameObject:
   m_ObjectHideFlags: 0
@@ -11957,7 +11973,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EmitManager
   emitPreparationTime: 1.5
-  emitDurationTime: 4.5
+  emitDurationTime: 3
   emitCoolTime: 5
   emitBufferFrames: 0
   emittedFrames: 0
@@ -11998,11 +12014,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3286993156168076105, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.09
+      value: -5.69
       objectReference: {fileID: 0}
     - target: {fileID: 3286993156168076105, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.02
+      value: -2.03
       objectReference: {fileID: 0}
     - target: {fileID: 3286993156168076105, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12156,11 +12172,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2267084427359753174, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.43
+      value: 11.91
       objectReference: {fileID: 0}
     - target: {fileID: 2267084427359753174, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.33
+      value: -0.34
       objectReference: {fileID: 0}
     - target: {fileID: 2267084427359753174, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12209,7 +12225,7 @@ PrefabInstance:
     - target: {fileID: 3808333509452986135, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: deathSound
       value: 
-      objectReference: {fileID: 8300000, guid: 6c28ed22dcc349c4cbb90c09b36c98f1, type: 3}
+      objectReference: {fileID: 8300000, guid: 60605c677983a6e4bb4c678c3a455925, type: 3}
     - target: {fileID: 3808333509452986135, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: attackHitSound
       value: 
@@ -12222,6 +12238,10 @@ PrefabInstance:
       propertyPath: ghostHealthBar
       value: 
       objectReference: {fileID: 1058857067}
+    - target: {fileID: 8508038252274918448, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
+      propertyPath: deathEffectType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8537339604988419193, guid: 5aae8889077a8c54d97b945dba973ca6, type: 3}
       propertyPath: MaxDistance
       value: 30

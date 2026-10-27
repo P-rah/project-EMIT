@@ -18,7 +18,5 @@ MonoBehaviour:
   strongKnockbackRate: 4
   knockbackTime: 0.2
   HitRecoveryTime: 0.3
-  powerResetTime: 1.5
+  powerResetTime: 5
   powerStackWeight: 5
-  sweepHitSound: {fileID: 8300000, guid: bd023842f8777b04c9047827cd78db44, type: 3}
-  grabHitSound: {fileID: 8300000, guid: b862d6d4f7fe34a4389becebfef2bbd2, type: 3}

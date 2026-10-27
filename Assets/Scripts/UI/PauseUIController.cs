@@ -40,6 +40,7 @@ public class PauseUIController : MonoBehaviour
         restartButton.onClick.AddListener(SceneControlManager.Instance.ReloadStage);
         settingsButton.onClick.AddListener(SceneControlManager.Instance.LoadSettings);
         toTitleButton.onClick.AddListener(SceneControlManager.Instance.LoadTitle);
+
     }
 
     private void OnDisable()

@@ -28,7 +28,7 @@ public class Boss1StateMachine : MonoBehaviour, IEnemyStateMachine
         IdleState = new Boss1IdleState(this);
         AttackState = new Boss1AttackState(this);
         ChaseState = new EnemyChaseState(this);
-        DeadState = new EnemyDeadState(this, deathEffectType);
+        DeadState = new BossDeadState(this, deathEffectType);
     }
 
     public bool IsCurrentState(object state)

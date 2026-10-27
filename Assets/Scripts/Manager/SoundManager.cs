@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -34,19 +35,22 @@ public class SoundManager : MonoBehaviour
 
     [Header("BGM")]
     [SerializeField] private AudioClip bgmClip;
-    [Range(0f, 1f)] 
+    [Range(0f, 1f)]
     [SerializeField] private float bgmVolume = 1f;
 
     private AudioSource bgmPlayer; // 배경음악 전용 (반복 재생)
 
     [Header("SFX")]
-    [Range(0f, 1f)] 
+    [Range(0f, 1f)]
     [SerializeField] private float sfxVolume = 1f;
-    [Min(1)] 
+    [Min(1)]
     [SerializeField] private int channels = 8;
 
     private AudioSource[] sfxPlayers;
     private int channelIndex;
+
+    // 외부 3D 오디오 소스 구독을 위한 레지스트리
+    private HashSet<AudioSource> registeredSfxSources = new HashSet<AudioSource>();
 
     private void Awake()
     {
@@ -58,6 +62,26 @@ public class SoundManager : MonoBehaviour
         instance = this;
         InitBgmPlayer();
         InitSfxPlayer();
+    }
+
+    // ==========================================
+    // 외부 3D 오디오 소스 구독(Registry) 시스템
+    // ==========================================
+    public void RegisterSfxSource(AudioSource source)
+    {
+        if (source != null && !registeredSfxSources.Contains(source))
+        {
+            source.volume = sfxVolume; // 등록 직후 현재 SFX 볼륨 동기화
+            registeredSfxSources.Add(source);
+        }
+    }
+
+    public void UnregisterSfxSource(AudioSource source)
+    {
+        if (source != null)
+        {
+            registeredSfxSources.Remove(source);
+        }
     }
 
     private void InitBgmPlayer()
@@ -101,7 +125,7 @@ public class SoundManager : MonoBehaviour
         if (bgmPlayer.clip == clip) return;
 
         if (playReverse) StartEmitBGM(); else StopEmitBGM();
-        
+
         bgmPlayer.clip = clip;
         bgmPlayer.loop = true;
         bgmPlayer.Play();
@@ -139,12 +163,23 @@ public class SoundManager : MonoBehaviour
     public void SetSfxVolume(float volume)
     {
         sfxVolume = Mathf.Clamp01(volume);
-        
-        if (sfxPlayers == null) return;
 
-        foreach (AudioSource player in sfxPlayers)
+        if (sfxPlayers != null)
         {
-            player.volume = sfxVolume;
+            foreach (AudioSource player in sfxPlayers)
+            {
+                if (player != null) player.volume = sfxVolume;
+            }
+        }
+
+        // 구독된 외부 3D 오디오 소스들의 볼륨도 함께 일괄 조절
+        registeredSfxSources.RemoveWhere(source => source == null);
+        foreach (AudioSource source in registeredSfxSources)
+        {
+            if (source != null)
+            {
+                source.volume = sfxVolume;
+            }
         }
 
         Debug.Log($"SFX Volume set to {sfxVolume}");

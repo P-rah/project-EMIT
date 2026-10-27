@@ -14,7 +14,8 @@ public class Boss1JumpAttack : Boss1AttackStrategy
     {
         enemy.attackSound = attackSound;
         enemy.attackReadySound = attackReadySound;
-        enemy.myAudioSource.PlayOneShot(jumpReadySound);
+
+        enemy.myAudioSource.PlayOneShot(attackReadySound);
         setCancellable(false);
         enemy.NotifyAttackWindupStarted();
 

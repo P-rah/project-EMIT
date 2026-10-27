@@ -94,11 +94,20 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     protected virtual void OnEnable()
     {
         EventManager.StartListening("OnEmitFinished", CheckDeath);
+        if (myAudioSource != null && SoundManager.Instance != null)
+        {
+            SoundManager.Instance.RegisterSfxSource(myAudioSource);
+        }
     }
 
     protected virtual void OnDisable()
     {
         EventManager.StopListening("OnEmitFinished", CheckDeath);
+
+        if (myAudioSource != null && SoundManager.Instance != null)
+        {
+            SoundManager.Instance.UnregisterSfxSource(myAudioSource);
+        }
     }
 
     public virtual void Init()
@@ -204,6 +213,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public void Animevent_playWalkSound()
     {
         if (myAudioSource == null || walkSound == null) return;
+        Debug.Log($"현재 오디오 아웃풋 그룹: {myAudioSource.outputAudioMixerGroup?.name}", gameObject);
         myAudioSource.pitch = 1.0f + Random.Range(-0.2f, 0.2f);
         myAudioSource.PlayOneShot(walkSound);
         myAudioSource.pitch = 1.0f;

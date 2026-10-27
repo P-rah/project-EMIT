@@ -19,6 +19,9 @@ EditorBuildSettings:
     guid: 440521d582fbcc841be622884f2c5a2d
   - enabled: 1
     path: Assets/Scenes/UseScene/Ch1_G2.unity
+    guid: f0894bfc5d4f4a043a30eb8490ef9eea
+  - enabled: 1
+    path: Assets/Scenes/UseScene/Ch1_G3.unity
     guid: d76b9ce327f9f004d886f34b27fb8cd8
   - enabled: 1
     path: Assets/Scenes/UseScene/Ch1_B1.unity

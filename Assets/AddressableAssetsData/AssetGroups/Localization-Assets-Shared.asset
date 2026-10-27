@@ -15,6 +15,26 @@ MonoBehaviour:
   m_GroupName: Localization-Assets-Shared
   m_GUID: 082f27397690f59429ff5f83818ba636
   m_SerializeEntries:
+  - m_GUID: 1c501a42ea180204ab4e92899ae03863
+    m_Address: Assets/Settings/LanguageSettings/Setting Text Table Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1deaef5b152ae1e489c16c04fd784f67
+    m_Address: Assets/Settings/LanguageSettings/Title Text Table Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a7c5b3b75ef6dd47a65039cfd798316
+    m_Address: Assets/Settings/LanguageSettings/Pause Menu Text Table Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aad9db2f06003034a8dcf0bf143083bc
+    m_Address: Assets/Settings/LanguageSettings/Temp_ClearScene Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: afd94a66f9ff47641b45ad78e1947c8e
     m_Address: Assets/Settings/Tutorial Text Table Shared Data.asset
     m_ReadOnly: 1

@@ -5261,6 +5261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   myAudioSource: {fileID: 4522538891955453453}
   dragEffect: {fileID: 5875116590446938056}
+  deathFragmentPrefab: {fileID: 3764518140752545662, guid: 19d5b793557818548a4aabe0a2b3a6f3, type: 3}
   data: {fileID: 11400000, guid: 961e8d0ab9dd3e24480ac976a2d275e6, type: 2}
   maxHealth: 10
   baseAttack: 2
@@ -5273,21 +5274,21 @@ MonoBehaviour:
   recoveryTime: 1
   powerResetTime: 0
   walkSound: {fileID: 8300000, guid: dff74eaf3cf96e948a0ffc77128191d0, type: 3}
-  attackReadySound: {fileID: 8300000, guid: 066f1955da67a3c48a0390eb610db9ab, type: 3}
+  attackReadySound: {fileID: 8300000, guid: 93bebbf5ae64eec4e9b537cf1d9090e1, type: 3}
   attackSound: {fileID: 8300000, guid: 37207ed13e7e7844a9c59dc59d875952, type: 3}
-  sweepHitSound: {fileID: 8300000, guid: bd023842f8777b04c9047827cd78db44, type: 3}
-  grabHitSound: {fileID: 8300000, guid: b862d6d4f7fe34a4389becebfef2bbd2, type: 3}
+  attackHitSound: {fileID: 8300000, guid: 4f7a35f61fd1ebe4799b3bdcbf14bc16, type: 3}
   deathSound: {fileID: 8300000, guid: 6c28ed22dcc349c4cbb90c09b36c98f1, type: 3}
   currentHealth: 10
   isRooted: 1
   isCurrentHitGrab: 0
   canHit: 0
+  canAttack: 0
   front: {x: 1, y: 0}
   isFacingLeft: 0
   targetDir: {x: 0, y: 0}
+  flipable: 1
   invincibilityDuration: 0.2
   enemyCollisionDetector: {fileID: 0}
-  canAttack: 0
 --- !u!114 &3801262647741350734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5347,7 +5348,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c818d8e28770344afd73d9fc3f2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStateMachine
-  enemy: {fileID: 0}
+  enemyBase: {fileID: 0}
+  deathEffectType: 0
 --- !u!82 &4522538891955453453
 AudioSource:
   m_ObjectHideFlags: 0

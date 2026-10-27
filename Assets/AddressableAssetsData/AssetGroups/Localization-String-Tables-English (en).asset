@@ -15,6 +15,30 @@ MonoBehaviour:
   m_GroupName: Localization-String-Tables-English (en)
   m_GUID: 0b2de40fcb366da458fd110c76bb4b0d
   m_SerializeEntries:
+  - m_GUID: 4af65cc5a57b3b24295befc9fcf09c89
+    m_Address: Title Text Table_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e4f616133f29f34f987457202aa36ec
+    m_Address: Pause Menu Text Table_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8436116faf9cb2942b160256d403de2d
+    m_Address: Setting Text Table_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1432706b884a4f418acb22e0fee1497
+    m_Address: Temp_ClearScene_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b691314f6c0bf474398c1f39697f0747
     m_Address: Tutorial Text Table_en
     m_ReadOnly: 1

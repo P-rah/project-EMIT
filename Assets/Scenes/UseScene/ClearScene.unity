@@ -152,6 +152,7 @@ MonoBehaviour:
   thisSceneBgm: {fileID: 0}
   noBGM: 1
   revserse: 0
+  cursorVisible: 1
 --- !u!4 &105025755
 Transform:
   m_ObjectHideFlags: 0
@@ -325,6 +326,7 @@ GameObject:
   - component: {fileID: 599860331}
   - component: {fileID: 599860330}
   - component: {fileID: 599860329}
+  - component: {fileID: 599860332}
   m_Layer: 5
   m_Name: New Game
   m_TagString: Untagged
@@ -507,6 +509,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 599860327}
   m_CullTransparentMesh: 1
+--- !u!114 &599860332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599860327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Components.LocalizeStringEvent
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:aad9db2f06003034a8dcf0bf143083bc
+    m_TableEntryReference:
+      m_KeyId: 6499688448
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 599860330}
+        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+        m_MethodName: SetText
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!4 &888778306 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8067961287516934624, guid: fa3e91708b989af40b07254da722cae5, type: 3}
