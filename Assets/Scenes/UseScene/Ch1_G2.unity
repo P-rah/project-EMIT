@@ -108016,6 +108016,18 @@ PrefabInstance:
       propertyPath: invulnerableTime
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3108448078108470986, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: cullingMode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108448078108470986, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: moveWithTransform
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108448078108470986, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: InitialModule.gravitySource
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3286993156168076105, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_LocalPosition.x
       value: 155.3

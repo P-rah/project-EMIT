@@ -62240,7 +62240,19 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 31612418871366717, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 31612418871366717, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108448078108470986, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: stopAction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108448078108470986, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: moveWithTransform
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3286993156168076105, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
@@ -62298,6 +62310,22 @@ PrefabInstance:
     - target: {fileID: 6119669005937929587, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833889956631427747, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833889956631427747, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -840063207
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833889956631427747, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833889956631427747, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
+      propertyPath: m_UseCustomVertexStreams
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7169946073245587956, guid: fed26fd687d25ca41b4f8b3dfb3eab85, type: 3}
       propertyPath: m_IsActive

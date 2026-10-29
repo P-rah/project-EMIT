@@ -22,10 +22,8 @@ public class EmitParticleController : MonoBehaviour
     {
         if (particle == null || EmitManager.Instance == null) return;
 
-        if (EmitManager.Instance.isEmittable)
-        {
-            particle.Play();
-        }
+        particle.Play();
+        Debug.Log("파티클 생성");
     }
 
     void DisableParticles()
@@ -34,5 +32,6 @@ public class EmitParticleController : MonoBehaviour
 
         particle.Stop();
         particle.Clear();
+        Debug.Log("파티클 소멸");
     }
 }
