@@ -30,3 +30,8 @@ MonoBehaviour:
   HitRecoveryTime: 0.2
   powerResetTime: 5
   invincibilityDuration: 0.2
+  walkSound: {fileID: 8300000, guid: a90b1f58d702f0b498dec665be3dc7d5, type: 3}
+  attackReadySound: {fileID: 8300000, guid: 93bebbf5ae64eec4e9b537cf1d9090e1, type: 3}
+  attackSound: {fileID: 8300000, guid: 7cf59d449e6c53e48bf0afa10e7d7999, type: 3}
+  attackHitSound: {fileID: 8300000, guid: d025ee3274846e2469f0ed3847d1f9e1, type: 3}
+  deathSound: {fileID: 8300000, guid: 6c28ed22dcc349c4cbb90c09b36c98f1, type: 3}

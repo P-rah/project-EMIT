@@ -14,22 +14,22 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public Transform target { get; set; }
     public Rigidbody2D rb { get; set; }
     public AudioSource myAudioSource;
-    public ParticleSystem dragEffect;
+    protected ParticleSystem dragEffect;
     public DieFragment deathFragmentPrefab;
     public EmitManager emitManager { get; set; }
-    private PowerStackUIController powerStackUIController { get; set; }
-    public SpriteRenderer spriteRenderer { get; set; }
+    protected PowerStackUIController powerStackUIController { get; set; }
+    protected SpriteRenderer spriteRenderer { get; set; }
 
     [SerializeField] protected EnemyData data;
 
     [Header("Base Stats")]
-    public int maxHealth;
-    public int baseAttack;
+    protected int maxHealth;
+    protected int baseAttack;
     public float baseSpeed;
-    public float jumpHeight;
-    public float visionRange;
-    public float attackRange;
-    public float startAttackRange;
+    protected float jumpHeight;
+    protected float visionRange;
+    protected float attackRange;
+    protected float startAttackRange;
     public float startUpTime;
     public float recoveryTime;
 
@@ -45,7 +45,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
     public AudioClip attackReadySound;
     public AudioClip attackSound;
     public AudioClip attackHitSound;
-    //public AudioClip grabHitSound;
     public AudioClip deathSound;
 
     [Header("Base State Flags")]
@@ -141,7 +140,13 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable, IGrabbable, IKnock
             HitRecoveryTime = data.HitRecoveryTime;
             powerResetTime = data.powerResetTime;
             invincibilityDuration = data.invincibilityDuration;
-        }
+            walkSound = data.walkSound;
+            attackReadySound = data.attackReadySound;
+            attackSound = data.attackSound;
+            attackHitSound = data.attackHitSound;
+            deathSound = data.deathSound;
+
+}
 
         canChangeState = true;
         isRooted = false;

@@ -6,14 +6,14 @@ public class EmitParticleController : MonoBehaviour
 
     void OnEnable()
     {
-        EventManager.StartListening("OnEmitPressed", EnableParticles);
+        EventManager.StartListening("OnEmitStart", EnableParticles);
         EventManager.StartListening("StopEmit", DisableParticles);
         EventManager.StartListening("OnEmitFinished", DisableParticles);
     }
 
     void OnDisable()
     {
-        EventManager.StopListening("OnEmitPressed", EnableParticles);
+        EventManager.StopListening("OnEmitStart", EnableParticles);
         EventManager.StopListening("StopEmit", DisableParticles);
         EventManager.StopListening("OnEmitFinished", DisableParticles);
     }
@@ -22,8 +22,10 @@ public class EmitParticleController : MonoBehaviour
     {
         if (particle == null || EmitManager.Instance == null) return;
 
-        particle.Play();
-        Debug.Log("파티클 생성");
+        if(EmitManager.Instance.isEmitting)
+        {
+            particle.Play();
+        }
     }
 
     void DisableParticles()

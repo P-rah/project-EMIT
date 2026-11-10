@@ -4,8 +4,8 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     [Header("설명")]
-    public string enemyName;
-    public string enemyInfo; 
+    [SerializeField] private string enemyName;
+    [SerializeField] private string enemyInfo; 
 
     [Header("기본 수치")]
     public int baseHealth;
@@ -31,4 +31,11 @@ public class EnemyData : ScriptableObject
 
     public float powerResetTime;
     public float invincibilityDuration;
+
+    [Header("사운드")]
+    public AudioClip walkSound;
+    public AudioClip attackReadySound;
+    public AudioClip attackSound;
+    public AudioClip attackHitSound;
+    public AudioClip deathSound;
 }
