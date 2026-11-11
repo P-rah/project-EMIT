@@ -49,5 +49,5 @@
 
 ## 🎬 플레이 영상
 
-[▶ 게임 플레이 영상 보기](영상_URL)
+[▶ 게임 플레이 영상 보기](https://www.youtube.com/watch?v=bQFhsghHADU)
 
